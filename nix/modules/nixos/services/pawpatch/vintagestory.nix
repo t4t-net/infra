@@ -10,7 +10,7 @@ let
     BlockTickChunkRange = 5;
     BlockTickInterval = 300;
     ChatRateLimitMs = 1000;
-    ClientConnectionTimeout = 1000;
+    ClientConnectionTimeout = 600;
     CompressPackets = true;
     ConfigVersion = "1.7";
     CorruptionProtection = true;
@@ -30,7 +30,7 @@ let
     LogFileSplitAfterLine = 500000;
     LoginFloodProtection = false;
     MapSizeX = 1024000;
-    MapSizeY = 256;
+    MapSizeY = 348;
     MapSizeZ = 1024000;
     MasterserverUrl = "http://masterserver.vintagestory.at/api/v1/servers/";
     MaxChunkRadius = 12;

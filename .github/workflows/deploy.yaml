@@ -136,6 +136,7 @@ jobs:
       - name: Write CI builders
         shell: bash
         run: |
+          mkdir -p /etc/nix
           nix eval --raw ./nix#ciBuilders | sudo tee /etc/nix/machines
 
       - name: Deploy with Colmena

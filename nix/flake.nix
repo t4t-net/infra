@@ -147,12 +147,12 @@
               let
                 mkNixBuilders = import ./lib/mkNixMachines.nix { inherit lib; };
               in
-              mkNixBuilders [
+              mkNixBuilders (map (m: m // { sshKey = null; }) [
                 (self.lib.machineAsBuilder "unmusique")
                 (self.lib.machineAsBuilder "peer2peer")
                 (self.lib.machineAsBuilder "psychoboost")
                 (self.lib.machineAsBuilder "fadeoutz")
-              ];
+              ]);
 
             colmenaHive = colmena.lib.makeHive self.outputs.colmena;
 

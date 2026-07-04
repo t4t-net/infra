@@ -94,7 +94,6 @@ jobs:
       - name: Get deploy SSH certificate via OIDC
         shell: bash
         env:
-          STEPDEBUG: 1
           CA_URL: https://ca.t4t.net
           CA_FINGERPRINT: 43c891ed6cbf41cec282e972df5e567ab1593a5cb69ac6a8f25304895fd71b31
         run: |
@@ -133,13 +132,6 @@ jobs:
           ssh-keygen -L -f /tmp/ci_deploy_key-cert.pub
           ssh-add /tmp/ci_deploy_key
           ssh-add -l
-          ssh deploy@fadeoutz.tail09d5b.ts.net "echo working"
-
-      - name: Write CI builder SSH key
-        shell: bash
-        run: |
-          sudo mkdir -p /etc/nix
-          echo "${{ secrets.NIX_CI_BUILD_SSH_KEY }}" | sudo tee /etc/nix/builder_ed25519
 
       - name: Write CI builders
         shell: bash

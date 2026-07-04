@@ -203,6 +203,30 @@ in
                 };
               };
             }
+            {
+              type = "OIDC";
+              name = "google";
+              clientID = "1006359536780-u091808nveacnnsdpiu4dirmejspv2h9.apps.googleusercontent.com";
+              clientSecret = "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";
+              configurationEndpoint = "https://accounts.google.com/.well-known/openid-configuration";
+              admins = [ "me@ellie.fm" ];
+              domains = [ "ellie.fm" ];
+              scopes = [
+                "openid"
+                "email"
+              ];
+              claims = {
+                enableSSHCA = true;
+                maxTLSCertDuration = "24h";
+                defaultTLSCertDuration = "24h";
+                disableRenewal = true;
+              };
+              options = {
+                ssh = {
+                  templateFile = "${sshTemplate}";
+                };
+              };
+            }
           ];
 
           policy = {

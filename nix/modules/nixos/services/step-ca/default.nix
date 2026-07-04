@@ -1,12 +1,10 @@
 {
   pkgs,
   config,
-  self,
   ...
 }:
 let
-  settingsFormat = (pkgs.formats.json { });
-  configFile = settingsFormat.generate "ca.json" (
+  configContent = builtins.toJSON (
     config.services.step-ca.settings
     // {
       address = config.services.step-ca.address + ":" + toString config.services.step-ca.port;
@@ -15,6 +13,10 @@ let
 in
 {
   config = {
+    sops.templates."services/step-ca/config" = {
+      content = configContent;
+    };
+
     rv32ima.machine.impermanence.extraPersistDirectories = [
       {
         path = /var/lib/postgresql;
@@ -28,12 +30,17 @@ in
       sopsFile = ./secrets.yaml;
     };
 
-    # configuration file indirection is needed to support reloading
-    environment.etc."smallstep/ca.json".source = configFile;
+    sops.secrets."services/step-ca/google-oauth/client-id" = {
+      sopsFile = ./secrets.yaml;
+    };
+
+    sops.secrets."services/step-ca/google-oauth/client-secret" = {
+      sopsFile = ./secrets.yaml;
+    };
 
     systemd.services."step-ca" = {
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ configFile ];
+      restartTriggers = [ configContent ];
       unitConfig = {
         ConditionFileNotEmpty = ""; # override upstream
       };
@@ -50,7 +57,7 @@ in
 
         ExecStart = [
           "" # override upstream
-          "${pkgs.step-ca}/bin/step-ca /etc/smallstep/ca.json"
+          "${pkgs.step-ca}/bin/step-ca ${config.sops.templates."services/step-ca/config".path}"
         ];
 
         # ProtectProc = "invisible"; # not supported by upstream yet
@@ -206,8 +213,8 @@ in
             {
               type = "OIDC";
               name = "google";
-              clientID = "1006359536780-u091808nveacnnsdpiu4dirmejspv2h9.apps.googleusercontent.com";
-              clientSecret = "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";
+              clientID = "${config.sops.placeholder."services/step-ca/google-oauth/client-id"}";
+              clientSecret = "${config.sops.placeholder."services/step-ca/google-oauth/client-secret"}";
               configurationEndpoint = "https://accounts.google.com/.well-known/openid-configuration";
               admins = [ "me@ellie.fm" ];
               domains = [ "ellie.fm" ];

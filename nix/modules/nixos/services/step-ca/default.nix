@@ -15,6 +15,9 @@ in
   config = {
     sops.templates."services/step-ca/config" = {
       content = configContent;
+      owner = "step-ca";
+      group = "step-ca";
+      mode = "0400";
     };
 
     rv32ima.machine.impermanence.extraPersistDirectories = [

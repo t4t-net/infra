@@ -1,5 +1,5 @@
 {
-  description = "ellie's nix flake";
+  description = "t4t.net infrastructure";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
@@ -71,8 +71,10 @@
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
     copyparty.url = "github:9001/copyparty";
     copyparty.inputs.nixpkgs.follows = "nixpkgs";
-    comin.url = "github:nlewo/comin";
-    comin.inputs.nixpkgs.follows = "nixpkgs";
+    dotfiles = {
+      url = "github:rv32ima/dotfiles";
+      flake = false;
+    };
   };
 
   outputs =
@@ -147,12 +149,14 @@
               let
                 mkNixBuilders = import ./lib/mkNixMachines.nix { inherit lib; };
               in
-              mkNixBuilders (map (m: m // { sshKey = null; }) [
-                (self.lib.machineAsBuilder "unmusique")
-                (self.lib.machineAsBuilder "peer2peer")
-                (self.lib.machineAsBuilder "psychoboost")
-                (self.lib.machineAsBuilder "fadeoutz")
-              ]);
+              mkNixBuilders (
+                map (m: m // { sshKey = null; }) [
+                  (self.lib.machineAsBuilder "unmusique")
+                  (self.lib.machineAsBuilder "peer2peer")
+                  (self.lib.machineAsBuilder "psychoboost")
+                  (self.lib.machineAsBuilder "fadeoutz")
+                ]
+              );
 
             colmenaHive = colmena.lib.makeHive self.outputs.colmena;
 

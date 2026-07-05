@@ -1,7 +1,0 @@
-custom-shader-animation = true
-custom-shader = shaders/smear_cursor_blocks.glsl
-theme = Catppuccin Mocha
-link-url = true
-link-previews = true
-working-directory = inherit 
-keybind = global:super+shift+enter=toggle_quick_terminal

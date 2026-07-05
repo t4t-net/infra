@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  inputs,
   self,
   ...
 }:
@@ -13,7 +14,7 @@
       starship = {
         enable = true;
         # TODO: don't do this anymore
-        settings = builtins.fromTOML (builtins.readFile ../../../starship/starship.toml);
+        settings = builtins.fromTOML (builtins.readFile "${inputs.dotfiles}/starship/starship.toml");
       };
 
       direnv = {

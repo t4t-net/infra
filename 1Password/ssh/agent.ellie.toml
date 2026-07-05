@@ -1,6 +1,0 @@
-[[ssh-keys]]
-item = "Primary SSH key"
-vault = "Employee"
-[[ssh-keys]]
-item = "SSH Key for Juniper"
-vault = "Employee"

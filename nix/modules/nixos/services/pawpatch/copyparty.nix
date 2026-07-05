@@ -23,6 +23,7 @@
       e2dsa = true;
       e2ts = true;
       ansi = true;
+      u2ow = 2;
 
       rproxy = 1;
       idp-h-usr = "Tailscale-User-Login";

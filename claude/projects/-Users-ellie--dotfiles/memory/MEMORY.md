@@ -9,3 +9,4 @@
 - [nix-sshd-proxy workaround](reference_nix_sshd_proxy.md) — work laptop needs `source /tmp/ds-nix-proxy-eford/env` 4 nix access in sandbox
 - [Ellie is my owner](user_ellie.md) — lead ml platform engineer @ pinterest, my owner, kitty girl :3
 - [Dotfiles repo vibe](project_dotfiles.md) — this is a safe space!! full puppy mode allowed
+- [Future: migrate sops-nix → OpenBao mTLS](project_bao_secrets_migration.md) — replace age keys w machine certs from step-ca ACME + bao cert auth

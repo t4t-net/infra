@@ -78,6 +78,17 @@ in
       (self.lib.machineAsBuilder "peer2peer")
     ];
 
+    sops.secrets."services/nix/github-access-token" = {
+      sopsFile = ./secrets/nix.yaml;
+      # We want this world-readable, since it only provides read-only access to public
+      # repositories and nothing more.
+      mode = "0444";
+    };
+
+    nix.extraOptions = ''
+      !include ${config.sops.secrets."services/nix/github-access-token".path}
+    '';
+
     services.zfs.autoScrub.enable = true;
     services.zfs.autoScrub.interval = "weekly";
 

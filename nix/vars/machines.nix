@@ -10,6 +10,17 @@
       targetUser = "root";
     };
   };
+  "experimental-skin" = {
+    system = "x86_64-linux";
+    stateVersion = "26.05";
+    machineID = "e9176ca3f729792c10ef27ed6a4ad2e2";
+    sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMr/j1AJxcbzhfsN2iZ7cQnVzmBsJH6FcJxvT8eEUoEL";
+    deployment = {
+      targetHost = "golden-experience.tail09d5b.ts.net";
+      targetPort = 22;
+      targetUser = "root";
+    };
+  };
   "ghostholding" = {
     system = "x86_64-linux";
     stateVersion = "25.11";

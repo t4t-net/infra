@@ -30,6 +30,6 @@ ipxe.override {
     set dns 1.1.1.1 
 
     :boot
-    chain http://peer2peer.sea.t4t.net:8787/autoexec.ipxe
+    chain http://23.190.72.45:8787/autoexec.ipxe
   '';
 }

@@ -33,7 +33,7 @@ in
     ];
     users.users.nix.openssh.authorizedPrincipals = [
       "ellie"
-      ''command="${nix-ssh-wrapper}",restrict repo:rv32ima/dotfiles:ref:refs/heads/main''
+      ''command="${nix-ssh-wrapper}",restrict repo:t4t-net/infra:ref:refs/heads/main''
     ];
 
     nix.settings.trusted-users = [ "nix" ];

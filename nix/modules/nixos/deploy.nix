@@ -4,7 +4,7 @@
       group = "deploy";
       openssh.authorizedPrincipals = [
         "ellie"
-        "repo:rv32ima/dotfiles:ref:refs/heads/main"
+        "repo:t4t-net/infra:ref:refs/heads/main"
       ];
       shell = pkgs.bashInteractive;
       isSystemUser = true;

@@ -108,8 +108,8 @@ in
           }
         '';
         githubActionsSSHTemplate = pkgs.writeText "github-actions-ssh.tpl" ''
-          {{- if not (eq .Token.sub "repo:rv32ima/dotfiles:ref:refs/heads/main") -}}
-          {{- fail "unauthorized: only rv32ima/dotfiles main branch is allowed" -}}
+          {{- if not (eq .Token.sub "repo:t4t-net/infra:ref:refs/heads/main") -}}
+          {{- fail "unauthorized: only t4t-net/infra main branch is allowed" -}}
           {{- end -}}
           {
             "type": {{ toJson .Type }},

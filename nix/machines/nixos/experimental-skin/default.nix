@@ -9,6 +9,7 @@
     (self.lib.nixosModule "nixos/update-dotfiles")
     (self.lib.nixosModule "nixos/remote-builder")
     (self.lib.nixosModule "nixos/deploy")
+    (self.lib.nixosModule "nixos/services/tailscale")
     # No machine-certificate since this lives at home and is behind
     # NAT.
 

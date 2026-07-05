@@ -313,13 +313,7 @@
               inherit (pkgs) rv32ima;
             };
 
-            devShells.default = pkgs.mkShell {
-              packages = with pkgs; [
-                openbao
-                colmena
-                step-cli
-              ];
-            };
+            devShells.default = pkgs.rv32ima.shell;
           };
       }
     );

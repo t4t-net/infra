@@ -1,34 +1,6 @@
 .DS_Store
-fish/fish_variables
-ssh/id_*
-ssh/*.pub
-ssh/known_hosts
-ssh/known_hosts.old
 nix/result
 /result
 .direnv
 
-# Ignore the vast majority of Claude Code configs
-claude/backups
-claude/cache
-claude/file-history
-claude/history.jsonl
-claude/ide
-claude/mcp-needs-auth-cache.json
-claude/paste-cache
-claude/plans
-claude/projects/**
-!claude/projects/-Users-ellie--dotfiles/
-!claude/projects/-Users-ellie--dotfiles/memory/
-!claude/projects/-Users-ellie--dotfiles/memory/**
-claude/session-env
-claude/sessions
-claude/shell-snapshots
-claude/skills
-claude/.last-cleanup
-claude/daemon
-claude/daemon.lock
-claude/daemon.log
-claude/daemon.status.json
-claude/jobs
-claude/pins.json
+.terragrunt-cache/

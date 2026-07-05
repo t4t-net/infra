@@ -91,7 +91,7 @@
         map (
           x:
           lib.nameValuePair "${name}-serve-${toString x.targetPort}" {
-            wantedBy = [ targetUnit ];
+            wantedBy = [ "multi-user.target" targetUnit ];
             after = [
               targetUnit
               "tailscaled.service"

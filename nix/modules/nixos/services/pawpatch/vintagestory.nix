@@ -487,6 +487,7 @@ in
       serviceConfig = {
         Type = "simple";
         Restart = "always";
+        UMask = "0002"; # Allow r/w for user & group, but not world
         User = "vintagestory";
         Sockets = "vintagestory.socket";
         StandardInput = "socket";

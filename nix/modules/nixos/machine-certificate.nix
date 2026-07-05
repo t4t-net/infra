@@ -59,13 +59,8 @@ in
       publicKey = lib.fileContents ../../../certificates/ssh-host-ca.pub;
     };
 
-    programs.ssh.extraConfig = ''
-
-    '';
-
     services.openssh.extraConfig = ''
       HostCertificate ${sshHostKeyPath}-cert.pub
-      TrustedUserCAKeys ${sshUserCA}
     '';
 
     # Bootstrap SSH host certificate: exchange x509 cert (x5c) then immediately

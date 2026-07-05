@@ -39,6 +39,10 @@
       MaxRetentionSec=3month
     '';
 
+    services.openssh.extraConfig = ''
+      TrustedUserCAKeys ${../../../certificates/ssh-user-ca.pub}
+    '';
+
     # Probably needed in some systems:
     hardware.enableRedistributableFirmware = true;
 

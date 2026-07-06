@@ -213,6 +213,7 @@
                   (machineAndInstaller "psychoboost")
                   (machineAndInstaller "unmusique")
                   (machineAndInstaller "fadeoutz")
+                  (machineAndInstaller "experimental-skin")
                 ];
             };
 

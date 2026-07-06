@@ -45,7 +45,7 @@ let
         def get_store_path(machine):
             if machine in store_path_cache:
                 return store_path_cache[machine]
-            url = f"{HYDRA_URL}/job/dotfiles/master/nixos.{machine}-installer/latest-finished"
+            url = f"{HYDRA_URL}/job/infra/main/nixos.{machine}-installer/latest-finished"
             req = urllib.request.Request(url, headers={"Accept": "application/json"})
             with urllib.request.urlopen(req, timeout=30) as resp:
                 data = json.load(resp)

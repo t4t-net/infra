@@ -4,9 +4,13 @@ ipxe.override {
     "bin-x86_64-efi/ipxe.iso" = "ipxe-efi.iso";
   };
 
+  additionalOptions = [
+    "NSLOOKUP_CMD"
+  ];
+
   embedScript = writeText "embed.ipxe" ''
     #!ipxe
-    dhcp || goto no_dhcp
+    ifconf -c dhcp || goto no_dhcp
     set dns 1.1.1.1 
     goto boot
 
@@ -30,6 +34,8 @@ ipxe.override {
     set dns 1.1.1.1 
 
     :boot
-    chain http://23.190.72.45:8787/autoexec.ipxe
+    nslookup address peer2peer.sea.t4t.net
+    echo DNS address: peer2peer.sea.t4t.net: ''${address}
+    chain http://peer2peer.sea.t4t.net:8787/autoexec.ipxe
   '';
 }

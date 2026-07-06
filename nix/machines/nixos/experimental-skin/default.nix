@@ -1,5 +1,6 @@
 {
   self,
+  inputs,
   ...
 }:
 {
@@ -18,6 +19,8 @@
 
     ./network.nix
     ./disk-config.nix
+
+    inputs.nixos-hardware.nixosModules.framework-amd-ai-300-series
   ];
 
   config = {

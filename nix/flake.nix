@@ -75,6 +75,10 @@
       url = "github:rv32ima/dotfiles";
       flake = false;
     };
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

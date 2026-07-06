@@ -9,6 +9,8 @@
     ./network.nix
     (self.lib.nixosModule "users/root")
     (self.lib.nixosModule "nixos/netboot")
+
+    inputs.nixos-hardware.nixosModules.framework-amd-ai-300-series
   ];
 
   config = {

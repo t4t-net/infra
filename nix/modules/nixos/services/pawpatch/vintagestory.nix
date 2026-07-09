@@ -30,7 +30,7 @@ let
     LogFileSplitAfterLine = 500000;
     LoginFloodProtection = false;
     MapSizeX = 1024000;
-    MapSizeY = 256;
+    MapSizeY = 384;
     MapSizeZ = 1024000;
     MasterserverUrl = "http://masterserver.vintagestory.at/api/v1/servers/";
     MaxChunkRadius = 12;
@@ -361,7 +361,7 @@ let
       AllowCreativeMode = true;
       CreatedByPlayerName = null;
       DisabledMods = null;
-      MapSizeY = null;
+      MapSizeY = 384;
       PlayStyle = "surviveandbuild";
       PlayStyleLangCode = "surviveandbuild-bands";
       RepairMode = false;
@@ -406,7 +406,7 @@ let
         oceanscale = "0.5";
         playerHealthPoints = "15";
         playerHealthRegenSpeed = "1";
-        playerHungerSpeed = "0.6";
+        playerHungerSpeed = "0.4";
         playerMoveSpeed = "1.75";
         playerlives = "-1";
         playstyle = "surviveandbuild";

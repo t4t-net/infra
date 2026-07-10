@@ -24,6 +24,12 @@ in
     (self.lib.nixosModule "nixos/services/pawpatch/soulseek")
     (self.lib.nixosModule "nixos/services/pawpatch/vintagestory")
     (self.lib.nixosModule "nixos/services/pawpatch/vintagestory-eval")
+    (self.lib.nixosModule "nixos/services/pawpatch/prowlarr")
+    (self.lib.nixosModule "nixos/services/pawpatch/radarr")
+    (self.lib.nixosModule "nixos/services/pawpatch/lidarr")
+    (self.lib.nixosModule "nixos/services/pawpatch/sonarr")
+    (self.lib.nixosModule "nixos/services/pawpatch/overseerr")
+    (self.lib.nixosModule "nixos/services/pawpatch/nzbget")
 
     (self.lib.nixosModule "users/root")
     (self.lib.nixosModule "users/ellie")

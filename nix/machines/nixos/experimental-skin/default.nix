@@ -51,8 +51,8 @@
     '';
 
     boot.kernelParams = [
-      # The kernel module parameter gttsize is a is deprecated and will be removed in the future.
-      "options amdgpu gttsize=120000"
+      "amdttm.pages_limit=27648000"
+      "amdttm.page_pool_size=27648000"
     ];
 
     boot.initrd.availableKernelModules = [

@@ -30,6 +30,7 @@ in
     (self.lib.nixosModule "nixos/services/pawpatch/sonarr")
     (self.lib.nixosModule "nixos/services/pawpatch/overseerr")
     (self.lib.nixosModule "nixos/services/pawpatch/nzbget")
+    (self.lib.nixosModule "nixos/services/pawpatch/unpackerr")
 
     (self.lib.nixosModule "users/root")
     (self.lib.nixosModule "users/ellie")

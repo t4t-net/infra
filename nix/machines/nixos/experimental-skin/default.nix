@@ -43,6 +43,17 @@
     boot.loader.limine.enable = true;
     boot.loader.limine.secureBoot.enable = true;
     boot.loader.limine.efiInstallAsRemovable = true;
+    boot.loader.limine.extraEntries = ''
+      /Windows 11
+        protocol: efi
+        path: guid(6835-BA6A):/EFI/Microsoft/Boot/bootmgfw.efi
+        comment: Boot into Windows 11
+    '';
+
+    boot.kernelParams = [
+      # The kernel module parameter gttsize is a is deprecated and will be removed in the future.
+      "options amdgpu gttsize=120000"
+    ];
 
     boot.initrd.availableKernelModules = [
       "ahci"

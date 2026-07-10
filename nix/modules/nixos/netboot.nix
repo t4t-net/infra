@@ -2,6 +2,7 @@
   config,
   pkgs,
   modulesPath,
+  lib,
   ...
 }:
 {
@@ -21,7 +22,7 @@
         imgfree
         kernel bzImage
         initrd initrd
-        imgargs bzImage init=${config.system.build.toplevel}/init initrd=initrd nohibernate loglevel=4 lsm=landlock,yama,bpf
+        imgargs bzImage init=${config.system.build.toplevel}/init initrd=initrd ${lib.concatStringsSep " " (lib.filter (p: !(lib.hasPrefix "root=" p || lib.hasPrefix "resume=" p)) config.boot.kernelParams)}
         boot
       '')
     ];

@@ -24,6 +24,12 @@
   ];
 
   config = {
+    # Automatically authorize any new Thunderbolt devices plugged into our system.
+    # This is totally not secure.
+    services.udev.extraRules = ''
+      ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{authorized}=="0", ATTR{authorized}="1"
+    '';
+
     rv32ima.machine.impermanence.enable = true;
     rv32ima.machine.impermanence.extraPersistDirectories = [
       {
@@ -46,6 +52,7 @@
       "usb_storage"
       "sd_mod"
       "sr_mod"
+      "nvme"
     ];
     boot.initrd.kernelModules = [ ];
     boot.kernelModules = [ "kvm-amd" ];
@@ -70,6 +77,9 @@
 
     services.zfs.autoScrub.enable = true;
     services.zfs.autoScrub.interval = "weekly";
+
+    hardware.enableRedistributableFirmware = true;
+    hardware.amdgpu.initrd.enable = true;
 
     networking.domain = "home.t4t.net";
     system.primaryUser = "ellie";

@@ -18,6 +18,12 @@
       inputs.disko.packages.x86_64-linux.default
     ];
 
+    # Automatically authorize any new Thunderbolt devices plugged into our system.
+    # This is totally not secure.
+    services.udev.extraRules = ''
+      ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{authorized}=="0", ATTR{authorized}="1"
+    '';
+
     # boot.loader.efi.canTouchEfiVariables = true;
     # boot.loader.grub.efiSupport = true;
     # boot.loader.grub.efiInstallAsRemovable = true;
@@ -36,5 +42,8 @@
     nixpkgs.hostPlatform = "x86_64-linux";
     system.stateVersion = "26.05";
     networking.domain = "home.t4t.net";
+
+    hardware.amdgpu.initrd.enable = true;
+    hardware.enableRedistributableFirmware = true;
   };
 }

@@ -14,11 +14,11 @@
     system = "x86_64-linux";
     stateVersion = "26.05";
     machineID = "e9176ca3f729792c10ef27ed6a4ad2e2";
-    sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMr/j1AJxcbzhfsN2iZ7cQnVzmBsJH6FcJxvT8eEUoEL";
+    sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPL5V0jwonNuoI/xs4L35zWLRRTAND7A1e1WZu99V+kp";
     deployment = {
-      targetHost = "golden-experience.tail09d5b.ts.net";
+      targetHost = "experimental-skin.tail09d5b.ts.net";
       targetPort = 22;
-      targetUser = "root";
+      targetUser = "deploy";
     };
   };
   "ghostholding" = {

@@ -72,6 +72,17 @@
     # head -c4 /dev/urandom | od -A none -t x4
     networking.hostId = "5a05f268";
 
+    hardware.graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
+
+    services.displayManager.gdm.enable = true;
+    services.desktopManager.gnome.enable = true;
+
+    programs.virt-manager.enable = true;
+    virtualisation.libvirtd.enable = true;
+
     rv32ima.machine.tailscale.enable = true;
 
     services.prometheus.exporters.node.enable = true;

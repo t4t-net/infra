@@ -32,6 +32,7 @@ in
     (self.lib.nixosModule "nixos/services/tailscale")
     (self.lib.nixosModule "nixos/services/nzbget")
     (self.lib.nixosModule "nixos/services/copyparty")
+    (self.lib.nixosModule "nixos/services/soularr")
 
     (self.lib.nixosModule "users/root")
     (self.lib.nixosModule "users/ellie")

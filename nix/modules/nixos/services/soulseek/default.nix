@@ -51,6 +51,12 @@
     services.slskd.environmentFile = config.sops.secrets."services/soulseek/environment".path;
     services.slskd.nginx.listenAddresses = [ "127.0.0.1" ];
 
+    systemd.services.slskd.serviceConfig.UMask = "000";
+
+    users.groups.slskd.members = [
+      "lidarr"
+    ];
+
     rv32ima.machine.tailscale.services.slskd = {
       port = 5030;
     };

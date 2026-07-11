@@ -47,6 +47,11 @@ creation_rules:
     - age:
       - *1password
       - *peer2peer
+  - path_regex: modules/nixos/services/soularr/.*$
+    key_groups:
+    - age:
+      - *1password
+      - *peer2peer
   - path_regex: modules/nixos/services/unpackerr/.*$
     key_groups:
     - age:

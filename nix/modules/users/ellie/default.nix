@@ -65,8 +65,8 @@ in
         enable = true;
         settings = {
           user = {
-            name = "Ellie Ford";
-            email = "me@ellie.fm";
+            name = "kitty";
+            email = "kitty@catmod.ing";
           };
         };
       };
@@ -74,8 +74,8 @@ in
       programs.jujutsu = {
         settings = {
           user = {
-            name = "Ellie Ford";
-            email = "me@ellie.fm";
+            name = "kitty";
+            email = "kitty@catmod.ing";
           };
         };
       };

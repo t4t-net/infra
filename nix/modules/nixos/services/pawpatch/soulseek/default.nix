@@ -32,6 +32,8 @@
     services.slskd.environmentFile = config.sops.secrets."services/soulseek/environment".path;
     services.slskd.nginx.listenAddresses = [ "127.0.0.1" ];
 
+    systemd.services.slskd.serviceConfig.UMask = "000";
+
     rv32ima.machine.tailscale.services.pawpatch-slskd = {
       targetUnit = "slskd.service";
       port = 5030;

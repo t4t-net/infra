@@ -218,6 +218,7 @@
                   (machineAndInstaller "unmusique")
                   (machineAndInstaller "fadeoutz")
                   (machineAndInstaller "experimental-skin")
+                  (machineAndInstaller "professional-vengeance")
                 ];
             };
 

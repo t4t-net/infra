@@ -150,4 +150,16 @@
       ];
     };
   };
+  "professional-vengeance" = {
+    system = "x86_64-linux";
+    stateVersion = "26.05";
+    machineID = "f726d5df2f60e6e3a53e17566a56c97a";
+    sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJeEX3/9e5OfsCkPw2P/hWN+tLniuNO+muL9Q9KgfJFq";
+    deployment = {
+      targetHost = "professional-vengeance.tail09d5b.ts.net";
+      targetPort = 22;
+      targetUser = "deploy";
+      tags = [ "auto-deploy" ];
+    };
+  };
 }

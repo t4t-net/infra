@@ -34,14 +34,13 @@
     boot.loader.limine.efiInstallAsRemovable = true;
 
     boot.initrd.availableKernelModules = [
+      "uhci_hcd"
+      "ehci_pci"
       "ahci"
-      "xhci_pci"
-      "megaraid_sas"
-      "usbhid"
-      "usb_storage"
+      "virtio_pci"
+      "virtio_scsi"
       "sd_mod"
       "sr_mod"
-      "virtio_scsi"
     ];
     boot.initrd.kernelModules = [ ];
     boot.kernelModules = [ ];

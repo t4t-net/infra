@@ -1,5 +1,6 @@
 {
   self,
+  modulesPath,
   ...
 }:
 {
@@ -13,6 +14,8 @@
 
     (self.lib.nixosModule "users/root")
     (self.lib.nixosModule "users/ellie")
+
+    "${modulesPath}/profiles/qemu-guest.nix"
 
     ./network.nix
     ./disk-config.nix

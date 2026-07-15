@@ -11,6 +11,7 @@ keys:
   - &pawpatch age1rfysgjptjhvqzmj37u646wp896jypl405g7r7285qc0s8g5r89aqr9rtez
   - &psychoboost age1t3e7cxufz9ljuhf3ltnw8q54tw7fwn3ggwmj6ke5ka5n5cwusuzqfhfcne
   - &experimental-skin age1m09t4l3suvancrvwtu4ylwrqz26xsl85jzx5wyeex33k5f3wxvgq3rrncc
+  - &professional-vengeance age13eslnwq6dghrpyhwfym66rpehyd27n54303ps8822wjwexkvpe8qkfxs9r
 creation_rules:
   - path_regex: users/.*/secrets/.*$
     key_groups:
@@ -27,6 +28,7 @@ creation_rules:
       - *pawpatch
       - *psychoboost
       - *experimental-skin
+      - *professional-vengeance
   - path_regex: modules/nixos/services/pawpatch/.*$
     key_groups:
       - age:

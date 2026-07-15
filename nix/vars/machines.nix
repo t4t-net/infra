@@ -159,7 +159,7 @@
       targetHost = "professional-vengeance.tail09d5b.ts.net";
       targetPort = 22;
       targetUser = "deploy";
-      tags = [ "auto-deploy" ];
+      # tags = [ "auto-deploy" ];
     };
   };
 }

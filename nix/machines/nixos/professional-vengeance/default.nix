@@ -41,6 +41,7 @@
       "usb_storage"
       "sd_mod"
       "sr_mod"
+      "virtio_scsi"
     ];
     boot.initrd.kernelModules = [ ];
     boot.kernelModules = [ ];

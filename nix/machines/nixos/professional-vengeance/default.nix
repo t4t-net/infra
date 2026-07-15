@@ -9,6 +9,7 @@
     (self.lib.nixosModule "nixos/update-dotfiles")
     (self.lib.nixosModule "nixos/remote-builder")
     (self.lib.nixosModule "nixos/deploy")
+    (self.lib.nixosModule "nixos/services/tailscale")
 
     (self.lib.nixosModule "users/root")
     (self.lib.nixosModule "users/ellie")

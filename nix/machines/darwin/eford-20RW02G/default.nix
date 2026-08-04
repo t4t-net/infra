@@ -22,17 +22,19 @@
 
     nix.settings.trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "cache.tvscids.net-1:FZCEhH4KgWQ/1VWZehUCiKaVvfPPEzjjl11NJ4kbVbg="
     ];
 
     nix.settings.trusted-substituters = [
       "https://nix-community.cachix.org"
+      "https://nix-cache.tail1256ba.ts.net"
     ];
 
     nix.settings.max-jobs = 10;
     nix.distributedBuilds = true;
     nix.buildMachines = [
       {
-        hostName = "nix-build-x86-64-01.bongo-cat.ts.net";
+        hostName = "nix-build-x86-64-01.tail1256ba.ts.net";
         sshUser = "nix";
         sshKey = "/Users/${config.system.primaryUser}/code/ds/.keys/builder_ed25519";
         protocol = "ssh-ng";

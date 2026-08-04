@@ -19,6 +19,7 @@
     (self.lib.nixosModule "home-manager/neovim")
     (self.lib.nixosModule "home-manager/jujutsu")
     (self.lib.nixosModule "home-manager/claude-code")
+    (self.lib.nixosModule "home-manager/jjui")
   ];
 
   config = {

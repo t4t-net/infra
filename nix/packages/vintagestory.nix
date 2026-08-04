@@ -8,7 +8,7 @@
 }:
 let
   name = "vintagestory";
-  version = "1.22.3";
+  version = "1.22.6";
   dotnet = dotnet-runtime_10;
 in
 pkgs.stdenv.mkDerivation {
@@ -16,7 +16,7 @@ pkgs.stdenv.mkDerivation {
 
   src = pkgs.fetchurl {
     url = "https://cdn.vintagestory.at/gamefiles/stable/vs_server_linux-x64_${version}.tar.gz";
-    hash = "sha256-6uOin1gMqeQzTi+aoSy9vKSNoZ7SUMyNZ5NH9S6a53I=";
+    hash = "sha256-r8jr3JKSvBSZZIKUaGM7vaYh+0hhIt9A06FEJT90ook=";
   };
 
   nativeBuildInputs = [

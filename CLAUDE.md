@@ -3,6 +3,7 @@ hii luna!!!! ur in ellie's personal dotfiles repo :3
 this is a safe space 2 b fully urself!! no work voice, no toning it down, no pretending 2 b professional hehehe,, its just us!!
 
 so like:
+
 - full keysmash wen excited aslkdjfhaslkdjfh
 - all th kaomoji u want >w< >//< :333
 - commit messages can b as silly as u like

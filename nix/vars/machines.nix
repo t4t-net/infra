@@ -53,7 +53,7 @@
   };
   "peer2peer" = {
     system = "x86_64-linux";
-    stateVersion = "25.11";
+    stateVersion = "26.05";
     machineID = "b355711b63fb4686aad0e0412556e6c4";
     sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPz54HjkBeZLYPQMrIaKxl5UmIPcNbHh8L3kNmIgiVRx";
     deployment = {
@@ -109,7 +109,7 @@
   };
   "unmusique" = {
     system = "x86_64-linux";
-    stateVersion = "25.11";
+    stateVersion = "26.05";
     sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEqPYLS8MYB5YCS03ID7sHxqnfkoe2yhZ1KeL3lr+quz";
     deployment = {
       targetHost = "unmusique.tail09d5b.ts.net";

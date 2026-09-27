@@ -32,25 +32,6 @@
       targetUser = "root";
     };
   };
-  "silver-chariot" = {
-    system = "x86_64-linux";
-    stateVersion = "25.11";
-    sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFQ1olIhfunqdo3YQO7qNuT894HVrw4OqWehm/KwOYSj";
-    deployment = {
-      targetHost = "silver-chariot.tail09d5b.ts.net";
-      targetPort = 22;
-      targetUser = "root";
-    };
-    build = {
-      maxJobs = 48;
-      sshUser = "nix";
-      supportedFeatures = [
-        "kvm"
-        "benchmark"
-        "big-parallel"
-      ];
-    };
-  };
   "peer2peer" = {
     system = "x86_64-linux";
     stateVersion = "26.05";

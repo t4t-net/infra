@@ -19,6 +19,7 @@ in
     (self.lib.nixosModule "nixos/bootstrapper")
     (self.lib.nixosModule "nixos/deploy")
     (self.lib.nixosModule "nixos/machine-certificate")
+    (self.lib.nixosModule "nixos/backup")
     (self.lib.nixosModule "nixos/services/soulseek")
     (self.lib.nixosModule "nixos/services/plex")
     (self.lib.nixosModule "nixos/services/rtorrent")
@@ -88,47 +89,16 @@ in
     networking.firewall.allowedTCPPorts = [ ];
     networking.firewall.logRefusedConnections = false;
 
-    sops.secrets."services/restic/media/password" = {
-      sopsFile = ./secrets/restic.yaml;
-      owner = config.users.users."restic".name;
-      group = config.users.users."restic".group;
-      mode = "0440";
-    };
-
-    sops.secrets."services/restic/media/rcloneConfig" = {
-      sopsFile = ./secrets/restic.yaml;
-      owner = config.users.users."restic".name;
-      group = config.users.users."restic".group;
-      mode = "0440";
-    };
-
-    users.users."restic" = {
+    rv32ima.machine.backup = {
       enable = true;
-      group = "restic";
-      isSystemUser = true;
+      secretsFile = ./secrets/restic.yaml;
+      metrics.directory = "media";
+      directories."media" = {
+        path = "/media";
+        # predates per-host repositories; drop this once it's been moved to restic/peer2peer/media
+        repository = "rclone:secret:restic/media";
+      };
     };
-
-    services.restic.backups."media" = {
-      repository = "rclone:secret:restic/media";
-      user = config.users.users."restic".name;
-      paths = [
-        "/media"
-      ];
-      passwordFile = config.sops.secrets."services/restic/media/password".path;
-      rcloneConfigFile = config.sops.secrets."services/restic/media/rcloneConfig".path;
-    };
-
-    services.prometheus.exporters.restic = {
-      enable = true;
-      repository = "rclone:secret:restic/media";
-      rcloneConfigFile = config.sops.secrets."services/restic/media/rcloneConfig".path;
-      passwordFile = config.sops.secrets."services/restic/media/password".path;
-    };
-
-    users.groups."restic".members = [
-      "restic"
-      "restic-exporter"
-    ];
 
     sops.secrets."services/msmtp/password" = {
       sopsFile = ./secrets/msmtp.yaml;

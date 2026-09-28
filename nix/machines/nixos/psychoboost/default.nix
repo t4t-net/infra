@@ -55,6 +55,8 @@ in
     boot.initrd.kernelModules = [ ];
     boot.kernelModules = [ "kvm-amd" ];
     boot.extraModulePackages = [ ];
+    # tc offload on the ConnectX-4 Lx VF representors, for switchdev / VF LAG
+    boot.kernelPackages = pkgs.linuxPackagesFor pkgs.rv32ima.mlx5-switchdev-kernel;
 
     # head -c4 /dev/urandom | od -A none -t x4
     networking.hostId = "6c0d5ca5";

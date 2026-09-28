@@ -46,12 +46,19 @@
       buildMachinesFiles = [ "/etc/nix/machines" ];
       useSubstitutes = true;
       smtpHost = "smtp.fastmail.com";
+      # max_db_connections caps the queue-runner's connection pool (hydra defaults it to 128, more
+      # than postgres allows in total). one per build slot is plenty
       extraConfig = ''
         store_uri = s3://rv32ima-nix-store?secret-key=${
           config.sops.secrets."services/hydra/nix-signing-key".path
-        }&endpoint=359f72dd5610ef51b6f186e0818ab188.r2.cloudflarestorage.com&region=auto&compression=zstd 
+        }&endpoint=359f72dd5610ef51b6f186e0818ab188.r2.cloudflarestorage.com&region=auto&compression=zstd
+        max_db_connections = 64
       '';
     };
+
+    # worst case for hydra: queue-runner 64 + hydra-server 25 (maxServers) + evaluator ~6 + notify/stats 2.
+    # postgres' default of 100 (97 after superuser reservations) got exhausted
+    services.postgresql.settings.max_connections = 150;
 
     sops.templates."services/hydra/smtp" = {
       content = ''

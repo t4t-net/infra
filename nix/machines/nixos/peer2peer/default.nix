@@ -93,11 +93,7 @@ in
       enable = true;
       secretsFile = ./secrets/restic.yaml;
       metrics.directory = "media";
-      directories."media" = {
-        path = "/media";
-        # predates per-host repositories; drop this once it's been moved to restic/peer2peer/media
-        repository = "rclone:secret:restic/media";
-      };
+      directories."media".path = "/media";
     };
 
     sops.secrets."services/msmtp/password" = {

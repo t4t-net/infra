@@ -61,6 +61,9 @@ jobs:
             keep-outputs = true
             substituters = https://cache.t4t.net/ https://cache.nixos.org/
             trusted-public-keys = cache.t4t.net-1:7NimrD/skv9tL7c3UjgwMxpup/RNcvzd7yrH0QNnlF0= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+            # the nixos toplevel (and every etc/unit file in it) is allowSubstitutes = false, so without
+            # this nix rebuilds ~400 derivations per machine even when hydra already cached the system
+            always-allow-substitutes = true
 
       # Get into our Nix shell :D
       - uses: nicknovitski/nix-develop@v1

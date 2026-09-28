@@ -11,17 +11,7 @@ let
 in
 {
   rv32ima = prev.lib.filterAttrs (
-    n: v:
-    if
-      prev.system != "x86_64-linux"
-      && builtins.elem n [
-        "mlx-kernel"
-        "mlx5-switchdev-kernel"
-      ]
-    then
-      false
-    else
-      true
+    n: v: if prev.system != "x86_64-linux" && n == "mlx-kernel" then false else true
   ) packagesDir;
 
   lib = prev.lib // {

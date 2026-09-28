@@ -94,6 +94,9 @@ in
       secretsFile = ./secrets/restic.yaml;
       metrics.directory = "media";
       directories."media".path = "/media";
+      persist.enable = true;
+      # TODO: give persist its own services/restic/persist/password
+      directories."persist".passwordSecret = "services/restic/media/password";
     };
 
     sops.secrets."services/msmtp/password" = {

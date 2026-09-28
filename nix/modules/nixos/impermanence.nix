@@ -93,9 +93,16 @@
         }
       ];
 
+      # machineAsBuilder hardcodes /etc/nix/builder_ed25519, which the rollback wipes,
+      # so point it at a copy that lives in /persist.
+      environment.etc."nix/builder_ed25519" = lib.mkIf (config.nix.buildMachines != [ ]) {
+        source = "/persist/etc/nix/builder_ed25519";
+      };
+
       systemd.tmpfiles.rules = lib.lists.flatten (
         [
           "d /persist/etc/ssh 0644 root root"
+          "d /persist/etc/nix 0755 root root"
         ]
         ++ (builtins.map (
           {

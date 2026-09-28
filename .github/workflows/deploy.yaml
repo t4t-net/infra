@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      skip_cache_wait:
+        description: "Deploy without waiting for hydra (anything uncached gets built on the CI builders)"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -60,6 +66,13 @@ jobs:
       - uses: nicknovitski/nix-develop@v1
         with:
           arguments: "./nix"
+
+      # Before the SSH cert step, since the cert could expire during a long wait.
+      - name: Wait for hydra to build everything
+        if: ${{ !inputs.skip_cache_wait }}
+        timeout-minutes: 185
+        shell: bash
+        run: .github/scripts/wait-for-cache.sh ./nix 10800
 
       - name: Start SSH agent
         shell: bash

@@ -22,7 +22,7 @@ in
     (self.lib.nixosModule "nixos/backup")
     (self.lib.nixosModule "nixos/services/soulseek")
     (self.lib.nixosModule "nixos/services/plex")
-    (self.lib.nixosModule "nixos/services/rtorrent")
+    (self.lib.nixosModule "nixos/services/qbittorrent")
     (self.lib.nixosModule "nixos/services/radarr")
     (self.lib.nixosModule "nixos/services/lidarr")
     (self.lib.nixosModule "nixos/services/beets")

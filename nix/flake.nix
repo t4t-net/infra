@@ -185,7 +185,12 @@
                 };
               }
               // (builtins.mapAttrs (name: value: {
-                imports = value._module.args.modules;
+                imports = value._module.args.modules ++ [
+                  # colmena runs eval-config with plain nixpkgs lib, which lacks the flake's version info
+                  # that nixpkgs.lib.nixosSystem adds. without this every node evaluates to a
+                  # "26.05pre-git" system that doesn't match what hydra built and cached
+                  { system.nixos = { inherit (value.config.system.nixos) versionSuffix revision; }; }
+                ];
                 deployment = self.lib.vars.machines.${name}.deployment or { };
               }) conf);
 

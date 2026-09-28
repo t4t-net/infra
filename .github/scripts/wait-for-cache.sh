@@ -41,7 +41,9 @@ for m in "${machines[@]}"; do
     echo "$m is auto-deploy but not in hydraJobs.nixos, so hydra will never cache it" >&2
     exit 1
   fi
-  pending[$m]=$(quiet_eval --raw "$FLAKE#nixosConfigurations.$m.config.system.build.toplevel.outPath")
+  # colmena's own evaluation, not nixosConfigurations: if the two ever drift apart, this waits
+  # (and times out) instead of letting colmena rebuild everything on the CI builders
+  pending[$m]=$(quiet_eval --raw "$FLAKE#colmenaHive.nodes.$m.config.system.build.toplevel.outPath")
   echo "$m -> ${pending[$m]}"
 done
 

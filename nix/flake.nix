@@ -34,14 +34,14 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    zig = {
-      url = "github:mitchellh/zig-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
+    zig2nix = {
+      url = "github:rv32ima/zig2nix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.flake-utils.follows = "flake-utils";
     };
     zls = {
-      url = "github:zigtools/zls/0.15.0";
+      url = "github:zigtools/zls/0.16.0";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.zig-overlay.follows = "zig";
     };
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";

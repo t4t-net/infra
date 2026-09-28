@@ -65,7 +65,7 @@ in
     home.username = "eford";
     home.stateVersion = "25.11";
     home.packages = with pkgs; [
-      zigpkgs."0.15.1"
+      zig
       inputs.zls.packages.${system}.default
 
       duckdb

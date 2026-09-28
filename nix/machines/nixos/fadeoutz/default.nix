@@ -18,6 +18,7 @@ in
     (self.lib.nixosModule "nixos/remote-builder")
     (self.lib.nixosModule "nixos/deploy")
     (self.lib.nixosModule "nixos/machine-certificate")
+    (self.lib.nixosModule "nixos/backup")
     (self.lib.nixosModule "nixos/services/tailscale")
     (self.lib.nixosModule "nixos/services/step-ca")
 
@@ -60,6 +61,12 @@ in
     networking.hostId = "f38e6b58";
 
     rv32ima.machine.tailscale.enable = true;
+
+    rv32ima.machine.backup = {
+      enable = true;
+      secretsFile = ./secrets/restic.yaml;
+      persist.enable = true;
+    };
 
     services.prometheus.exporters.node.enable = true;
 

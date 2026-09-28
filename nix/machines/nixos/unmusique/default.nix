@@ -19,6 +19,7 @@ in
     (self.lib.nixosModule "nixos/remote-builder")
     (self.lib.nixosModule "nixos/deploy")
     (self.lib.nixosModule "nixos/machine-certificate")
+    (self.lib.nixosModule "nixos/backup")
     (self.lib.nixosModule "nixos/services/tailscale")
     (self.lib.nixosModule "nixos/services/grafana")
     (self.lib.nixosModule "nixos/services/tailscalesd")
@@ -60,6 +61,12 @@ in
     networking.hostId = "b89ce780";
 
     rv32ima.machine.tailscale.enable = true;
+
+    rv32ima.machine.backup = {
+      enable = true;
+      secretsFile = ./secrets/restic.yaml;
+      persist.enable = true;
+    };
 
     services.openssh.enable = true;
     services.openssh.openFirewall = false;

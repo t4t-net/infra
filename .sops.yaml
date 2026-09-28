@@ -75,7 +75,7 @@ creation_rules:
     - age:
       - *1password
       - *unmusique
-  - path_regex: machines/fadeoutz/secrets/.*$
+  - path_regex: machines/nixos/fadeoutz/secrets/.*$
     key_groups:
     - age:
       - *1password

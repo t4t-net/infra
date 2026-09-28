@@ -35,15 +35,24 @@ if [ ${#machines[@]} -eq 0 ]; then
   exit 1
 fi
 
-declare -A pending
 for m in "${machines[@]}"; do
   if ! printf '%s\n' "${jobs[@]}" | grep -qx "$m"; then
     echo "$m is auto-deploy but not in hydraJobs.nixos, so hydra will never cache it" >&2
     exit 1
   fi
-  # colmena's own evaluation, not nixosConfigurations: if the two ever drift apart, this waits
-  # (and times out) instead of letting colmena rebuild everything on the CI builders
-  pending[$m]=$(quiet_eval --raw "$FLAKE#colmenaHive.nodes.$m.config.system.build.toplevel.outPath")
+done
+
+# colmena's own evaluation, not nixosConfigurations: if the two ever drift apart, this waits
+# (and times out) instead of letting colmena rebuild everything on the CI builders.
+# all machines in one eval: every `nix eval` spends ~20s loading the flake and shared stuff before
+# it gets to the machine (~12s), so this is ~2x faster than one eval per machine, and faster than
+# running those in parallel too
+outpaths_json=$(quiet_eval --json "$FLAKE#colmenaHive.nodes" --apply \
+  "ns: builtins.listToAttrs (map (n: { name = n; value = ns.\${n}.config.system.build.toplevel.outPath; }) (builtins.fromJSON ''$machines_json''))")
+
+declare -A pending
+for m in "${machines[@]}"; do
+  pending[$m]=$(jq -r --arg m "$m" '.[$m]' <<<"$outpaths_json")
   echo "$m -> ${pending[$m]}"
 done
 

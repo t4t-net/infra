@@ -77,6 +77,13 @@
       serviceConfig.EnvironmentFile = "${config.sops.secrets."services/hydra/r2".path}";
     };
 
+    # the queue runner spawns ssh to remote builders as hydra-queue-runner, not root, so it has
+    # to own the builder key. root's nix-daemon can still read it, and ssh only refuses loose
+    # perms on keys owned by the calling user
+    systemd.tmpfiles.rules = [
+      "z /persist/etc/nix/builder_ed25519 0400 hydra-queue-runner root"
+    ];
+
     rv32ima.machine.tailscale.services.hydra = {
       targetUnit = "hydra-server.service";
       port = 3000;

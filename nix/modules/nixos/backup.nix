@@ -31,6 +31,17 @@ in
       description = "prefix for every repository on this host; each directory gets <repositoryBase>/<name>";
     };
 
+    rv32ima.machine.backup.pruneOpts = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [
+        "--keep-daily 7"
+        "--keep-weekly 4"
+        "--keep-monthly 6"
+        "--max-unused 10%"
+      ];
+      description = "retention policy for every directory on this host; `forget --prune` runs after each backup";
+    };
+
     rv32ima.machine.backup.metrics.directory = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
@@ -58,10 +69,14 @@ in
                 type = lib.types.str;
                 default = "services/restic/${name}/rcloneConfig";
               };
+              pruneOpts = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
+                default = cfg.pruneOpts;
+              };
               extraConfig = lib.mkOption {
                 type = lib.types.attrs;
                 default = { };
-                description = "extra options merged into services.restic.backups.<name> (timerConfig, pruneOpts, exclude, ...)";
+                description = "extra options merged into services.restic.backups.<name> (timerConfig, exclude, ...)";
               };
             };
           }
@@ -98,7 +113,7 @@ in
     services.restic.backups = lib.mapAttrs (
       _: dir:
       {
-        inherit (dir) repository;
+        inherit (dir) repository pruneOpts;
         user = config.users.users."restic".name;
         paths = [ dir.path ];
         passwordFile = secretPath dir.passwordSecret;

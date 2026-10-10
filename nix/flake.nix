@@ -210,12 +210,13 @@
                 let
                   mkClosure = machine: self.nixosConfigurations.${machine}.config.system.build.toplevel;
                   mkNetboot = machine: self.nixosConfigurations.${machine}.config.system.build.netboot;
+
                   machineAndInstaller = machine: {
                     "${machine}" = mkClosure machine;
                     "${machine}-installer" = mkNetboot "${machine}-installer";
                   };
                 in
-                lib.mergeAttrsList [
+                (lib.mergeAttrsList [
                   (machineAndInstaller "peer2peer")
                   (machineAndInstaller "ghostholding")
                   (machineAndInstaller "pawpatch")
@@ -224,7 +225,11 @@
                   (machineAndInstaller "fadeoutz")
                   (machineAndInstaller "experimental-skin")
                   (machineAndInstaller "professional-vengeance")
-                ];
+                ])
+                // {
+                  "digitalocean-base" =
+                    self.nixosConfigurations.digitalocean-base.config.system.build.digitalOceanImage;
+                };
             };
 
             lib = {

@@ -155,10 +155,8 @@
               in
               mkNixBuilders (
                 map (m: m // { sshKey = null; }) [
-                  (self.lib.machineAsBuilder "unmusique")
                   (self.lib.machineAsBuilder "peer2peer")
                   (self.lib.machineAsBuilder "psychoboost")
-                  (self.lib.machineAsBuilder "fadeoutz")
                 ]
               );
 
@@ -221,8 +219,6 @@
                   (machineAndInstaller "ghostholding")
                   (machineAndInstaller "pawpatch")
                   (machineAndInstaller "psychoboost")
-                  (machineAndInstaller "unmusique")
-                  (machineAndInstaller "fadeoutz")
                   (machineAndInstaller "experimental-skin")
                   (machineAndInstaller "professional-vengeance")
                 ])

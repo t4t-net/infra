@@ -88,49 +88,6 @@
       ];
     };
   };
-  "unmusique" = {
-    system = "x86_64-linux";
-    stateVersion = "26.05";
-    sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEqPYLS8MYB5YCS03ID7sHxqnfkoe2yhZ1KeL3lr+quz";
-    deployment = {
-      targetHost = "unmusique.tail09d5b.ts.net";
-      targetPort = 22;
-      targetUser = "deploy";
-      tags = [ "auto-deploy" ];
-    };
-    build = {
-      maxJobs = 40;
-      sshUser = "nix";
-      speedFactor = 1;
-      supportedFeatures = [
-        "kvm"
-        "benchmark"
-        "big-parallel"
-      ];
-    };
-  };
-  "fadeoutz" = {
-    system = "x86_64-linux";
-    stateVersion = "26.05";
-    machineID = "d79d558458594324a0626831b6fd86b1";
-    sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJeEX3/9e5OfsCkPw2P/hWN+tLniuNO+muL9Q9KgfJFq";
-    deployment = {
-      targetHost = "fadeoutz.tail09d5b.ts.net";
-      targetPort = 22;
-      targetUser = "deploy";
-      tags = [ "auto-deploy" ];
-    };
-    build = {
-      maxJobs = 48;
-      sshUser = "nix";
-      speedFactor = 1;
-      supportedFeatures = [
-        "kvm"
-        "benchmark"
-        "big-parallel"
-      ];
-    };
-  };
   "professional-vengeance" = {
     system = "x86_64-linux";
     stateVersion = "26.05";

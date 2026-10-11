@@ -150,10 +150,8 @@
       };
 
       networking.hosts = {
-        "108.62.157.229" = [ "fadeoutz.sea.t4t.net" ];
         "199.255.18.181" = [ "ghostholding.sea.t4t.net" ];
         "2606:7940:32:3c::11" = [ "ghostholding.sea.t4t.net" ];
-        "23.82.201.9" = [ "unmusique.sea.t4t.net" ];
       };
 
       services.dnsmasq = {

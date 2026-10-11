@@ -74,7 +74,6 @@ in
     networking.firewall.logRefusedConnections = false;
 
     nix.buildMachines = [
-      (self.lib.machineAsBuilder "unmusique")
       (self.lib.machineAsBuilder "peer2peer")
     ];
 

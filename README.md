@@ -25,7 +25,7 @@ To bootstrap a new machine requires an existing machine (of a similar architectu
 On the bootstrapping machine, you'll want to run:
 
 ```
-MACHINE="fadeoutz"
+MACHINE="peer2peer"
 nix build "github:rv32ima/dotfiles#nixosConfigurations.${MACHINE}-installer.config.system.build.netboot"
 ```
 
@@ -59,7 +59,7 @@ After a couple of seconds, the machine should come alive and should be available
 NOTE: nixos-install will likely fail due to missing Secure Boot keys. We'll fix this later.
 
 ```
-MACHINE="fadeoutz"
+MACHINE="peer2peer"
 disko --mode destroy,format,mount --flake "github:rv32ima/dotfiles?dir=nix#${MACHINE}"
 sudo nixos-install --no-root-password --flake "github:rv32ima/dotfiles?dir=nix#${MACHINE}"
 nixos-enter
@@ -79,7 +79,7 @@ sops updatekeys nix/modules/users/*/secrets/password.yaml
 on every file that the new machine needs access to. After you've done that, commit the new secrets to this repo, and push to GitHub. Then, on the target machine, run the following:
 
 ```
-MACHINE="fadeoutz"
+MACHINE="peer2peer"
 sudo nixos-install --no-root-password --flake "github:rv32ima/dotfiles?dir=nix#${MACHINE}"
 ```
 

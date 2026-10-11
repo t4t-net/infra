@@ -147,4 +147,15 @@
     system = "x86_64-linux";
     stateVersion = "26.05";
   };
+  "cert-authority" = {
+    system = "x86_64-linux";
+    stateVersion = "26.05";
+    machineID = "4778c864daf34899b771dfaf455153f4";
+    deployment = {
+      targetHost = "cert-authority.tail09d5b.ts.net";
+      targetPort = 22;
+      targetUser = "root";
+      tags = [ "auto-deploy" ];
+    };
+  };
 }

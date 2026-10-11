@@ -246,6 +246,7 @@ in
                   "*.t4t.net"
                   "*.sea.t4t.net"
                   "*.tail09d5b.ts.net"
+                  "*.sfo.t4t.net"
                 ];
               };
               allowWildcardNames = true;

@@ -223,6 +223,8 @@
                   (machineAndInstaller "professional-vengeance")
                 ])
                 // {
+                  # droplets boot from th digitalocean-base image, so no installer 2 build
+                  "cert-authority" = mkClosure "cert-authority";
                   "digitalocean-base" =
                     self.nixosConfigurations.digitalocean-base.config.system.build.digitalOceanImage;
                 };

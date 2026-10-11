@@ -111,7 +111,7 @@
     deployment = {
       targetHost = "cert-authority.tail09d5b.ts.net";
       targetPort = 22;
-      targetUser = "root";
+      targetUser = "deploy";
       tags = [ "auto-deploy" ];
     };
   };

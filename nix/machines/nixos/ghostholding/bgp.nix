@@ -1,145 +1,103 @@
-{ pkgs, lib, ... }:
+{ lib, ... }:
 let
-  prefixes = [
-    {
-      family = "ipv4";
-      prefix = "23.190.72.0/24";
-      nexthop = "0.0.0.0";
-    }
-    {
-      family = "ipv6";
-      prefix = "2620:c2:2000::/48";
-      nexthop = "::";
-    }
-  ];
-in
-{
-  services.gobgpd = {
-    enable = true;
-    settings = {
-      global.config = {
-        as = 395388;
-        router-id = "199.255.18.181";
-      };
+  asn = 395388;
+  routerId = "199.255.18.181";
+  uplinkV6 = "2606:7940:32:3c::11";
 
-      peer-groups = [
-        {
-          config = {
-            peer-group-name = "cofractal";
-            peer-as = 26073;
-          };
-          afi-safis = [
-            { config.afi-safi-name = "ipv4-unicast"; }
-            { config.afi-safi-name = "ipv6-unicast"; }
-          ];
-          apply-policy.config = {
-            default-import-policy = "accept-route";
-            export-policy-list = [ "EXPORT" ];
-            default-export-policy = "reject-route";
-          };
-        }
-        {
-          config = {
-            peer-group-name = "bgp-tools";
-            peer-as = 212232;
-          };
-          afi-safis = [
-            { config.afi-safi-name = "ipv4-unicast"; }
-            { config.afi-safi-name = "ipv6-unicast"; }
-          ];
-          apply-policy.config = {
-            default-import-policy = "reject-route";
-            default-export-policy = "accept-route";
-          };
-        }
-      ];
-
-      neighbors = [
-        {
-          config = {
-            neighbor-address = "2606:7940:32:3c::2";
-            peer-group = "cofractal";
-          };
-        }
-        {
-          config = {
-            neighbor-address = "2606:7940:32:3c::3";
-            peer-group = "cofractal";
-          };
-        }
-        {
-          config = {
-            neighbor-address = "185.230.223.73";
-            peer-group = "bgp-tools";
-          };
-          ebgp-multihop.config = {
-            enabled = true;
-          };
-        }
-      ];
-
-      # match the lo prefixes — gobgp has no interface matching
-      defined-sets.prefix-sets = [
-        {
-          prefix-set-name = "lo-prefixes";
-          prefix-list = map (p: {
-            ip-prefix = p.prefix;
-            masklength-range =
-              let
-                mask = lib.last (lib.splitString "/" p.prefix);
-              in
-              "${mask}..${mask}";
-          }) prefixes;
-        }
-      ];
-
-      policy-definitions = [
-        {
-          name = "EXPORT";
-          statements = [
-            {
-              name = "permit-lo-with-v6-nexthop";
-              conditions.match-prefix-set = {
-                prefix-set = "lo-prefixes";
-                match-set-options = "any";
-              };
-              actions = {
-                route-disposition = "accept-route";
-                # RFC 5549: ipv4 routes with ipv6 nexthop over ipv6 session.
-                # extended-nexthop capability is auto-negotiated since transport is ipv6.
-                bgp-actions.set-next-hop = "2606:7940:32:3c::11";
-              };
-            }
-            {
-              name = "deny-rest";
-              actions.route-disposition = "reject-route";
-            }
-          ];
-        }
-      ];
-    };
+  prefixes = {
+    ipv4 = [ "23.190.72.0/24" ];
+    ipv6 = [ "2620:c2:2000::/48" ];
   };
 
-  # gobgp has no kernel RIB redistribution, so inject lo prefixes on start.
-  # nexthops here are dummies — the EXPORT policy sets the real one.
-  systemd.services."gobgpd-inject-routes" = {
-    after = [ "gobgpd.service" ];
-    bindsTo = [ "gobgpd.service" ];
-    wantedBy = [ "gobgpd.service" ];
-    path = [ pkgs.gobgp ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-    };
-    script = ''
-      for i in $(seq 30); do
-        gobgp global 2>/dev/null && break
-        [ "$i" -eq 30 ] && echo "gobgpd not ready after 30s, giving up" && exit 1
-        sleep 1
-      done
-      ${lib.concatMapStrings (
-        p: "gobgp global rib add -a ${p.family} ${p.prefix} nexthop ${p.nexthop}\n"
-      ) prefixes}
+  prefixSet = family: "[ ${lib.concatStringsSep ", " prefixes.${family}} ]";
+  staticRoutes =
+    family: lib.concatMapStrings (p: "  route ${p} blackhole;\n") prefixes.${family};
+in
+{
+  # bird instead of gobgp: gobgp starved keepalives while dumping the full
+  # table to bgp.tools and died at the 90s hold timer every time, then
+  # reconnected every ~2s with no backoff until bgp.tools kicked us.
+  #
+  # there is deliberately NO `protocol kernel` here. nothing bird learns gets
+  # anywhere near the FIB, so the spectrum ASIC only ever sees the static
+  # routes from network.nix. full tables live in bird's RIB and that's it.
+  services.bird = {
+    enable = true;
+    config = ''
+      log syslog all;
+      router id ${routerId};
+
+      protocol device {
+        scan time 10;
+      }
+
+      # our own prefixes, originated from here. blackhole is fine since they
+      # never get exported to the kernel.
+      protocol static static4 {
+        ipv4;
+      ${staticRoutes "ipv4"}}
+
+      protocol static static6 {
+        ipv6;
+      ${staticRoutes "ipv6"}}
+
+      filter cofractal_out4 {
+        if source = RTS_STATIC && net ~ ${prefixSet "ipv4"} then accept;
+        reject;
+      }
+
+      filter cofractal_out6 {
+        if source = RTS_STATIC && net ~ ${prefixSet "ipv6"} then accept;
+        reject;
+      }
+
+      template bgp cofractal {
+        local ${uplinkV6} as ${toString asn};
+
+        # RFC 5549: ipv4 routes with an ipv6 nexthop over the ipv6 session.
+        # next hop self picks the session source, i.e. ${uplinkV6}.
+        ipv4 {
+          extended next hop on;
+          import all;
+          export filter cofractal_out4;
+          next hop self;
+        };
+
+        ipv6 {
+          import all;
+          export filter cofractal_out6;
+          next hop self;
+        };
+      }
+
+      protocol bgp cofractal1 from cofractal {
+        neighbor 2606:7940:32:3c::2 as 26073;
+      }
+
+      protocol bgp cofractal2 from cofractal {
+        neighbor 2606:7940:32:3c::3 as 26073;
+      }
+
+      # full table feed. bgp.tools sends us nothing useful, we send them
+      # everything we have.
+      protocol bgp bgptools {
+        local ${routerId} as ${toString asn};
+        neighbor 185.230.223.73 as 212232;
+        multihop;
+
+        ipv4 {
+          import none;
+          export all;
+          next hop self;
+        };
+
+        # ipv6 over an ipv4 session needs an explicit v6 nexthop
+        ipv6 {
+          import none;
+          export all;
+          next hop address ${uplinkV6};
+        };
+      }
     '';
   };
 }

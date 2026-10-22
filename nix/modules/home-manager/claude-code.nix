@@ -14,7 +14,7 @@
         };
       in
       [
-        pkgsUnstable.claude-code
+        (pkgs.rv32ima.claude-code-sandboxed.override { inherit (pkgsUnstable) claude-code; })
       ];
 
     home.file.".claude" = {

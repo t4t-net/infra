@@ -32,7 +32,7 @@ in
         direnv
 
         # Claude Code
-        pkgsUnstable.claude-code
+        (pkgs.rv32ima.claude-code-sandboxed.override { inherit (pkgsUnstable) claude-code; })
 
         markdownlint-cli2
 

@@ -75,6 +75,15 @@ in
 
     rv32ima.machine.tailscale.enable = true;
 
+    rv32ima.machine.hydraDeploy = {
+      enable = true;
+      allowReboot = true;
+      rebootWindow = {
+        lower = "04:00";
+        upper = "05:00";
+      };
+    };
+
     services.prometheus.exporters.node.enable = true;
 
     services.openssh.enable = true;

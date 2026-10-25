@@ -63,7 +63,8 @@
       targetHost = "pawpatch.tail09d5b.ts.net";
       targetPort = 22;
       targetUser = "deploy";
-      tags = [ "auto-deploy" ];
+      # hydra-deploy canary: pulls from hydra itself, so CI's colmena stays off it
+      # tags = [ "auto-deploy" ];
     };
   };
   "psychoboost" = {

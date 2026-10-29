@@ -34,8 +34,9 @@ in
       createHome = true;
     }
     //
-      lib.optionalAttrs
-        (builtins.hasAttr "openssh.authorizedPrincipals" (options.users.users.type.getSubOptions { }))
+      # `?` and not hasAttr: hasAttr looks for one attr literally named "openssh.authorizedPrincipals",
+      # so it was always false and ellie never got a principal (nix-darwin really doesn't have it)
+      lib.optionalAttrs ((options.users.users.type.getSubOptions [ ]) ? openssh.authorizedPrincipals)
         {
           openssh.authorizedPrincipals = [
             "ellie"

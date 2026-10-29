@@ -11,6 +11,7 @@
 let
   cfg = config.rv32ima.machine.hydraDeploy;
   hostName = config.networking.hostName;
+  discordSecret = "hydra-deploy/discord-webhook";
 
   deployScript = pkgs.writeShellApplication {
     name = "hydra-deploy";
@@ -28,6 +29,7 @@ let
       ALLOW_REBOOT=${lib.boolToString cfg.allowReboot}
       WINDOW_LOWER=${lib.escapeShellArg cfg.rebootWindow.lower}
       WINDOW_UPPER=${lib.escapeShellArg cfg.rebootWindow.upper}
+      DISCORD_WEBHOOK_FILE=${lib.escapeShellArg (lib.optionalString cfg.discord.enable config.sops.secrets.${discordSecret}.path)}
       # the last path *we* switched to, so a manual colmena apply sticks until hydra has something
       # newer instead of getting reverted on the next tick (or after a reboot). a gc root and not a
       # file in /var/lib, since impermanence wipes that but /nix always survives
@@ -105,6 +107,32 @@ let
           in_window=true
         fi
 
+        # once per pending kernel, not once per tick. /run is a tmpfs, so the reboot itself clears
+        # this, and a second kernel bump before then pings again
+        pending=$(readlink -f /run/current-system/{kernel,initrd,kernel-modules} | sha256sum | cut -d' ' -f1)
+        notified=/run/hydra-deploy/reboot-notified
+        if [[ -n $DISCORD_WEBHOOK_FILE && $(cat "$notified" 2>/dev/null || true) != "$pending" ]]; then
+          booted_kernel=$(basename "$(dirname "$(readlink -f /run/booted-system/kernel)")")
+          new_kernel=$(basename "$(dirname "$(readlink -f /run/current-system/kernel)")")
+          if [[ $ALLOW_REBOOT == true ]]; then
+            plan="rebooting itself between $WINDOW_LOWER and $WINDOW_UPPER"
+          else
+            plan="won't reboot itself, someone has to do it by hand"
+          fi
+          if [[ $booted_kernel == "$new_kernel" ]]; then
+            what="same kernel (''${new_kernel#*-}), but a new initrd or kernel modules"
+          else
+            what="booted ''${booted_kernel#*-}, now has ''${new_kernel#*-}"
+          fi
+          payload=$(jq -n --arg msg "**$HOST** needs a reboot: $what. $plan" '{content: $msg}')
+          # a failed ping isn't a failed deploy, so it just gets retried next tick
+          if curl -sf --max-time 10 --retry 3 -H 'Content-Type: application/json' -d "$payload" "$(<"$DISCORD_WEBHOOK_FILE")" >/dev/null; then
+            echo "$pending" >"$notified"
+          else
+            echo "couldn't ping discord about the pending reboot, trying again next tick" >&2
+          fi
+        fi
+
         if [[ $ALLOW_REBOOT == true && $in_window == true ]]; then
           echo "kernel changed since boot, rebooting"
           systemctl reboot
@@ -152,6 +180,12 @@ in
       description = "Reboot inside rebootWindow when the kernel, initrd or kernel modules changed since boot.";
     };
 
+    discord.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Ping discord (webhook from secrets/hydra-deploy.yaml) once when a reboot is pending.";
+    };
+
     rebootWindow = {
       lower = lib.mkOption {
         type = lib.types.strMatching "[[:digit:]]{2}:[[:digit:]]{2}";
@@ -165,6 +199,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    sops.secrets.${discordSecret} = lib.mkIf cfg.discord.enable {
+      sopsFile = ../../secrets/hydra-deploy.yaml;
+      key = "discord-webhook";
+    };
+
     systemd.services.hydra-deploy = {
       description = "deploy this machine's latest hydra build";
       wants = [ "network-online.target" ];
@@ -175,6 +214,9 @@ in
       serviceConfig = {
         Type = "oneshot";
         ExecStart = lib.getExe deployScript;
+        # holds the reboot-notified marker; kept between ticks, gone after a reboot
+        RuntimeDirectory = "hydra-deploy";
+        RuntimeDirectoryPreserve = true;
       };
     };
 

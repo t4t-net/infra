@@ -95,6 +95,15 @@ creation_rules:
     - age:
       - *1password
       - *cert-authority
+  # discord webhook hydra-deploy pings when a box needs a reboot
+  - path_regex: secrets/hydra-deploy\.yaml$
+    key_groups:
+    - age:
+      - *1password
+      - *pawpatch
+      - *peer2peer
+      - *psychoboost
+      - *cert-authority
   # restic passwords for backups of machines that are gone, kept so th backups stay restorable
   - path_regex: secrets/decommissioned/.*$
     key_groups:

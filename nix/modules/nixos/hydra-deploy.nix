@@ -33,7 +33,9 @@ let
       # file in /var/lib, since impermanence wipes that but /nix always survives
       STATE=/nix/var/nix/gcroots/hydra-deploy-last-applied
 
-      build=$(curl -sfL --max-time 30 -H 'Accept: application/json' "$HYDRA_URL/job/$JOB/latest-finished")
+      # latest and not latest-finished: latest-finished only looks at evals where *every* build is
+      # done, so we'd sit waiting on some installer or disk image nobody deploys
+      build=$(curl -sfL --max-time 30 -H 'Accept: application/json' "$HYDRA_URL/job/$JOB/latest")
       build_id=$(jq -r '.id' <<<"$build")
       path=$(jq -r 'select(.finished == 1 and .buildstatus == 0) | .buildoutputs.out.path // empty' <<<"$build")
 

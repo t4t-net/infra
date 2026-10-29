@@ -1,9 +1,8 @@
 name: Deploy
 
+# manual only: boxes pull their own systems from hydra now (nix/modules/nixos/hydra-deploy.nix).
+# this is the "push it everywhere right now" escape hatch
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       skip_cache_wait:

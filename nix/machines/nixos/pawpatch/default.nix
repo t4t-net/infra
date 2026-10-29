@@ -75,14 +75,9 @@ in
 
     rv32ima.machine.tailscale.enable = true;
 
-    rv32ima.machine.hydraDeploy = {
-      enable = true;
-      allowReboot = true;
-      rebootWindow = {
-        lower = "04:00";
-        upper = "05:00";
-      };
-    };
+    # luks w/o tpm2 or initrd ssh yet, so a reboot hangs at the password prompt. it still
+    # switches on its own and logs "reboot pending", reboot it by hand for now
+    rv32ima.machine.hydraDeploy.enable = true;
 
     services.prometheus.exporters.node.enable = true;
 

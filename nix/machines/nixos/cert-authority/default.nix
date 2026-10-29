@@ -45,6 +45,16 @@ in
 
     rv32ima.machine.tailscale.enable = true;
 
+    # no luks on the droplet, so it can reboot for kernels on its own
+    rv32ima.machine.hydraDeploy = {
+      enable = true;
+      allowReboot = true;
+      rebootWindow = {
+        lower = "05:00";
+        upper = "06:00";
+      };
+    };
+
     # no /persist (or zfs) on a droplet, so name th state we care about instead of persist.enable.
     # reuses th one password that's already in restic.yaml
     rv32ima.machine.backup = {

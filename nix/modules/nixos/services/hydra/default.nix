@@ -2,8 +2,16 @@
   config,
   lib,
   pkgs,
+  vars',
   ...
 }:
+let
+  # /etc/nix/machines only has the *other* builders, so without this hydra never builds on the box
+  # it lives on. "localhost" makes the queue runner use the local daemon, no ssh
+  localBuilder = pkgs.writeText "hydra-local-builder" ''
+    localhost ${vars'.system} - ${toString vars'.build.maxJobs} ${toString vars'.build.speedFactor} ${lib.concatStringsSep "," vars'.build.supportedFeatures} -
+  '';
+in
 {
   config = {
     rv32ima.machine.impermanence.extraPersistDirectories = [
@@ -43,7 +51,10 @@
       enable = true;
       hydraURL = "https://hydra.tail09d5b.ts.net";
       notificationSender = "hydra@t4t.net";
-      buildMachinesFiles = [ "/etc/nix/machines" ];
+      buildMachinesFiles = [
+        "/etc/nix/machines"
+        localBuilder
+      ];
       useSubstitutes = true;
       smtpHost = "smtp.fastmail.com";
       # max_db_connections caps the queue-runner's connection pool (hydra defaults it to 128, more
@@ -68,6 +79,11 @@
         EMAIL_SENDER_TRANSPORT_ssl=starttls
       '';
     };
+
+    # builds (local, hydra's, and remote ones over ssh) all run under nix-daemon.service, so this
+    # throttles them before the box gets tight enough for the oom killer to pick postgres or the
+    # evaluator. leaves ~14G for hydra, postgres and everything else
+    systemd.services.nix-daemon.serviceConfig.MemoryHigh = "48G";
 
     systemd.services.hydra-notify = {
       serviceConfig.EnvironmentFile = "${config.sops.templates."services/hydra/smtp".path}";

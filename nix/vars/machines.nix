@@ -79,7 +79,9 @@
       tags = [ "auto-deploy" ];
     };
     build = {
-      maxJobs = 64;
+      # 62G of ram, so 64 jobs is <1G each and one llvm build away from the oom killer. the
+      # threads run out way after the memory does
+      maxJobs = 32;
       sshUser = "nix";
       speedFactor = 10;
       supportedFeatures = [

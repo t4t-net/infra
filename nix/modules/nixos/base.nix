@@ -69,10 +69,6 @@
       dmidecode
     ];
 
-    environment.sessionVariables = {
-      FLAKE = self;
-    };
-
     # Where we are roughly:
     time.timeZone = "America/Los_Angeles";
 

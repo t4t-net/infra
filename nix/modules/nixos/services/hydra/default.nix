@@ -59,7 +59,11 @@ in
       smtpHost = "smtp.fastmail.com";
       # max_db_connections caps the queue-runner's connection pool (hydra defaults it to 128, more
       # than postgres allows in total). one per build slot is plenty
+      # evaluator_workers defaults to 1, so nix-eval-jobs evals every job serially. 4 workers at
+      # th default 4G cap each fits in th ~14G nix-daemon's MemoryHigh leaves over
       extraConfig = ''
+        evaluator_workers = 4
+        evaluator_max_memory_size = 4096
         store_uri = s3://rv32ima-nix-store?secret-key=${
           config.sops.secrets."services/hydra/nix-signing-key".path
         }&endpoint=359f72dd5610ef51b6f186e0818ab188.r2.cloudflarestorage.com&region=auto&compression=zstd

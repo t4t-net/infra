@@ -69,6 +69,9 @@ in
             name = "kitty";
             email = "kitty@catmod.ing";
           };
+          # t4t-net uses the step ssh cert via the normal agent,, personal repos
+          # go thru the github-personal alias in ~/.dotfiles/ssh which uses 1p
+          url."git@github-personal:rv32ima/".insteadOf = "git@github.com:rv32ima/";
         };
       };
 

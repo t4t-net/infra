@@ -107,6 +107,20 @@ in
             "criticalOptions": {{ toJson .CriticalOptions }}
           }
         '';
+        # github's org ssh CA maps certs 2 users via the login@github.com extension,,
+        # keep the email -> login mapping explicit so nobody else on ellie.fm can claim rv32ima
+        googleSSHTemplate = pkgs.writeText "google-ssh.tpl" ''
+          {{- $ext := dict -}}
+          {{- range $k, $v := .Extensions }}{{ $_ := set $ext $k $v }}{{ end -}}
+          {{- if eq .Token.email "me@ellie.fm" }}{{ $_ := set $ext "login@github.com" "rv32ima" }}{{ end -}}
+          {
+            "type": {{ toJson .Type }},
+            "keyId": {{ toJson .KeyID }},
+            "principals": {{ toJson .Principals }},
+            "extensions": {{ toJson $ext }},
+            "criticalOptions": {{ toJson .CriticalOptions }}
+          }
+        '';
         githubActionsSSHTemplate = pkgs.writeText "github-actions-ssh.tpl" ''
           {{- if not (eq .Token.sub "repo:t4t-net/infra:ref:refs/heads/main") -}}
           {{- fail "unauthorized: only t4t-net/infra main branch is allowed" -}}
@@ -233,7 +247,7 @@ in
               };
               options = {
                 ssh = {
-                  templateFile = "${sshTemplate}";
+                  templateFile = "${googleSSHTemplate}";
                 };
               };
             }

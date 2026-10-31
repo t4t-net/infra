@@ -2,15 +2,11 @@
   config,
   inputs,
   lib,
+  pkgs,
   self,
   vars,
   ...
 }:
-let
-  pkgsUnstable = import inputs.nixpkgs-unstable {
-    system = config.rv32ima.machine.platform;
-  };
-in
 {
   imports = [
     (self.lib.nixosModule "darwin/workstation")
@@ -25,7 +21,7 @@ in
     # client, like what comes from Nix. Alas, we have to use the "real" version that
     # uses a kernel extension.
     services.tailscale.enable = lib.mkForce false;
-    services.tailscale.package = pkgsUnstable.tailscale;
+    services.tailscale.package = pkgs.unstable.tailscale;
     homebrew = {
       casks = [
         "tailscale-app"

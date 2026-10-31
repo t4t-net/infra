@@ -65,13 +65,7 @@
 
   config = lib.mkIf config.rv32ima.machine.tailscale.enable {
     services.tailscale.enable = true;
-    services.tailscale.package =
-      let
-        pkgsUnstable = import inputs.nixpkgs-unstable {
-          system = pkgs.stdenv.hostPlatform.system;
-        };
-      in
-      pkgsUnstable.tailscale;
+    services.tailscale.package = pkgs.unstable.tailscale;
     services.tailscale.openFirewall = true;
     services.tailscale.useRoutingFeatures = "both";
     services.tailscale.extraSetFlags = [ "--accept-routes" ];
@@ -91,7 +85,10 @@
         map (
           x:
           lib.nameValuePair "${name}-serve-${toString x.targetPort}" {
-            wantedBy = [ "multi-user.target" targetUnit ];
+            wantedBy = [
+              "multi-user.target"
+              targetUnit
+            ];
             after = [
               targetUnit
               "tailscaled.service"

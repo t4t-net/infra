@@ -11,6 +11,8 @@
       enable = true;
       vimAlias = true;
       vimdiffAlias = true;
+      withRuby = true;
+      withPython3 = true;
 
       extraPackages = with pkgs; [
         git

@@ -17,6 +17,10 @@
         "theseal/homebrew-ssh-askpass" = inputs.darwin-ssh-askpass;
       };
       mutableTaps = false;
+      # brew >= 6 refuses 2 load formulae from non-official taps unless trusted
+      trust.formulae = [
+        "theseal/ssh-askpass/ssh-askpass"
+      ];
     };
 
     homebrew = {

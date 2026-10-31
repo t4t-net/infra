@@ -104,6 +104,7 @@ creation_rules:
       - *peer2peer
       - *psychoboost
       - *cert-authority
+      - *ghostholding
   # restic passwords for backups of machines that are gone, kept so th backups stay restorable
   - path_regex: secrets/decommissioned/.*$
     key_groups:

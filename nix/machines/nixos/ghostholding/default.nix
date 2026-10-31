@@ -21,6 +21,26 @@
 
     services.getty.autologinUser = "root";
 
+    # no luks, so it can reboot for kernels on its own. routing + bgp drop while it does, hence 3am
+    rv32ima.machine.hydraDeploy = {
+      enable = true;
+      allowReboot = true;
+    };
+
+    # tiny msata, nd every deploy drops a whole new system on it. prune old generations daily, nd
+    # gc mid-build if it gets tight anyway
+    nix.gc = {
+      automatic = true;
+      dates = "daily";
+      options = "--delete-older-than 7d";
+    };
+    nix.settings = {
+      min-free = 2 * 1024 * 1024 * 1024;
+      max-free = 5 * 1024 * 1024 * 1024;
+    };
+    # the 500M esp holds a kernel + initrd per generation, so cap what grub keeps
+    boot.loader.grub.configurationLimit = 5;
+
     boot.initrd.availableKernelModules = [
       "ahci"
       "xhci_pci"

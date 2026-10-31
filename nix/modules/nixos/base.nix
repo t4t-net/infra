@@ -44,6 +44,10 @@
       TrustedUserCAKeys ${../../../certificates/ssh-user-ca.pub}
     '';
 
+    # th nixos manual (man configuration.nix, nixos-help) evals every option on every host eval,
+    # nd nobody reads it on a server
+    documentation.nixos.enable = false;
+
     # Probably needed in some systems:
     hardware.enableRedistributableFirmware = true;
 
@@ -61,7 +65,6 @@
       jq
       vim
       wget
-      disko
       sbctl
       # persistent terminal sessions for ssh
       tmux

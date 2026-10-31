@@ -17,6 +17,8 @@
     };
     home-manager.sharedModules = [
       (self.lib.nixosModule "home-manager/ssh-agent")
+      # th hm manpage evals every hm option 2 render docs, per user, on every host eval
+      { manual.manpages.enable = false; }
     ];
   };
 }

@@ -25,8 +25,11 @@ symlinkJoin {
   nativeBuildInputs = [ makeBinaryWrapper ];
   postBuild = ''
     rm $out/bin/claude
+    # nixpkgs defaults this to `system` only, which drops the bundled
+    # roots and breaks TLS to api.anthropic.com on 2.1.311
     makeWrapper ${claude-code}/bin/claude $out/bin/claude \
-      --set CLAUDE_CODE_PROCESS_WRAPPER ${sandboxLauncher}
+      --set CLAUDE_CODE_PROCESS_WRAPPER ${sandboxLauncher} \
+      --set-default CLAUDE_CODE_CERT_STORE system,bundled
   '';
   inherit (claude-code) meta;
 }

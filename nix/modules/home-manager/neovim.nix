@@ -11,7 +11,7 @@
       enable = true;
       vimAlias = true;
       vimdiffAlias = true;
-      withRuby = true;
+      withRuby = false;
       withPython3 = true;
 
       extraPackages = with pkgs; [

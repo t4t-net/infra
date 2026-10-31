@@ -21,6 +21,9 @@ in
   services.routinator = {
     enable = true;
     settings.rtr-listen = [ "127.0.0.1:${toString rtrPort}" ];
+    # /status (per-repo fetch times, vrp counts) and /metrics. localhost only,
+    # curl it over ssh
+    settings.http-listen = [ "127.0.0.1:8323" ];
   };
 
   # bird instead of gobgp: gobgp starved keepalives while dumping the full

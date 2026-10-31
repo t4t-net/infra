@@ -10,7 +10,7 @@
     (self.lib.nixosModule "users/root")
     (self.lib.nixosModule "nixos/netboot")
 
-    inputs.nixos-hardware.nixosModules.framework-amd-ai-300-series
+    inputs.nixos-hardware.nixosModules.framework-desktop-amd-ai-max-300-series
   ];
 
   config = {

@@ -11,6 +11,7 @@
     (self.lib.nixosModule "nixos/remote-builder")
     (self.lib.nixosModule "nixos/deploy")
     (self.lib.nixosModule "nixos/services/tailscale")
+    (self.lib.nixosModule "nixos/services/llama-cpp")
     # No machine-certificate since this lives at home and is behind
     # NAT.
 
@@ -20,7 +21,7 @@
     ./network.nix
     ./disk-config.nix
 
-    inputs.nixos-hardware.nixosModules.framework-amd-ai-300-series
+    inputs.nixos-hardware.nixosModules.framework-desktop-amd-ai-max-300-series
   ];
 
   config = {
@@ -51,8 +52,11 @@
     '';
 
     boot.kernelParams = [
-      "amdttm.pages_limit=27648000"
-      "amdttm.page_pool_size=27648000"
+      # 120GiB of gtt. in-tree amdgpu, so ttm.* and not th dkms amdttm.* names!!
+      "ttm.pages_limit=31457280"
+      "ttm.page_pool_size=31457280"
+      # 8GiB. arc defaults 2 nearly all of ram nd fights gtt while big models load
+      "zfs.zfs_arc_max=8589934592"
     ];
 
     boot.initrd.availableKernelModules = [
@@ -84,6 +88,12 @@
     virtualisation.libvirtd.enable = true;
 
     rv32ima.machine.tailscale.enable = true;
+
+    # luks unlocks itself from th tpm2, so it can reboot for kernels on its own
+    rv32ima.machine.hydraDeploy = {
+      enable = true;
+      allowReboot = true;
+    };
 
     services.prometheus.exporters.node.enable = true;
 

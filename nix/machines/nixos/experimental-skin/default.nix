@@ -39,6 +39,13 @@
         owner = "root";
         group = "root";
       }
+      # vm definitions, nvram, networks nd th default image pool all live here
+      {
+        path = /var/lib/libvirt;
+        mode = "0755";
+        owner = "root";
+        group = "root";
+      }
     ];
 
     boot.loader.limine.enable = true;

@@ -1,38 +1,15 @@
+# work laptop only, so this is darwin-only
 {
   pkgs,
-  options,
-  config,
-  lib,
   inputs,
-  self,
   ...
 }:
-let
-  homeDirectory =
-    user:
-    if (lib.hasSuffix "darwin" config.nixpkgs.hostPlatform.config) then
-      "/Users/${user}"
-    else
-      "/home/${user}";
-
-in
 {
   users.users."eford" = {
     shell = pkgs.fish;
-    home = homeDirectory "eford";
+    home = "/Users/eford";
     createHome = true;
-  }
-  // lib.optionalAttrs (builtins.hasAttr "extraGroups" (options.users.users.type.getSubOptions { })) {
-    extraGroups = [
-      "wheel"
-      "trusted"
-    ];
-  }
-  //
-    lib.optionalAttrs (builtins.hasAttr "isNormalUser" (options.users.users.type.getSubOptions { }))
-      {
-        isNormalUser = true;
-      };
+  };
 
   home-manager.users."eford" = {
     programs.git = {
@@ -63,7 +40,6 @@ in
     };
 
     home.username = "eford";
-    home.stateVersion = "25.11";
     home.packages = with pkgs; [
       zig
       inputs.zls.packages.${system}.default

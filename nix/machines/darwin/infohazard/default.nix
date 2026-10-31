@@ -42,6 +42,7 @@
     ];
 
     system.stateVersion = 6;
+    home-manager.sharedModules = [ { home.stateVersion = "26.05"; } ];
     system.primaryUser = "ellie";
     nixpkgs.hostPlatform = "aarch64-darwin";
     networking.domain = "net.ellie.fm";

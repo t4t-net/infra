@@ -280,6 +280,8 @@
                     inherit self inputs;
                     vars = self.lib.vars;
                     vars' = self.lib.vars.machines.${machineName} or { };
+                    # lets modules pick platform-specific files via imports (which can't look at config)
+                    platform = "nixos";
                   };
                 };
 
@@ -298,6 +300,7 @@
                     inherit self inputs;
                     vars = self.lib.vars;
                     vars' = self.lib.vars.machines.${machineName} or { };
+                    platform = "darwin";
                   };
                 };
 

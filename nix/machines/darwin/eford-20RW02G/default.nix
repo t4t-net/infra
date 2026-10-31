@@ -75,6 +75,7 @@
     ];
 
     system.stateVersion = 6;
+    home-manager.sharedModules = [ { home.stateVersion = "25.11"; } ];
     system.primaryUser = "eford";
     nixpkgs.hostPlatform = "aarch64-darwin";
   };

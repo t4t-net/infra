@@ -1,4 +1,10 @@
-{ inputs, self, ... }:
+{
+  inputs,
+  self,
+  lib,
+  vars',
+  ...
+}:
 {
   imports = [
     inputs.home-manager.nixosModules.home-manager
@@ -17,6 +23,8 @@
     home-manager.sharedModules = [
       # th hm manpage evals every hm option 2 render docs, per user, on every host eval
       { manual.manpages.enable = false; }
+      # hm state lives on th host, so default it 2 th host's stateVersion
+      { home.stateVersion = lib.mkDefault vars'.stateVersion; }
     ];
   };
 }

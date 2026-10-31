@@ -1,4 +1,6 @@
 {
+  config,
+  pkgs,
   self,
   inputs,
   ...
@@ -93,6 +95,20 @@
 
     programs.virt-manager.enable = true;
     virtualisation.libvirtd.enable = true;
+    # th stock unit seals this key w /var/lib/systemd/credential.secret, which th root rollback
+    # wipes, so a persisted key goes undecryptable on th next boot. tpm-only has no such file!!
+    # if pcr 7 ever changes libvirtd wont start: delete th key nd restart it 2 make a new one
+    systemd.services.virt-secret-init-encryption.serviceConfig.ExecStart = [
+      ""
+      (pkgs.writeShellScript "virt-secret-init-encryption" ''
+        set -euo pipefail
+        umask 0077
+        ${pkgs.coreutils}/bin/dd if=/dev/random status=none bs=32 count=1 |
+          ${config.systemd.package}/bin/systemd-creds encrypt \
+            --with-key=tpm2 --tpm2-pcrs=7 --name=secrets-encryption-key - \
+            /var/lib/libvirt/secrets/secrets-encryption-key
+      '')
+    ];
 
     rv32ima.machine.tailscale.enable = true;
 

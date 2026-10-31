@@ -24,6 +24,7 @@ let
     ];
     text = ''
       HYDRA_URL=${lib.escapeShellArg cfg.hydraUrl}
+      HYDRA_PROXY=${lib.escapeShellArg (if cfg.proxy == null then "" else cfg.proxy)}
       JOB=${lib.escapeShellArg "${cfg.project}/${cfg.jobset}/${cfg.job}"}
       HOST=${lib.escapeShellArg hostName}
       ALLOW_REBOOT=${lib.boolToString cfg.allowReboot}
@@ -35,9 +36,15 @@ let
       # file in /var/lib, since impermanence wipes that but /nix always survives
       STATE=/nix/var/nix/gcroots/hydra-deploy-last-applied
 
+      # only hydra goes through the proxy. the cache is public and nix-daemon fetches it, not us
+      proxy_args=()
+      if [[ -n $HYDRA_PROXY ]]; then
+        proxy_args=(--proxy "$HYDRA_PROXY")
+      fi
+
       # latest and not latest-finished: latest-finished only looks at evals where *every* build is
       # done, so we'd sit waiting on some installer or disk image nobody deploys
-      build=$(curl -sfL --max-time 30 -H 'Accept: application/json' "$HYDRA_URL/job/$JOB/latest")
+      build=$(curl -sfL --max-time 30 "''${proxy_args[@]}" -H 'Accept: application/json' "$HYDRA_URL/job/$JOB/latest")
       build_id=$(jq -r '.id' <<<"$build")
       path=$(jq -r 'select(.finished == 1 and .buildstatus == 0) | .buildoutputs.out.path // empty' <<<"$build")
 
@@ -150,6 +157,13 @@ in
     hydraUrl = lib.mkOption {
       type = lib.types.str;
       default = "https://hydra.tail09d5b.ts.net";
+    };
+
+    proxy = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = "http://localhost:1055";
+      description = "HTTP proxy for reaching hydra, for boxes where tailscale runs in userspace mode and the tailnet isn't routable.";
     };
 
     project = lib.mkOption {

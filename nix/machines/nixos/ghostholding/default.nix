@@ -25,6 +25,7 @@
     rv32ima.machine.hydraDeploy = {
       enable = true;
       allowReboot = true;
+      proxy = "http://localhost:1055";
     };
 
     # tiny msata, nd every deploy drops a whole new system on it. prune old generations daily, nd
@@ -117,6 +118,10 @@
     services.tailscale.enable = true;
     services.tailscale.openFirewall = false;
     services.tailscale.interfaceName = "userspace-networking";
+    # userspace tailscale means no tun, no routes and no MagicDNS, so nothing on the box can reach the
+    # tailnet directly. tailscaled's http proxy can (and resolves ts.net names itself), so hydra-deploy
+    # goes through that
+    services.tailscale.extraDaemonFlags = [ "--outbound-http-proxy-listen=localhost:1055" ];
 
     services.openssh.enable = true;
     services.openssh.openFirewall = false;

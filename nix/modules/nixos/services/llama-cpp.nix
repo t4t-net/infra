@@ -53,8 +53,14 @@ in
         # auto-fit is reported 2 crash on strix halo w models this big
         "--fit"
         "off"
+        # auto load mode keeps th ~28GiB n-gram table in ram. reading it off th ssd on demand needs
+        # mmap, nd frees th memory th kv cache needs 2 reach th model's native context
+        "--load-mode"
+        "mmap"
+        "--lazy-mode"
+        "on"
         "--ctx-size"
-        "65536"
+        "262144"
         "--parallel"
         "1"
         "--temp"

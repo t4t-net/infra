@@ -70,6 +70,8 @@
       tmux
       # useful for getting metal host information
       dmidecode
+      # so TERM=xterm-ghostty works wen sshing in from ghostty
+      ghostty.terminfo
     ];
 
     # Where we are roughly:

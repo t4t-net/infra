@@ -5,12 +5,6 @@
   inputs,
   ...
 }:
-let
-  pkgsUnstable = import inputs.nixpkgs-unstable {
-    system = pkgs.stdenv.hostPlatform.system;
-    config.allowUnfree = true;
-  };
-in
 {
   home-manager.users."${config.system.primaryUser}" = { config, ... }: {
     programs.neovim = {
@@ -30,9 +24,6 @@ in
         jjui
 
         direnv
-
-        # Claude Code
-        (pkgs.rv32ima.claude-code-sandboxed.override { inherit (pkgsUnstable) claude-code; })
 
         markdownlint-cli2
 

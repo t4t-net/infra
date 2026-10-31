@@ -4,7 +4,6 @@
     inputs.home-manager.nixosModules.home-manager
     (self.lib.nixosModule "home-manager/common")
     (self.lib.nixosModule "home-manager/fish")
-    (self.lib.nixosModule "home-manager/ghostty")
     (self.lib.nixosModule "home-manager/neovim")
     (self.lib.nixosModule "home-manager/jujutsu")
   ];
@@ -16,7 +15,6 @@
       inherit inputs;
     };
     home-manager.sharedModules = [
-      (self.lib.nixosModule "home-manager/ssh-agent")
       # th hm manpage evals every hm option 2 render docs, per user, on every host eval
       { manual.manpages.enable = false; }
     ];

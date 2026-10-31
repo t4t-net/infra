@@ -33,6 +33,8 @@
 
     programs.zsh.enable = true;
 
+    home-manager.users.${config.system.primaryUser}.rv32ima.services.ssh-agent.enable = true;
+
     services.tailscale.enable = true;
 
     system.defaults.dock.autohide = true;

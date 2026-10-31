@@ -42,6 +42,16 @@ let
         proxy_args=(--proxy "$HYDRA_PROXY")
       fi
 
+      # a failed ping is never a failed deploy. retries on everything since right after a switch
+      # tailscale or the network might still be coming back up
+      discord() {
+        [[ -n $DISCORD_WEBHOOK_FILE ]] || return 1
+        curl -sf --max-time 10 --retry 5 --retry-all-errors --retry-delay 3 \
+          -H 'Content-Type: application/json' \
+          -d "$(jq -n --arg msg "$1" '{content: $msg}')" \
+          "$(<"$DISCORD_WEBHOOK_FILE")" >/dev/null
+      }
+
       # latest and not latest-finished: latest-finished only looks at evals where *every* build is
       # done, so we'd sit waiting on some installer or disk image nobody deploys
       build=$(curl -sfL --max-time 30 "''${proxy_args[@]}" -H 'Accept: application/json' "$HYDRA_URL/job/$JOB/latest")
@@ -86,11 +96,22 @@ let
         # half the box) every tick. the unit going failed is the signal
         ln -sfn "$path" "$STATE"
 
+        # the bit after nixos-system-$HOST-, like 25.11.20261020.abcdef0
+        version=''${path#/nix/store/*-nixos-system-"$HOST"-}
+        build_link="[$build_id](<$HYDRA_URL/build/$build_id>)"
+
         # a transient unit, so the switch has its own lifetime that switch-to-configuration can't
         # stop out from under itself. a fixed name doubles as a lock
-        systemd-run --unit=hydra-deploy-switch --collect --wait --quiet --service-type=exec \
+        if systemd-run --unit=hydra-deploy-switch --collect --wait --quiet --service-type=exec \
           -E LOCALE_ARCHIVE -E NIXOS_INSTALL_BOOTLOADER= \
-          "$path/bin/switch-to-configuration" switch
+          "$path/bin/switch-to-configuration" switch; then
+          discord "**$HOST** switched to hydra build $build_link ($version)" ||
+            echo "couldn't ping discord about the switch" >&2
+        else
+          discord "**$HOST** failed to switch to hydra build $build_link ($version), check \`journalctl -u hydra-deploy-switch\`" ||
+            echo "couldn't ping discord about the failed switch" >&2
+          exit 1
+        fi
       fi
 
       # checked every tick, not just after a deploy, so a kernel bump that landed outside the
@@ -131,9 +152,8 @@ let
           else
             what="booted ''${booted_kernel#*-}, now has ''${new_kernel#*-}"
           fi
-          payload=$(jq -n --arg msg "**$HOST** needs a reboot: $what. $plan" '{content: $msg}')
-          # a failed ping isn't a failed deploy, so it just gets retried next tick
-          if curl -sf --max-time 10 --retry 3 -H 'Content-Type: application/json' -d "$payload" "$(<"$DISCORD_WEBHOOK_FILE")" >/dev/null; then
+          # a failed ping just gets retried next tick
+          if discord "**$HOST** needs a reboot: $what. $plan"; then
             echo "$pending" >"$notified"
           else
             echo "couldn't ping discord about the pending reboot, trying again next tick" >&2
@@ -197,7 +217,7 @@ in
     discord.enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Ping discord (webhook from secrets/hydra-deploy.yaml) once when a reboot is pending.";
+      description = "Ping discord (webhook from secrets/hydra-deploy.yaml) after every switch, and once when a reboot is pending.";
     };
 
     rebootWindow = {

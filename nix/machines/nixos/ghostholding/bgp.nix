@@ -62,6 +62,9 @@ in
         roa4 { table rpki4; };
         roa6 { table rpki6; };
         remote 127.0.0.1 port ${toString rtrPort};
+        # only matters while the session is down. the 600s default meant every
+        # routinator restart left us without updates for 10 minutes
+        retry keep 30;
       }
 
       # drop invalids, keep valid + notfound. on 2026-10-30 that was ~100 of

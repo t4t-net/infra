@@ -85,6 +85,10 @@
         "ca.t4t.net.crt".text = builtins.readFile ../../../certificates/root-ca.crt;
       };
     boot.kernelParams = lib.optional (vars' ? machineID) "systemd.machine_id=${vars'.machineID}";
+    # an id from the kernel cmdline counts as transient, so systemd mounts it over /etc/machine-id and
+    # then machine-id-commit tries to write it back into the read-only store file. fails every boot and
+    # every switch (stc exit 4), and there's nothing to commit anyway since the cmdline is stable
+    systemd.suppressedSystemUnits = lib.optional (vars' ? machineID) "systemd-machine-id-commit.service";
 
     security.pki.certificates = [
       ''

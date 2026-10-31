@@ -207,11 +207,17 @@
               nixos =
                 let
                   mkClosure = machine: self.nixosConfigurations.${machine}.config.system.build.toplevel;
-                  mkNetboot = machine: self.nixosConfigurations.${machine}.config.system.build.netboot;
+                  # most installers r netboot, but some (ghostholding) r isos
+                  mkInstaller =
+                    machine:
+                    let
+                      build = self.nixosConfigurations.${machine}.config.system.build;
+                    in
+                    build.netboot or build.isoImage;
 
                   machineAndInstaller = machine: {
                     "${machine}" = mkClosure machine;
-                    "${machine}-installer" = mkNetboot "${machine}-installer";
+                    "${machine}-installer" = mkInstaller "${machine}-installer";
                   };
                 in
                 (lib.mergeAttrsList [

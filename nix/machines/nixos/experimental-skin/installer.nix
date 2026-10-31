@@ -40,7 +40,6 @@
     ];
 
     nixpkgs.hostPlatform = "x86_64-linux";
-    system.stateVersion = "26.05";
     networking.domain = "home.t4t.net";
 
     hardware.amdgpu.initrd.enable = true;

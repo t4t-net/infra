@@ -14,7 +14,10 @@
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGPUAs4RQBUriBrp7rv2cepCve5eIo6uqFfgs7oPqV9Q" # 1Password -> 'Primary SSH key'
     ];
-    openssh.authorizedPrincipals = [ "ellie" ];
+    openssh.authorizedPrincipals = [
+      "ellie"
+      "me@ellie.fm"
+    ];
     createHome = true;
     hashedPasswordFile = config.sops.secrets."users/root/password".path;
   };

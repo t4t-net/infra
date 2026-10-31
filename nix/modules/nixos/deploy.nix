@@ -4,6 +4,7 @@
       group = "deploy";
       openssh.authorizedPrincipals = [
         "ellie"
+        "me@ellie.fm"
         "repo:t4t-net/infra:ref:refs/heads/main"
       ];
       shell = pkgs.bashInteractive;

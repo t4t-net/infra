@@ -40,6 +40,7 @@ in
         {
           openssh.authorizedPrincipals = [
             "ellie"
+            "me@ellie.fm"
           ];
         }
     // lib.optionalAttrs (builtins.hasAttr "extraGroups" (options.users.users.type.getSubOptions { })) {

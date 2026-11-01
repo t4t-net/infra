@@ -52,7 +52,8 @@ in
   ];
 
   config = {
-    # DISCORD_BOT_TOKEN + ANTHROPIC_API_KEY + EMAIL_PASSWORD + FIRECRAWL_API_KEY as dotenv lines
+    # DISCORD_BOT_TOKEN + ANTHROPIC_API_KEY + EMAIL_PASSWORD + FIRECRAWL_API_KEY as dotenv lines,
+    # plus OPENAI_API_KEY, which is th llama-server key 4 th fallback below
     sops.secrets."hermes/env" = {
       sopsFile = ../../../machines/nixos/iris/secrets/hermes.yaml;
       key = "env";
@@ -117,6 +118,16 @@ in
           base_url = "https://api.anthropic.com";
           default = "claude-sonnet-5-5";
         };
+        # if anthropic is down or her spend limit runs out, she drops 2 th slow local brain instead
+        # of going silent. key_env cuz this box's OPENAI_API_KEY is only good 4 this one server
+        fallback_model = [
+          {
+            provider = "custom";
+            base_url = "http://experimental-skin.tail09d5b.ts.net:8080/v1";
+            model = "qwen3.8-flash-next";
+            key_env = "OPENAI_API_KEY";
+          }
+        ];
         agent.reasoning_effort = "medium";
         # 1h 4 discord, where ellie wanders off between turns, 5m 4 cron nd subagents
         prompt_caching.cache_ttl = "auto";

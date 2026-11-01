@@ -10,6 +10,7 @@
     (self.lib.nixosModule "nixos/digitalocean-image")
     (self.lib.nixosModule "nixos/services/tailscale")
     (self.lib.nixosModule "nixos/services/hermes-agent")
+    (self.lib.nixosModule "nixos/services/anthropic-proxy")
     (self.lib.nixosModule "nixos/services/hevy-mcp")
 
     ./network.nix

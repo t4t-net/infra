@@ -52,9 +52,9 @@ in
   ];
 
   config = {
-    # DISCORD_BOT_TOKEN + ANTHROPIC_API_KEY + EMAIL_PASSWORD + FIRECRAWL_API_KEY +
-    # BROWSERBASE_API_KEY + BROWSERBASE_PROJECT_ID as dotenv lines, plus OPENAI_API_KEY, which is
-    # th llama-server key 4 th fallback below
+    # DISCORD_BOT_TOKEN + EMAIL_PASSWORD + FIRECRAWL_API_KEY + BROWSERBASE_API_KEY +
+    # BROWSERBASE_PROJECT_ID as dotenv lines, plus OPENAI_API_KEY, which is th llama-server key 4 th
+    # fallback below. th anthropic key lives in anthropic-proxy, this all lands in her .env
     sops.secrets."hermes/env" = {
       sopsFile = ../../../machines/nixos/iris/secrets/hermes.yaml;
       key = "env";
@@ -117,10 +117,8 @@ in
 
       settings = {
         model = {
+          # base_url comes from anthropic-proxy
           provider = "anthropic";
-          # spelled out cuz hermes honors this 4 anthropic, nd a leftover llama url in her config
-          # would hand th api key 2 th wrong box
-          base_url = "https://api.anthropic.com";
           default = "claude-sonnet-5-5";
         };
         # if anthropic is down or her spend limit runs out, she drops 2 th slow local brain instead

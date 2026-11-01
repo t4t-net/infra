@@ -12,7 +12,6 @@
     (self.lib.nixosModule "nixos/update-dotfiles")
     (self.lib.nixosModule "nixos/machine-certificate")
     (self.lib.nixosModule "nixos/impermanence")
-    (self.lib.nixosModule "nixos/deploy")
     (self.lib.nixosModule "nixos/backup")
     (self.lib.nixosModule "nixos/services/tailscale")
     (self.lib.nixosModule "nixos/services/step-ca")

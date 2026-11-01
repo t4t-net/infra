@@ -151,17 +151,6 @@
               )
             );
 
-            ciBuilders =
-              let
-                mkNixBuilders = import ./lib/mkNixMachines.nix { inherit lib; };
-              in
-              mkNixBuilders (
-                map (m: m // { sshKey = null; }) [
-                  (self.lib.machineAsBuilder "peer2peer")
-                  (self.lib.machineAsBuilder "psychoboost")
-                ]
-              );
-
             colmenaHive = colmena.lib.makeHive self.outputs.colmena;
 
             colmena =

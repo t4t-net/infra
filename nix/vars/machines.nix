@@ -18,7 +18,7 @@
     deployment = {
       targetHost = "experimental-skin.tail09d5b.ts.net";
       targetPort = 22;
-      targetUser = "deploy";
+      targetUser = "root";
     };
   };
   "ghostholding" = {
@@ -40,7 +40,7 @@
     deployment = {
       targetHost = "peer2peer.tail09d5b.ts.net";
       targetPort = 22;
-      targetUser = "deploy";
+      targetUser = "root";
       tags = [ "auto-deploy" ];
     };
     build = {
@@ -62,7 +62,7 @@
     deployment = {
       targetHost = "pawpatch.tail09d5b.ts.net";
       targetPort = 22;
-      targetUser = "deploy";
+      targetUser = "root";
       tags = [ "auto-deploy" ];
     };
   };
@@ -74,7 +74,7 @@
     deployment = {
       targetHost = "psychoboost.tail09d5b.ts.net";
       targetPort = 22;
-      targetUser = "deploy";
+      targetUser = "root";
       tags = [ "auto-deploy" ];
     };
     build = {
@@ -98,7 +98,7 @@
     deployment = {
       targetHost = "professional-vengeance.tail09d5b.ts.net";
       targetPort = 22;
-      targetUser = "deploy";
+      targetUser = "root";
       # tags = [ "auto-deploy" ];
     };
   };
@@ -113,7 +113,7 @@
     deployment = {
       targetHost = "cert-authority.tail09d5b.ts.net";
       targetPort = 22;
-      targetUser = "deploy";
+      targetUser = "root";
       tags = [ "auto-deploy" ];
     };
   };

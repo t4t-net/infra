@@ -86,16 +86,37 @@ in
       let
         rootCA = ../../../../../certificates/root-ca.crt;
         intermediateCA = ../../../../../certificates/intermediate-ca.crt;
-        x509Template = pkgs.writeText "x509.tpl" ''
+        # x5c takes its sans from th token, not th leaf, so any host could mint a leaf 4 another
+        # host's name nd then get that host's ssh cert. nothing needs x509 from x5c, so it gets none
+        x5cX509Template = pkgs.writeText "x5c-x509.tpl" ''
+          {{- fail "unauthorized: x5c only signs ssh host certificates" -}}
+        '';
+        # x5c puts .Type nd .Principals in th token, nd whoever holds a leaf writes th token. so
+        # without this any leaf could mint a user cert 4 "ellie". a host gets th names on its leaf,
+        # plus their first label cuz ssh'ing 2 a short name checks th cert 4 that (no san has it nd
+        # acme couldnt validate one). wildcards r skipped, th first label of *.t4t.net is "*"
+        x5cSSHTemplate = pkgs.writeText "x5c-ssh.tpl" ''
+          {{- if ne .Type "host" -}}
+          {{- fail "unauthorized: x5c only signs ssh host certificates" -}}
+          {{- end -}}
+          {{- $allowed := list -}}
+          {{- range .AuthorizationCrt.DNSNames -}}
+          {{- if not (contains "*" .) -}}
+          {{- $allowed = append $allowed . -}}
+          {{- $allowed = append $allowed (first (splitList "." .)) -}}
+          {{- end -}}
+          {{- end -}}
+          {{- range .Principals -}}
+          {{- if not (has . $allowed) -}}
+          {{- fail "unauthorized: ssh principal isnt on th x5c leaf" -}}
+          {{- end -}}
+          {{- end -}}
           {
-              "subject": {{ toJson .Subject }},
-              "sans": {{ toJson .SANs }},
-          {{- if typeIs "*rsa.PublicKey" .Insecure.CR.PublicKey }}
-              "keyUsage": ["keyEncipherment", "digitalSignature"],
-          {{- else }}
-              "keyUsage": ["digitalSignature"],
-          {{- end }}
-              "extKeyUsage": ["serverAuth", "clientAuth"]
+            "type": {{ toJson .Type }},
+            "keyId": {{ toJson .KeyID }},
+            "principals": {{ toJson .Principals }},
+            "extensions": {{ toJson .Extensions }},
+            "criticalOptions": {{ toJson .CriticalOptions }}
           }
         '';
         sshTemplate = pkgs.writeText "ssh.tpl" ''
@@ -121,39 +142,10 @@ in
             "criticalOptions": {{ toJson .CriticalOptions }}
           }
         '';
-        githubActionsSSHTemplate = pkgs.writeText "github-actions-ssh.tpl" ''
-          {{- if not (eq .Token.sub "repo:t4t-net/infra:ref:refs/heads/main") -}}
-          {{- fail "unauthorized: only t4t-net/infra main branch is allowed" -}}
-          {{- end -}}
-          {
-            "type": {{ toJson .Type }},
-            "keyId": {{ toJson .Token.sub }},
-            "principals": [ {{ toJson .Token.sub }} ],
-            "extensions": {{ toJson .Extensions }},
-            "criticalOptions": {{ toJson .CriticalOptions }}
-          }
-        '';
       in
       {
         authority = {
           provisioners = [
-            {
-              encryptedKey = "eyJhbGciOiJQQkVTMi1IUzI1NitBMTI4S1ciLCJjdHkiOiJqd2sranNvbiIsImVuYyI6IkEyNTZHQ00iLCJwMmMiOjYwMDAwMCwicDJzIjoid3FmT2w4Q3hldjhZeXhKQkJzdTVCdyJ9.kUyoE8KhDYII89gxRt4jHNhVNTd3ghXrKO1brT2a3zeR6VFSFgOPDA.RYlJM1hW00E4puL0.JvpEODq_yKWeHZmkv1f4pdkKsXKslnf-Z6F4mG3u4uGKqcwhUvqpLKZ0UWiMT-fHl4RekRi4XA7F_67jPqwyuvwamzRhzyfwgqLorEBs9mPZRD0AizF2RURol-kOzJHMxF6vKNWHkFuF3TKi56IvgoapQWB-AMD4hHheDWYoAL0BifR1GVGiIkBdeH7LKLve8sWk2HiOE41kX-y19zMZgmDH499JgOzV0q16-ImBXG7hSivQz18mQOQ2kkGX88DiPXwa_eg_tqmmI0tPP9oFWlRgP8D4f7aelPn0fcdy2vhm4Ik43TgRO2-U40Z3Xyq5RLOfJBiYoKiB-ztCOMU.eKW5Lv9M6FK7txhhsx22uw";
-              key = {
-                alg = "ES256";
-                crv = "P-256";
-                kid = "c83DXf8QpGr9dPE4tUWEWzIoydCTzWFqmsuZ2BTw4eE";
-                kty = "EC";
-                use = "sig";
-                x = "l2YMYC2LVDRkOpHlCblby7-1ZHPutunJ_WW4HlAtR80";
-                y = "QuAqRVFR32V28Zjw9TjopM2Ifh-jJ6sz94F0s1VeqSk";
-              };
-              name = "ellie@t4t.net";
-              type = "JWK";
-              claims = {
-                enableSSHCA = true;
-              };
-            }
             {
               type = "ACME";
               name = "acme";
@@ -203,27 +195,10 @@ in
               };
               options = {
                 x509 = {
-                  templateFile = "${x509Template}";
+                  templateFile = "${x5cX509Template}";
                 };
                 ssh = {
-                  templateFile = "${sshTemplate}";
-                };
-              };
-            }
-            {
-              type = "OIDC";
-              name = "github-actions";
-              clientID = "https://ca.t4t.net";
-              configurationEndpoint = "https://token.actions.githubusercontent.com/.well-known/openid-configuration";
-              claims = {
-                enableSSHCA = true;
-                maxTLSCertDuration = "1h";
-                defaultTLSCertDuration = "1h";
-                disableRenewal = true;
-              };
-              options = {
-                ssh = {
-                  templateFile = "${githubActionsSSHTemplate}";
+                  templateFile = "${x5cSSHTemplate}";
                 };
               };
             }

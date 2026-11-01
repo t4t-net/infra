@@ -11,7 +11,6 @@
     (self.lib.nixosModule "nixos/home-manager")
     (self.lib.nixosModule "nixos/update-dotfiles")
     (self.lib.nixosModule "nixos/remote-builder")
-    (self.lib.nixosModule "nixos/deploy")
     (self.lib.nixosModule "nixos/services/tailscale")
     (self.lib.nixosModule "nixos/services/llama-cpp")
     # No machine-certificate since this lives at home and is behind

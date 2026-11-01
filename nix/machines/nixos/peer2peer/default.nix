@@ -12,7 +12,6 @@
     (self.lib.nixosModule "nixos/update-dotfiles")
     (self.lib.nixosModule "nixos/remote-builder")
     (self.lib.nixosModule "nixos/bootstrapper")
-    (self.lib.nixosModule "nixos/deploy")
     (self.lib.nixosModule "nixos/machine-certificate")
     (self.lib.nixosModule "nixos/backup")
     (self.lib.nixosModule "nixos/services/soulseek")
@@ -49,6 +48,8 @@
     ];
 
     rv32ima.machine.bootstrapper.baseUrl = "http://peer2peer.sea.t4t.net:8787";
+    rv32ima.machine.bootstrapper.clientInterface = "bond0";
+    rv32ima.machine.bootstrapper.clientNetwork = "23.190.72.0/24";
 
     boot.loader.limine.enable = true;
     boot.loader.limine.secureBoot.enable = true;

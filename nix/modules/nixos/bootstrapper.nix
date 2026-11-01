@@ -30,6 +30,7 @@ let
         #!${pkgs.python3}/bin/python3
         import json
         import os
+        import re
         import shutil
         import subprocess
         import urllib.request
@@ -40,6 +41,8 @@ let
         BASE_URL = "${cfg.baseUrl}"
         NIX_STORE = "${pkgs.nix}/bin/nix-store"
         GC_ROOTS_DIR = "/nix/var/nix/gcroots/netboot-server"
+        SERVED_FILES = {"autoexec.ipxe", "bzImage", "initrd"}
+        MACHINE_NAME = re.compile(r"[a-z0-9-]+")
         store_path_cache = {}
 
         def get_store_path(machine):
@@ -72,6 +75,11 @@ let
                     self.send_error(400, "expected /autoexec.ipxe or /{machine}/{file}")
                     return
                 machine, filename = parts[0], parts[1]
+                # both of these come from th client nd end up in a path, nd machine in a hydra url 2.
+                # a allowlist nd not a resolve() check cuz bzImage nd initrd r symlinks 2 other store paths
+                if not MACHINE_NAME.fullmatch(machine) or filename not in SERVED_FILES:
+                    self.send_error(404)
+                    return
                 try:
                     store_path = get_store_path(machine)
                 except Exception as e:
@@ -99,7 +107,7 @@ let
                         shutil.copyfileobj(f, self.wfile)
 
             def log_message(self, fmt, *args):
-                print(fmt % args, flush=True)
+                print(self.client_address[0], fmt % args, flush=True)
 
         ThreadingHTTPServer(("", 8787), NetbootHandler).serve_forever()
       '';
@@ -111,6 +119,16 @@ in
       description = "base HTTP URL of this netboot server, embedded in the dispatch iPXE script";
       example = "http://peer2peer.sea.t4t.net:8787";
     };
+    rv32ima.machine.bootstrapper.clientInterface = lib.mkOption {
+      type = lib.types.str;
+      description = "interface netbooting machines reach this server on";
+      example = "bond0";
+    };
+    rv32ima.machine.bootstrapper.clientNetwork = lib.mkOption {
+      type = lib.types.str;
+      description = "IPv4 network netbooting machines get their address from. The server only binds IPv4.";
+      example = "23.190.72.0/24";
+    };
   };
 
   config = {
@@ -119,8 +137,6 @@ in
       group = "netboot-server";
     };
     users.groups.netboot-server = { };
-
-    nix.settings.trusted-users = [ "netboot-server" ];
 
     systemd.tmpfiles.rules = [
       "d /nix/var/nix/gcroots/netboot-server 0755 netboot-server netboot-server -"
@@ -138,6 +154,9 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = [ 8787 ];
+    # th internet doesnt need 2 netboot anything. -I cuz nixos-fw ends in th refuse rule
+    networking.firewall.extraCommands = ''
+      iptables -I nixos-fw -i ${cfg.clientInterface} -s ${cfg.clientNetwork} -p tcp --dport 8787 -j nixos-fw-accept
+    '';
   };
 }

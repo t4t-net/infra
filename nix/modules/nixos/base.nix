@@ -44,6 +44,13 @@
       TrustedUserCAKeys ${../../../certificates/ssh-user-ca.pub}
     '';
 
+    # both, cuz with UsePAM keyboard-interactive is a password prompt by another name. console logins
+    # r unaffected
+    services.openssh.settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
+
     # th nixos manual (man configuration.nix, nixos-help) evals every option on every host eval,
     # nd nobody reads it on a server
     documentation.nixos.enable = false;

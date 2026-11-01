@@ -34,7 +34,6 @@ in
     users.users.nix.openssh.authorizedPrincipals = [
       "ellie"
       "me@ellie.fm"
-      ''command="${nix-ssh-wrapper}",restrict repo:t4t-net/infra:ref:refs/heads/main''
     ];
 
     nix.settings.trusted-users = [ "nix" ];

@@ -10,6 +10,8 @@
     (self.lib.nixosModule "nixos/digitalocean-image")
     (self.lib.nixosModule "nixos/services/tailscale")
     (self.lib.nixosModule "nixos/services/hermes-agent")
+
+    ./network.nix
   ];
 
   config = {

@@ -137,6 +137,16 @@
               Destination = "2620:c2:2000:1::/64";
               Gateway = "2620:c2:2000::10";
             }
+            # iris lives behind a wg tunnel on peer2peer. these r plain nexthops on purpose so th ASIC
+            # forwards them: wg on this box would mean every packet goes thru th devlink trap path
+            {
+              Destination = "23.190.72.254/32";
+              Gateway = "23.190.72.45";
+            }
+            {
+              Destination = "2620:c2:2000:2::/64";
+              Gateway = "2620:c2:2000::10";
+            }
           ];
 
         };
@@ -175,7 +185,8 @@
             "2606:4700:4700::1001"
           ];
           dhcp-range = [
-            "23.190.72.2,23.190.72.254,255.255.255.0,24h"
+            # .254 is iris, routed via peer2peer
+            "23.190.72.2,23.190.72.253,255.255.255.0,24h"
             "2620:c2:2000::10,2620:c2:2000::200,64,24h"
           ];
           dhcp-option = [

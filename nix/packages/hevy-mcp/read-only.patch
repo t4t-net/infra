@@ -1,0 +1,12 @@
+--- a/dist/config-BEwLTEKj.mjs
++++ b/dist/config-BEwLTEKj.mjs
+@@ -6470,8 +6470,7 @@
+ [...hevyToolDefinitions];
+ /** Register every Hevy tool in its production ordering. */
+ function registerHevyTools(server, runtime) {
+-	for (const definition of hevyToolDefinitions) registerToolDefinition(server, runtime, definition);
+-	registerUnobservedToolDefinition(server, runtime, feedbackToolDefinition);
++	for (const definition of hevyToolDefinitions) if (definition.kind === "read") registerToolDefinition(server, runtime, definition);
+ }
+ //#endregion
+ //#region ../core/src/tools/capabilities.ts

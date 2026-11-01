@@ -11,6 +11,7 @@ keys:
   - &experimental-skin age1m09t4l3suvancrvwtu4ylwrqz26xsl85jzx5wyeex33k5f3wxvgq3rrncc
   - &professional-vengeance age13eslnwq6dghrpyhwfym66rpehyd27n54303ps8822wjwexkvpe8qkfxs9r
   - &cert-authority age1x6yyxc2jwkxesdyszzd5ssm8ug7a7jh3u3hghvpflx7pqmhktf9scmnm4d
+  - &iris age1al32dnvnetgdxhvu9gmsslquse553mza9jds7f33lu2ny8whl4fs3kyltw
 creation_rules:
   - path_regex: users/.*/secrets/.*$
     key_groups:
@@ -95,6 +96,11 @@ creation_rules:
     - age:
       - *1password
       - *cert-authority
+  - path_regex: machines/nixos/iris/secrets/.*$
+    key_groups:
+    - age:
+      - *1password
+      - *iris
   # discord webhook hydra-deploy pings when a box needs a reboot
   - path_regex: secrets/hydra-deploy\.yaml$
     key_groups:

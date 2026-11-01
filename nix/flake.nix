@@ -75,6 +75,8 @@
       url = "github:rv32ima/dotfiles";
       flake = false;
     };
+    hermes-agent.url = "github:NousResearch/hermes-agent/v0.22.5";
+
     nixos-hardware = {
       url = "github:NixOS/nixos-hardware";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -231,6 +233,7 @@
                 // {
                   # droplets boot from th digitalocean-base image, so no installer 2 build
                   "cert-authority" = mkClosure "cert-authority";
+                  "iris" = mkClosure "iris";
                   "digitalocean-base" =
                     self.nixosConfigurations.digitalocean-base.config.system.build.digitalOceanImage;
                 };

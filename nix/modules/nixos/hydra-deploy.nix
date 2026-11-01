@@ -217,7 +217,13 @@ in
     discord.enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Ping discord (webhook from secrets/hydra-deploy.yaml) after every switch, and once when a reboot is pending.";
+      description = "Ping discord after every switch, and once when a reboot is pending.";
+    };
+
+    discord.sopsFile = lib.mkOption {
+      type = lib.types.path;
+      default = ../../secrets/hydra-deploy.yaml;
+      description = "Sops file holding the webhook under `discord-webhook`. Override it for boxes that shouldn't hold the fleet's shared webhook.";
     };
 
     rebootWindow = {
@@ -234,7 +240,7 @@ in
 
   config = lib.mkIf cfg.enable {
     sops.secrets.${discordSecret} = lib.mkIf cfg.discord.enable {
-      sopsFile = ../../secrets/hydra-deploy.yaml;
+      inherit (cfg.discord) sopsFile;
       key = "discord-webhook";
     };
 

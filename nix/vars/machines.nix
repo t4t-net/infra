@@ -117,4 +117,15 @@
       tags = [ "auto-deploy" ];
     };
   };
+  "iris" = {
+    system = "x86_64-linux";
+    stateVersion = "26.05";
+    machineID = "30f3457341b6478d37102007e29d3d95";
+    deployment = {
+      targetHost = "iris.tail09d5b.ts.net";
+      targetPort = 22;
+      targetUser = "deploy";
+      tags = [ "auto-deploy" ];
+    };
+  };
 }

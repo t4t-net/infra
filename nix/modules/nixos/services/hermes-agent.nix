@@ -1,7 +1,41 @@
-{ config, inputs, ... }:
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 let
   llamaUrl = "http://experimental-skin.tail09d5b.ts.net:8080/v1";
   ellie = "130951003100020736";
+
+  # hermes hides its python set, but it takes uv2nix as an arg, so sneak our patch in thru th
+  # workspace overlay. no fork, no ifd, nd only th hermes-agent wheel rebuilds. drop this once
+  # upstream #146847 lands
+  uv2nix = inputs.hermes-agent.inputs.uv2nix;
+  patchedUv2nix = uv2nix // {
+    lib = uv2nix.lib // {
+      workspace = uv2nix.lib.workspace // {
+        loadWorkspace =
+          args:
+          let
+            workspace = uv2nix.lib.workspace.loadWorkspace args;
+          in
+          workspace
+          // {
+            mkPyprojectOverlay =
+              overlayArgs:
+              lib.composeExtensions (workspace.mkPyprojectOverlay overlayArgs) (
+                _: prev: {
+                  hermes-agent = prev.hermes-agent.overrideAttrs (old: {
+                    patches = (old.patches or [ ]) ++ [ ./hermes-approve-admin-only.patch ];
+                  });
+                }
+              );
+          };
+      };
+    };
+  };
 in
 {
   imports = [
@@ -27,6 +61,10 @@ in
     services.hermes-agent = {
       enable = true;
 
+      package = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+        uv2nix = patchedUv2nix;
+      };
+
       hermesHomeFiles."SOUL.md" = ../../../machines/nixos/iris/SOUL.md;
 
       environmentFiles = [ config.sops.secrets."hermes/env".path ];
@@ -35,8 +73,8 @@ in
         OPENAI_BASE_URL = llamaUrl;
         # default-deny, this is ellie nd nobody else
         DISCORD_ALLOWED_USERS = ellie;
-        # so luna can @ her in a thread. careful: bots skip DISCORD_ALLOWED_USERS entirely, so any bot
-        # in a server she shares can do this too. keep her in private servers only!!
+        # so luna can @ her in a thread. bots skip DISCORD_ALLOWED_USERS, so this is only ok w th
+        # approval patch above + allow_admin_from below. keep her in private servers!!
         DISCORD_ALLOW_BOTS = "mentions";
       };
 

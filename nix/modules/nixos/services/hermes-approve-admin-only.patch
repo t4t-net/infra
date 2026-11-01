@@ -1,0 +1,24 @@
+--- a/gateway/slash_commands.py	2026-10-31 18:26:24.877693591 -0700
++++ b/gateway/slash_commands.py	2026-10-31 18:26:24.916396975 -0700
+@@ -1201,6 +1201,10 @@
+     async def _handle_approve_command(self, event: MessageEvent) -> Optional[str]:
+         """Handle /approve — unblock waiting agent thread(s). They block inside tools/approval.py;
+         signalling the event resumes them so the command executes inline (same flow as the CLI)."""
++        # every approval reaches this handler, including bare "yes" routed from run_busy (#146847)
++        denied = self._check_slash_access(event.source, "approve")
++        if denied:
++            return denied
+         from tools.approval import resolve_gateway_approval
+         session_key, stale = self._blocking_approval_or_stale(event, "gateway.approval_expired",
+                                                               "gateway.approve.no_pending")
+@@ -1224,6 +1228,10 @@
+         ``/deny <reason>`` (or ``/deny all <reason>``) attaches a one-line reason that is relayed back to
+         the agent so it can adapt instead of only hearing "denied". Ported from qwibitai/nanoclaw#2832.
+         """
++        # every approval reaches this handler, including bare "yes" routed from run_busy (#146847)
++        denied = self._check_slash_access(event.source, "deny")
++        if denied:
++            return denied
+         from tools.approval import resolve_gateway_approval
+         session_key, stale = self._blocking_approval_or_stale(event, "gateway.deny.stale",
+                                                               "gateway.deny.no_pending")

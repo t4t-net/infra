@@ -6,7 +6,6 @@
   ...
 }:
 let
-  llamaUrl = "http://experimental-skin.tail09d5b.ts.net:8080/v1";
   ellie = "130951003100020736";
 
   # hermes hides its python set, but it takes uv2nix as an arg, so sneak our patch in thru th
@@ -53,7 +52,7 @@ in
   ];
 
   config = {
-    # DISCORD_BOT_TOKEN + OPENAI_API_KEY + EMAIL_PASSWORD + FIRECRAWL_API_KEY as dotenv lines
+    # DISCORD_BOT_TOKEN + ANTHROPIC_API_KEY + EMAIL_PASSWORD + FIRECRAWL_API_KEY as dotenv lines
     sops.secrets."hermes/env" = {
       sopsFile = ../../../machines/nixos/iris/secrets/hermes.yaml;
       key = "env";
@@ -93,8 +92,6 @@ in
 
       environmentFiles = [ config.sops.secrets."hermes/env".path ];
       environment = {
-        # hermes only sends OPENAI_API_KEY 2 this exact origin
-        OPENAI_BASE_URL = llamaUrl;
         # default-deny, this is ellie nd nobody else
         DISCORD_ALLOWED_USERS = ellie;
         # so luna can @ her in a thread. bots skip DISCORD_ALLOWED_USERS, so this is only ok w th
@@ -114,9 +111,26 @@ in
 
       settings = {
         model = {
-          provider = "custom";
-          base_url = llamaUrl;
-          default = "qwen3.8-flash-next";
+          provider = "anthropic";
+          # spelled out cuz hermes honors this 4 anthropic, nd a leftover llama url in her config
+          # would hand th api key 2 th wrong box
+          base_url = "https://api.anthropic.com";
+          default = "claude-sonnet-5-5";
+        };
+        agent.reasoning_effort = "medium";
+        # 1h 4 discord, where ellie wanders off between turns, 5m 4 cron nd subagents
+        prompt_caching.cache_ttl = "auto";
+        # th chatty side tasks. compression nd background review stay on her main model: one is
+        # lossy, nd th other replays her history as warm cache reads
+        auxiliary = {
+          web_extract = {
+            provider = "anthropic";
+            model = "claude-haiku-5-5";
+          };
+          title_generation = {
+            provider = "anthropic";
+            model = "claude-haiku-5-5";
+          };
         };
         # smart mode asks a model whether a command is safe, nd th model is wat we dont trust here
         approvals.mode = "manual";

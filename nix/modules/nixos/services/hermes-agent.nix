@@ -139,9 +139,14 @@ in
         browser.cloud_provider = "browserbase";
         # 1h 4 discord, where ellie wanders off between turns, 5m 4 cron nd subagents
         prompt_caching.cache_ttl = "auto";
-        # th chatty side tasks. compression nd background review stay on her main model: one is
-        # lossy, nd th other replays her history as warm cache reads
+        # th chatty side tasks. compression stays on her main model cuz its lossy. background review
+        # was on it 2 cuz hermes promises warm cache reads, but it missed nd rewrote ~75k tokens a
+        # pop, ~45% of her bill. on another model it replays a short digest instead
         auxiliary = {
+          background_review = {
+            provider = "anthropic";
+            model = "claude-haiku-5-5";
+          };
           web_extract = {
             provider = "anthropic";
             model = "claude-haiku-5-5";

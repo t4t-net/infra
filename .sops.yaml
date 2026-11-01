@@ -96,6 +96,11 @@ creation_rules:
     - age:
       - *1password
       - *cert-authority
+  - path_regex: machines/nixos/experimental-skin/secrets/.*$
+    key_groups:
+    - age:
+      - *1password
+      - *experimental-skin
   - path_regex: machines/nixos/iris/secrets/.*$
     key_groups:
     - age:

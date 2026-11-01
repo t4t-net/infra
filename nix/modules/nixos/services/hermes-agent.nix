@@ -52,8 +52,9 @@ in
   ];
 
   config = {
-    # DISCORD_BOT_TOKEN + ANTHROPIC_API_KEY + EMAIL_PASSWORD + FIRECRAWL_API_KEY as dotenv lines,
-    # plus OPENAI_API_KEY, which is th llama-server key 4 th fallback below
+    # DISCORD_BOT_TOKEN + ANTHROPIC_API_KEY + EMAIL_PASSWORD + FIRECRAWL_API_KEY +
+    # BROWSERBASE_API_KEY + BROWSERBASE_PROJECT_ID as dotenv lines, plus OPENAI_API_KEY, which is
+    # th llama-server key 4 th fallback below
     sops.secrets."hermes/env" = {
       sopsFile = ../../../machines/nixos/iris/secrets/hermes.yaml;
       key = "env";
@@ -98,6 +99,10 @@ in
         # so luna can @ her in a thread. bots skip DISCORD_ALLOWED_USERS, so this is only ok w th
         # approval patch above + allow_admin_from below. keep her in private servers!!
         DISCORD_ALLOW_BOTS = "mentions";
+        # #private-iris-only. has 2 live here, /sethome cant write th nix-managed .env nd its
+        # config.yaml copy doesnt survive a deploy, so she'd nag on every new thread. cron output
+        # lands here 2, so keep it private
+        DISCORD_HOME_CHANNEL = "1566280996171816960";
         # her own fastmail user just 4 broker opt-outs, never ellie's inbox. unbroker only infers
         # hosts for fastmail.com addresses, so a t4t.net one has 2 spell them out
         EMAIL_ADDRESS = "iris@t4t.net";
@@ -129,6 +134,9 @@ in
           }
         ];
         agent.reasoning_effort = "medium";
+        # auto-detect tries browser use first, so name it. proxies r on by default nd theyre th
+        # whole point, brokers 403 th droplet's datacenter ip
+        browser.cloud_provider = "browserbase";
         # 1h 4 discord, where ellie wanders off between turns, 5m 4 cron nd subagents
         prompt_caching.cache_ttl = "auto";
         # th chatty side tasks. compression nd background review stay on her main model: one is

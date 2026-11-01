@@ -38,7 +38,7 @@
         settings = {
           user = {
             name = "kitty";
-            email = "kitty@catmod.ing";
+            email = "15710074+rv32ima@users.noreply.github.com";
           };
         };
       };

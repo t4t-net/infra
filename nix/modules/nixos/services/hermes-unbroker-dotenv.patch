@@ -1,0 +1,12 @@
+--- a/scripts/pdd.py
++++ b/scripts/pdd.py
+@@ -903,6 +903,9 @@
+ 
+ 
+ def main(argv=None) -> None:
++    # hermes strips EMAIL_PASSWORD from terminal children, so without this `setup --auto` sees the
++    # creds in $HERMES_HOME/.env but everything that actually sends or polls does not
++    os.environ.update(config_mod.dotenv_env())
+     args = build_parser().parse_args(argv)
+     try:
+         args.func(args)

@@ -36,6 +36,16 @@ let
       };
     };
   };
+
+  # pinned w hermes itself. this linkFarm is th allowlist: pointing external_dirs at optional-skills
+  # would hand her godmode nd web-pentest 2
+  irisSkills = pkgs.linkFarm "iris-skills" {
+    unbroker = pkgs.applyPatches {
+      name = "hermes-unbroker";
+      src = "${inputs.hermes-agent}/optional-skills/security/unbroker";
+      patches = [ ./hermes-unbroker-dotenv.patch ];
+    };
+  };
 in
 {
   imports = [
@@ -43,7 +53,7 @@ in
   ];
 
   config = {
-    # DISCORD_BOT_TOKEN + OPENAI_API_KEY as dotenv lines
+    # DISCORD_BOT_TOKEN + OPENAI_API_KEY + EMAIL_PASSWORD + FIRECRAWL_API_KEY as dotenv lines
     sops.secrets."hermes/env" = {
       sopsFile = ../../../machines/nixos/iris/secrets/hermes.yaml;
       key = "env";
@@ -57,6 +67,20 @@ in
       (builtins.toJSON config.services.hermes-agent.settings)
       config.services.hermes-agent.hermesHomeFiles."SOUL.md"
     ];
+
+    # skills call plain `python`, but login shells in th container only get python3, th entrypoint's
+    # venv never reaches them, nd extraPackages stops at th host unit. ~/.local/bin is on that PATH
+    # nd /nix/store is mounted. th d rule is so a fresh box doesnt get a root-owned dir uv cant use
+    systemd.tmpfiles.rules =
+      let
+        home = "${config.services.hermes-agent.stateDir}/home";
+        inherit (config.services.hermes-agent) user group;
+      in
+      [
+        "d ${home}/.local 0755 ${user} ${group} -"
+        "d ${home}/.local/bin 0755 ${user} ${group} -"
+        "L+ ${home}/.local/bin/python - - - - ${pkgs.python3}/bin/python3"
+      ];
 
     services.hermes-agent = {
       enable = true;
@@ -76,6 +100,11 @@ in
         # so luna can @ her in a thread. bots skip DISCORD_ALLOWED_USERS, so this is only ok w th
         # approval patch above + allow_admin_from below. keep her in private servers!!
         DISCORD_ALLOW_BOTS = "mentions";
+        # her own fastmail user just 4 broker opt-outs, never ellie's inbox. unbroker only infers
+        # hosts for fastmail.com addresses, so a t4t.net one has 2 spell them out
+        EMAIL_ADDRESS = "iris@t4t.net";
+        EMAIL_SMTP_HOST = "smtp.fastmail.com";
+        EMAIL_IMAP_HOST = "imap.fastmail.com";
       };
 
       # th whole agent lives in a container nd not just its terminal: terminal.backend = docker
@@ -91,6 +120,10 @@ in
         };
         # smart mode asks a model whether a command is safe, nd th model is wat we dont trust here
         approvals.mode = "manual";
+        skills.external_dirs = [ "${irisSkills}" ];
+        # th EMAIL_* creds above r also wat auto-starts th email gateway, nd that inbox is full of
+        # broker mail. nobody gets 2 talk 2 her thru it
+        platforms.email.enabled = false;
         # bots skip th allowlist nd a typed /approve runs a pending command, tested it!! gating slash
         # commands 2 ellie means luna (or any other bot) can talk 2 her but not approve anything
         gateway.platforms.discord.extra = {

@@ -85,7 +85,8 @@ in
         "--min-p"
         "0.0"
         "--chat-template-kwargs"
-        ''{"reasoning_effort":"medium"}''
+        # higher efforts spend so long thinking at 23 tok/s that replies come back empty
+        ''{"reasoning_effort":"low"}''
       ];
     };
 

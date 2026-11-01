@@ -18,6 +18,8 @@ in
     services.hermes-agent = {
       enable = true;
 
+      hermesHomeFiles."SOUL.md" = ../../../machines/nixos/iris/SOUL.md;
+
       environmentFiles = [ config.sops.secrets."hermes/env".path ];
       environment = {
         # hermes only sends OPENAI_API_KEY 2 this exact origin

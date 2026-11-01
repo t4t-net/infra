@@ -26,6 +26,9 @@ in
         OPENAI_BASE_URL = llamaUrl;
         # default-deny, this is ellie nd nobody else
         DISCORD_ALLOWED_USERS = "130951003100020736";
+        # so luna can @ her in a thread. careful: bots skip DISCORD_ALLOWED_USERS entirely, so any bot
+        # in a server she shares can do this too. keep her in private servers only!!
+        DISCORD_ALLOW_BOTS = "mentions";
       };
 
       # th whole agent lives in a container nd not just its terminal: terminal.backend = docker

@@ -1,5 +1,34 @@
-{ ... }: {
+{ config, lib, pkgs, ... }:
+let
+  cfg = config.services.aerospace;
+  user = config.system.primaryUser;
+
+  # same null-stripping the upstream module does before generating toml
+  filterNulls =
+    v:
+    if lib.isAttrs v then
+      lib.mapAttrs (_: filterNulls) (lib.filterAttrs (_: x: x != null) v)
+    else if lib.isList v then
+      map filterNulls (lib.filter (x: x != null) v)
+    else
+      v;
+  configFile = (pkgs.formats.toml { }).generate "aerospace.toml" (filterNulls cfg.settings);
+in
+{
   config = {
+    # upstream bakes store paths for the app and config into the launchd plist, so
+    # any settings change or nixpkgs bump changes the plist, nix-darwin reloads the
+    # agent, and a fresh aerospace dumps every window onto one workspace. point the
+    # agent at stable paths instead so the plist never changes, and hot-reload the
+    # config on activation.
+    environment.etc."aerospace.toml".source = configFile;
+
+    launchd.user.agents.aerospace.command = lib.mkForce "'/Applications/Nix Apps/AeroSpace.app/Contents/MacOS/AeroSpace' --config-path /etc/aerospace.toml";
+
+    system.activationScripts.postActivation.text = lib.mkAfter ''
+      launchctl asuser "$(id -u -- ${user})" sudo --user=${user} -- ${cfg.package}/bin/aerospace reload-config || true
+    '';
+
     services.aerospace = {
       enable = true;
       settings = {

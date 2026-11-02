@@ -32,6 +32,24 @@
           name = "Ellie Ford";
           email = "eford@pinterest.com";
         };
+
+        # tvsci repos are pushed under my public GH account, so use the noreply email there
+        "--scope" = [
+          {
+            "--when".repositories = [ "~/code/tvsci" ];
+            user.email = "15710074+rv32ima@users.noreply.github.com";
+          }
+          # personal repos are public, so keep the work email out of them
+          {
+            "--when".repositories = [
+              "~/.dotfiles"
+              "~/code/infra"
+              "~/code/deploy-gate-playground"
+              "~/code/zig2nix"
+            ];
+            user.email = "15710074+rv32ima@users.noreply.github.com";
+          }
+        ];
       };
     };
 

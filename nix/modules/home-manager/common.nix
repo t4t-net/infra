@@ -69,7 +69,6 @@
       buf
       graphviz
       bazelisk
-      jujutsu
       cargo-mommy
       tenv
       nix-your-shell

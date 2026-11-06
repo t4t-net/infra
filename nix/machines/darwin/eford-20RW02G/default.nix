@@ -29,6 +29,20 @@
       "https://nix-cache.tail1256ba.ts.net"
     ];
 
+    # disk keeps filling up >_< prune old generations daily (launchd catches up on wake if th
+    # laptop was asleep at 3am), dedupe th store weekly, nd gc mid-build if it gets tight anyway
+    nix.gc = {
+      automatic = true;
+      interval = {
+        Hour = 3;
+        Minute = 15;
+      };
+      options = "--delete-older-than 7d";
+    };
+    nix.optimise.automatic = true;
+    nix.settings.min-free = 5 * 1024 * 1024 * 1024;
+    nix.settings.max-free = 20 * 1024 * 1024 * 1024;
+
     nix.settings.max-jobs = 10;
     nix.distributedBuilds = true;
     nix.buildMachines = [

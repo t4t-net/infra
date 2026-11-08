@@ -12,6 +12,7 @@
     (self.lib.nixosModule "nixos/services/hermes-agent")
     (self.lib.nixosModule "nixos/services/anthropic-proxy")
     (self.lib.nixosModule "nixos/services/hevy-mcp")
+    (self.lib.nixosModule "nixos/services/ynab-mcp")
 
     ./network.nix
   ];

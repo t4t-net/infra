@@ -1,0 +1,73 @@
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  db = "/var/lib/forever-ah/forever-ah.sqlite";
+
+  # both units run as th same dynamic user so they can share th state dir
+  unit = description: args: {
+    inherit description;
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${lib.getExe pkgs.rv32ima.forever-ah} --db ${db} ${args}";
+      EnvironmentFile = config.sops.templates."forever-ah/env".path;
+      DynamicUser = true;
+      User = "forever-ah";
+      StateDirectory = "forever-ah";
+      StateDirectoryMode = "0700";
+      UMask = "0077";
+      ProtectHome = true;
+      PrivateDevices = true;
+      CapabilityBoundingSet = "";
+      RestrictAddressFamilies = [
+        "AF_INET"
+        "AF_INET6"
+      ];
+    };
+  };
+in
+{
+  config = {
+    sops.secrets = lib.genAttrs [ "forever-ah/client_id" "forever-ah/client_secret" ] (name: {
+      sopsFile = ../../../machines/nixos/psychoboost/secrets/forever-ah.yaml;
+      key = lib.removePrefix "forever-ah/" name;
+    });
+
+    sops.templates."forever-ah/env".content = ''
+      BNET_CLIENT_ID=${config.sops.placeholder."forever-ah/client_id"}
+      BNET_CLIENT_SECRET=${config.sops.placeholder."forever-ah/client_secret"}
+    '';
+
+    systemd.services.forever-ah-scrape = unit "snapshot every wow forever auction house" "scrape";
+    # ~1k static api calls at 5 req/s, recipes barely change so weekly is plenty.
+    # th scrape's raw-auction watchlist comes from these, so kick it by hand on a fresh db
+    systemd.services.forever-ah-recipes = unit "cache wow forever bs/mining recipes" "recipes";
+
+    # blizz refreshes th AH dump about hourly
+    systemd.timers.forever-ah-scrape = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "hourly";
+        RandomizedDelaySec = "5m";
+        Persistent = true;
+      };
+    };
+    systemd.timers.forever-ah-recipes = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "weekly";
+        RandomizedDelaySec = "1h";
+        Persistent = true;
+      };
+    };
+
+    # 4 poking at it over ssh: FOREVER_AH_DB is already set, so just `forever-ah analyze`
+    environment.systemPackages = [ pkgs.rv32ima.forever-ah ];
+    environment.variables.FOREVER_AH_DB = db;
+  };
+}

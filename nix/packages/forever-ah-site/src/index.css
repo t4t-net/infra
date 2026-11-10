@@ -1,0 +1,211 @@
+:root {
+  --bg: #0e0b08; --fg: #e8c15a; --alt: #c8815a;
+  --text: #d9d2c4;
+  --mute: color-mix(in srgb, var(--text) 50%, var(--bg));
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+}
+[data-flag="lesbian"]   { --bg: #120608; --fg: #FF9B55; --alt: #D461A6; }
+[data-flag="bisexual"]  { --bg: #0d0408; --fg: #D60270; --alt: #9B4F96; }
+[data-flag="nonbinary"] { --bg: #0c0b04; --fg: #FCF434; --alt: #9C59D1; }
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); }
+::selection { background: var(--fg); color: var(--bg); }
+
+main {
+  max-width: 80ch;
+  margin: 0 auto;
+  padding: 2rem 16px;
+}
+
+/* sparkle border: four thin strip canvases around the frame, sized and placed from js */
+.frame {
+  position: relative;
+  padding: 2.5em 4ch;
+}
+.edge {
+  position: absolute;
+  pointer-events: none;
+}
+
+@media (max-width: 480px) {
+  main { padding: 1rem 8px; }
+  .frame { padding: 2em 2.5ch; }
+}
+
+/* ascii starfield behind everything; the frame gets a solid bg so stars never cross the text */
+.starfield { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+.frame { background: var(--bg); }
+
+/* kaomoji rain: fills the empty side gutters on wide screens */
+.rain { position: fixed; inset: 0; pointer-events: none; user-select: none; z-index: 0; }
+.gutter {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc((100vw - 80ch) / 2 - 2ch);
+  overflow: hidden;
+}
+.gutter.left  { left: 0; }
+.gutter.right { right: 0; }
+.lane { position: absolute; top: 0; bottom: 0; }
+.faller {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  white-space: nowrap;
+  animation: fall linear infinite;
+}
+.trail-row { animation: wiggle .5s steps(1) infinite; }
+.trail-row:nth-child(even) { animation-delay: -.25s; } /* opposite phase = nyan zigzag */
+.face { margin-top: .3em; color: var(--text); }
+@keyframes fall {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(100vh); }
+}
+@keyframes wiggle {
+  0%, 100% { transform: translateX(-.5ch); }
+  50%      { transform: translateX(.5ch); }
+}
+main { position: relative; z-index: 1; }
+
+/* 1 in 10000 page loads (or ?nyan): nyan cat flies over everything with a flag trail */
+.nyan {
+  --px: 4px; /* one sprite art pixel */
+  position: fixed;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  width: max-content;
+  pointer-events: none;
+  user-select: none;
+  animation: nyan-fly 9s linear infinite;
+}
+.nyan-trail { display: flex; margin-top: var(--px); }
+.nyan-seg { width: calc(8 * var(--px)); animation: nyan-bob .56s steps(1) infinite; }
+.nyan-seg:nth-child(even) { animation-delay: -.28s; }
+.nyan-seg div { height: calc(3 * var(--px)); }
+.nyan-cat {
+  position: relative; /* sit on top of the trail's tucked-in end */
+  width: calc(34 * var(--px));
+  height: calc(21 * var(--px));
+  margin-left: calc(-6 * var(--px));
+  image-rendering: pixelated;
+}
+@keyframes nyan-fly {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100vw); }
+}
+@keyframes nyan-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(var(--px)); }
+}
+
+a { color: var(--fg); text-underline-offset: 2px; }
+a:hover { color: var(--alt); }
+
+header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 2.5rem;
+  margin-bottom: 2.5rem;
+}
+/* min-width: 0 lets the box shrink below the flag's own width, so it can be measured to fit */
+header .flag { flex: 1 1 18rem; max-width: 28rem; min-width: 0; }
+/* same for the facts, so the hostname can wrap at its dots on narrow phones */
+header .intro { min-width: 0; }
+h1 { margin: 0 0 .5rem; font-size: 1.6rem; color: var(--fg); }
+
+h2 {
+  display: flex;
+  align-items: center;
+  gap: 1ch;
+  margin: 2.5rem 0 1rem;
+  font-size: 1rem;
+  color: var(--alt);
+}
+h2::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px dashed currentColor;
+  opacity: .4;
+}
+
+p { margin: 0 0 1em; }
+
+dl { display: grid; grid-template-columns: max-content 1fr; gap: 0 2ch; margin: 0; }
+dd { margin: 0; }
+.facts dt { color: var(--alt); }
+.kv dd { color: var(--mute); }
+.qa { margin-bottom: 1.5em; }
+.qa:last-child { margin-bottom: 0; }
+.qa dt { color: var(--mute); }
+.qa .q { color: var(--fg); }
+
+pre {
+  margin: 0;
+  font: inherit;
+  overflow-x: auto;
+}
+pre .c { color: var(--mute); }
+
+footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--text) 20%, transparent);
+  color: var(--mute);
+  font-size: .85rem;
+}
+.themes { display: flex; flex-wrap: wrap; gap: 0 2ch; margin-bottom: .5rem; }
+.themes button {
+  font: inherit;
+  color: var(--mute);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.themes button:hover { color: var(--alt); }
+.themes button[aria-pressed="true"] { color: var(--fg); }
+.themes button[aria-pressed="true"]::before { content: '['; }
+.themes button[aria-pressed="true"]::after { content: ']'; }
+
+/* gold meta additions */
+:root { --gold: #e8c15a; --silver: #c3c9d1; --copper: #c8815a; color-scheme: dark; }
+.gold { color: var(--gold); }
+.silver { color: var(--silver); }
+.copper { color: var(--copper); }
+pre .down { color: var(--alt); }
+h3 { margin: 1.75rem 0 .5rem; font-size: 1rem; font-weight: normal; color: var(--fg); }
+h3::before { content: '## '; color: var(--mute); }
+.note, .mute { color: var(--mute); }
+.note { margin-top: 1rem; }
+section > pre { margin-bottom: 1em; }
+
+/* profession picker: same bracketed look as the theme buttons */
+.views { display: flex; flex-wrap: wrap; gap: 0 2ch; margin-top: 2.5rem; }
+.views a { color: var(--mute); text-decoration: none; }
+.views a:hover { color: var(--alt); }
+.views a[aria-current="page"] { color: var(--fg); }
+.views a[aria-current="page"]::before { content: '['; }
+.views a[aria-current="page"]::after { content: ']'; }
+
+/* the artifact wrapper's reset puts a system font and dark text on body, which beats what :root passes down */
+body { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace; font-size: 15px; line-height: 1.6; color: var(--text); }
+
+/* item quality, the in-game colors */
+.q-poor { color: #9d9d9d; }
+.q-common { color: #ffffff; }
+.q-uncommon { color: #1eff00; }
+.q-rare { color: #0070dd; }
+.q-epic { color: #a335ee; }
+.q-legendary { color: #ff8000; }

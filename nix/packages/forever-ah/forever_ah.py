@@ -80,9 +80,10 @@ create table if not exists item (
 
 
 class Client:
-    """Blizzard API client, throttled well under th 100 req/s / 36k req/h limits."""
+    """Blizzard API client, throttled 2 half th 100 req/s limit. th 36k req/h cap is wat bites first:
+    a full recipe crawl is ~1.5k calls, so only back-2-back giant crawls get near it (429s back off)."""
 
-    def __init__(self, region, client_id, client_secret, min_interval=0.2, retries=5):
+    def __init__(self, region, client_id, client_secret, min_interval=0.02, retries=5):
         self.region = region
         self.min_interval = min_interval
         self.retries = retries

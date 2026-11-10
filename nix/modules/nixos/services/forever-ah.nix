@@ -12,6 +12,27 @@ let
 
   forever-ah = "${lib.getExe pkgs.rv32ima.forever-ah} --db ${db}";
 
+  # sws's default sends max-age=86400 on index.html, so browsers kept a day-old page pointing at
+  # an old bundle. html nd json change every deploy/hour; vite's hashed assets never change
+  swsConfig = (pkgs.formats.toml { }).generate "forever-gold-sws.toml" {
+    general = {
+      host = "127.0.0.1";
+      inherit port;
+      root = www;
+      cache-control-headers = false;
+    };
+    advanced.headers = [
+      {
+        source = "**/*.{html,json}";
+        headers.Cache-Control = "no-cache";
+      }
+      {
+        source = "**/assets/**";
+        headers.Cache-Control = "public, max-age=31536000, immutable";
+      }
+    ];
+  };
+
   # every unit runs as th same dynamic user so they can share th 0700 state dir
   sandbox = {
     DynamicUser = true;
@@ -107,7 +128,7 @@ in
           rm -rf ${www}/assets ${www}/index.html ${www}/nyan.gif
           cp -rT --no-preserve=mode ${pkgs.rv32ima.forever-ah-site} ${www}
         '';
-        ExecStart = "${lib.getExe pkgs.static-web-server} --host 127.0.0.1 --port ${toString port} --root ${www}";
+        ExecStart = "${lib.getExe pkgs.static-web-server} --config-file ${swsConfig}";
         Restart = "on-failure";
       };
     };

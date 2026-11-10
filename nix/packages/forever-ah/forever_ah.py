@@ -9,6 +9,7 @@ creds: BNET_CLIENT_ID / BNET_CLIENT_SECRET, or ~/.secrets/battle-net-client-{id,
 """
 import argparse
 import base64
+import email.utils
 import json
 import os
 import sqlite3
@@ -25,7 +26,8 @@ create table if not exists snapshot (
   ts integer not null,
   region text not null,
   house_id integer not null,
-  house_name text not null
+  house_name text not null,
+  data_ts integer                 -- blizz's Last-Modified 4 th house dump, can lag ts by an hour+
 );
 create table if not exists price (
   snapshot_id integer not null references snapshot(id),
@@ -85,6 +87,7 @@ class Client:
         self.min_interval = min_interval
         self.retries = retries
         self.last = 0.0
+        self.last_modified = None  # of th most recent response, as unix seconds
         req = urllib.request.Request(
             "https://oauth.battle.net/token",
             data=b"grant_type=client_credentials",
@@ -106,6 +109,8 @@ class Client:
             self.last = time.monotonic()
             try:
                 with urllib.request.urlopen(req, timeout=120) as r:
+                    lm = r.headers.get("Last-Modified")
+                    self.last_modified = int(email.utils.parsedate_to_datetime(lm).timestamp()) if lm else None
                     return json.load(r)
             except urllib.error.HTTPError as e:
                 if e.code == 404:
@@ -166,10 +171,16 @@ def scrape(args, db):
     for h in houses:
         base = f"/data/wow/ruleset/{ruleset}/auctions/{h['id']}"
         regular = (api.get(base) or {}).get("auctions") or []
+        data_ts = api.last_modified
         commodities = (api.get(base + "/commodities") or {}).get("auctions") or []
+        # blizz hasnt republished since last run, a second copy would just look like nothing sold
+        prev = db.execute("select max(data_ts) from snapshot where house_id = ?", (h["id"],)).fetchone()[0]
+        if data_ts is not None and data_ts == prev:
+            print(f"{h['id']:>4} {h['name']:<28} unchanged since {time.strftime('%H:%M', time.localtime(data_ts))}")
+            continue
         cur = db.execute(
-            "insert into snapshot (ts, region, house_id, house_name) values (?, ?, ?, ?)",
-            (ts, args.region, h["id"], h["name"]),
+            "insert into snapshot (ts, region, house_id, house_name, data_ts) values (?, ?, ?, ?, ?)",
+            (ts, args.region, h["id"], h["name"], data_ts),
         )
         sid = cur.lastrowid
         db.executemany(
@@ -301,6 +312,8 @@ def main():
     # scrape nd recipes share th db on a timer, so wait out th other's write lock instead of dying
     db = sqlite3.connect(args.db, timeout=60)
     db.executescript(SCHEMA)
+    if "data_ts" not in {c[1] for c in db.execute("pragma table_info(snapshot)")}:
+        db.execute("alter table snapshot add column data_ts integer")
     {"scrape": scrape, "recipes": recipes, "analyze": analyze}[args.cmd](args, db)
 
 

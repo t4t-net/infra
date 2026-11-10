@@ -32,6 +32,8 @@ let
     inherit description;
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
+    # progress lines otherwise sit in python's buffer until exit nd th journal looks frozen
+    environment.PYTHONUNBUFFERED = "1";
     serviceConfig = sandbox // {
       Type = "oneshot";
       ExecStart = map (c: "${forever-ah} ${c}") commands;
@@ -83,6 +85,8 @@ in
       description = "wow forever gold meta site";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = sandbox // {
+        # th first export only happens at th next scrape, nd sws exits if its root is missing
+        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${www}";
         ExecStart = "${lib.getExe pkgs.static-web-server} --host 127.0.0.1 --port ${toString port} --root ${www}";
         Restart = "on-failure";
       };

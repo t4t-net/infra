@@ -15,11 +15,13 @@ import json
 import os
 import shutil
 import sqlite3
+import threading
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 SCHEMA = """
@@ -107,14 +109,16 @@ VENDOR_MATS = {"Weak Flux", "Strong Flux", "Coal", "Fine Thread", "Coarse Thread
 
 class Client:
     """Blizzard API client, throttled 2 half th 100 req/s limit. th 36k req/h cap is wat bites first:
-    a full recipe crawl is ~1.5k calls, so only back-2-back giant crawls get near it (429s back off)."""
+    a full recipe crawl is ~4k calls, so only back-2-back giant crawls get near it (429s back off)."""
 
     def __init__(self, region, client_id, client_secret, min_interval=0.02, retries=5):
         self.region = region
         self.min_interval = min_interval
         self.retries = retries
         self.last = 0.0
-        self.last_modified = None  # of th most recent response, as unix seconds
+        self.lock = threading.Lock()
+        # of th most recent response, as unix seconds. only meaningful 4 sequential get()s, not get_many
+        self.last_modified = None
         req = urllib.request.Request(
             "https://oauth.battle.net/token",
             data=b"grant_type=client_credentials",
@@ -130,10 +134,13 @@ class Client:
         )
         req = urllib.request.Request(url, headers={"Authorization": f"Bearer {self.token}"})
         for attempt in range(self.retries):
-            wait = self.last + self.min_interval - time.monotonic()
-            if wait > 0:
-                time.sleep(wait)
-            self.last = time.monotonic()
+            # reserve th next free slot under th lock, then sleep outside it so other threads queue up behind
+            with self.lock:
+                now = time.monotonic()
+                slot = max(now, self.last + self.min_interval)
+                self.last = slot
+            if slot > now:
+                time.sleep(slot - now)
             try:
                 with urllib.request.urlopen(req, timeout=120) as r:
                     lm = r.headers.get("Last-Modified")
@@ -146,6 +153,12 @@ class Client:
                     raise
                 time.sleep(int(e.headers.get("Retry-After") or 2 ** attempt))
         raise RuntimeError(f"gave up on {path} after {self.retries} attempts")
+
+    def get_many(self, paths, namespace="dynamic", workers=16):
+        """get() each path concurrently, results in th same order. one request at a time is latency-bound
+        at ~7/s from psychoboost, so th throttle only actually matters once there r a bunch in flight"""
+        with ThreadPoolExecutor(workers) as pool:
+            return list(pool.map(lambda p: self.get(p, namespace), paths))
 
 
 def creds():
@@ -239,33 +252,35 @@ def recipes(args, db):
     api = Client(args.region, *creds())
     item_ids = set()
     for prof in args.profession:
+        # th profession nd tier listings r a few calls; th recipes themselves r th bulk, so those fan out
+        listed = []
         for tier in api.get(f"/data/wow/profession/{prof}", "static")["skill_tiers"]:
             st = api.get(f"/data/wow/profession/{prof}/skill-tier/{tier['id']}", "static")
-            for cat in st.get("categories", []):
-                for r in cat.get("recipes", []):
-                    rec = api.get(f"/data/wow/recipe/{r['id']}", "static")
-                    if rec is None:
-                        continue
-                    crafted = rec.get("crafted_item") or rec.get("alliance_crafted_item")
-                    qty = rec.get("crafted_quantity", {})
-                    db.execute(
-                        "insert or replace into recipe values (?, ?, ?, ?, ?, ?, ?)",
-                        (rec["id"], prof, cat["name"], rec["name"], crafted and crafted["id"],
-                         qty.get("minimum", qty.get("value", 1)), qty.get("maximum", qty.get("value", 1))),
-                    )
-                    db.execute("delete from reagent where recipe_id = ?", (rec["id"],))
-                    for rg in rec.get("reagents", []):
-                        db.execute("insert into reagent values (?, ?, ?)", (rec["id"], rg["reagent"]["id"], rg["quantity"]))
-                        item_ids.add(rg["reagent"]["id"])
-                    if crafted:
-                        item_ids.add(crafted["id"])
-            db.commit()
-            n = db.execute("select count(*) from recipe where profession_id = ?", (prof,)).fetchone()[0]
-            print(f"profession {prof} tier {tier['name']}: {n} recipes")
+            listed += [(cat["name"], r["id"]) for cat in st.get("categories", []) for r in cat.get("recipes", [])]
+        fetched = api.get_many([f"/data/wow/recipe/{rid}" for _, rid in listed], "static")
+        for (category, _), rec in zip(listed, fetched):
+            if rec is None:
+                continue
+            crafted = rec.get("crafted_item") or rec.get("alliance_crafted_item")
+            qty = rec.get("crafted_quantity", {})
+            db.execute(
+                "insert or replace into recipe values (?, ?, ?, ?, ?, ?, ?)",
+                (rec["id"], prof, category, rec["name"], crafted and crafted["id"],
+                 qty.get("minimum", qty.get("value", 1)), qty.get("maximum", qty.get("value", 1))),
+            )
+            db.execute("delete from reagent where recipe_id = ?", (rec["id"],))
+            for rg in rec.get("reagents", []):
+                db.execute("insert into reagent values (?, ?, ?)", (rec["id"], rg["reagent"]["id"], rg["quantity"]))
+                item_ids.add(rg["reagent"]["id"])
+            if crafted:
+                item_ids.add(crafted["id"])
+        db.commit()
+        n = db.execute("select count(*) from recipe where profession_id = ?", (prof,)).fetchone()[0]
+        print(f"profession {prof}: {n} recipes", flush=True)
 
     known = {i for (i,) in db.execute("select id from item where found = 1")}
-    for iid in sorted(item_ids - known):
-        it = api.get(f"/data/wow/item/{iid}", "static")
+    todo = sorted(item_ids - known)
+    for iid, it in zip(todo, api.get_many([f"/data/wow/item/{i}" for i in todo], "static")):
         if it is None:
             db.execute("insert or replace into item values (?, null, null, null, 0)", (iid,))
         else:
@@ -427,8 +442,7 @@ def market_data(args, db):
     names = {}
     if todo:
         api = Client(args.region, *creds())
-        for i in todo:
-            it = api.get(f"/data/wow/item/{i}", "static")
+        for i, it in zip(todo, api.get_many([f"/data/wow/item/{i}" for i in todo], "static")):
             quality[i] = it["quality"]["type"].lower() if it and it.get("quality") else "common"
             if it:
                 names[i] = it["name"]

@@ -13,9 +13,11 @@ export const setData = (d: unknown) => { D = d }
 const theme = 'gold'
 
 // ---- text cells for the aut-num style blocks: plain strings or colored runs, padded by visible length
-type Run = { t: string; c?: string; href?: string }
+type Run = { t: string; c?: string; href?: string; external?: boolean }
 type Cell = string | Run[]
-const item = (id: number, name: string): Run[] => [{ t: name, c: `q-${D.quality[id] ?? 'common'}` }]
+// every item links 2 its wowhead page, in its rarity color
+const item = (id: number, name: string): Run[] =>
+  [{ t: name, c: `item q-${D.quality[id] ?? 'common'}`, href: `https://www.wowhead.com/forever/item=${id}`, external: true }]
 const runs = (x: Cell): Run[] => (typeof x === 'string' ? [{ t: x }] : x)
 const width = (x: Cell) => runs(x).reduce((a, r) => a + [...r.t].length, 0)
 
@@ -40,7 +42,9 @@ function trend(now?: number | null, then?: number | null): Run[] {
 }
 
 function Runs({ cell }: { cell: Cell }) {
-  return <>{runs(cell).map(r => r.href ? <a href={r.href}>{r.t}</a> : r.c ? <span className={r.c}>{r.t}</span> : r.t)}</>
+  return <>{runs(cell).map(r =>
+    r.href ? <a href={r.href} className={r.c} {...(r.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{r.t}</a>
+      : r.c ? <span className={r.c}>{r.t}</span> : r.t)}</>
 }
 
 // right-aligned columns are numbers; the first column is always left-aligned

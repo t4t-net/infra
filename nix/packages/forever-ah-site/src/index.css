@@ -209,3 +209,10 @@ body { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono'
 .q-rare { color: #0070dd; }
 .q-epic { color: #a335ee; }
 .q-legendary { color: #ff8000; }
+
+/* wowhead links keep their rarity color; the underline only firms up on hover */
+a.item { text-decoration-color: color-mix(in srgb, currentColor 30%, transparent); }
+a.item:hover { text-decoration-color: currentColor; }
+a.item.q-poor:hover { color: #9d9d9d; } a.item.q-common:hover { color: #ffffff; }
+a.item.q-uncommon:hover { color: #1eff00; } a.item.q-rare:hover { color: #0070dd; }
+a.item.q-epic:hover { color: #a335ee; } a.item.q-legendary:hover { color: #ff8000; }

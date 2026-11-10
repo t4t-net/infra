@@ -5,6 +5,7 @@
   forever-ah recipes  cache profession recipes + item vendor prices from th static api
   forever-ah analyze  craft profitability 4 one house from th latest snapshot
   forever-ah export   write a fresh data.json 4 th gold meta site
+  forever-ah alert    post newly opened flips 2 discord
 
 creds: BNET_CLIENT_ID / BNET_CLIENT_SECRET, or ~/.secrets/battle-net-client-{id,secret}
 """
@@ -448,12 +449,28 @@ def market_data(args, db):
     gather = {k: [market(i) for i in ids if i in now] for k, ids in GATHERED.items()}
 
     # buy in th quiet neutral house, sell here; 15% neutral cut is classic's, unverified 4 forever
-    flips = []
-    for i in now.keys() & bw.keys():
-        buy, sell = bw[i][1], now[i][1] * 0.95
-        if now[i][3] >= 8 and bw[i][3] >= 2 and sell > buy * 1.5 and sell - buy >= 2000:
-            flips.append({"id": i, "name": (items.get(i) or (None,))[0] or f"item {i}", "buy": buy, "buy_listings": bw[i][3],
-                          "sell": now[i][1], "sell_listings": now[i][3], "profit": int(sell - buy)})
+    def open_spreads(here, there):
+        out = {}
+        for i in here.keys() & there.keys():
+            buy, sell = there[i][1], here[i][1] * 0.95
+            if here[i][3] >= 8 and there[i][3] >= 2 and sell > buy * 1.5 and sell - buy >= 2000:
+                out[i] = (buy, int(sell - buy))
+        return out
+
+    # how many dumps in th window each spread was open 4. blackwater only gets a new snapshot when its dump
+    # changes, so each of our dumps pairs w th latest blackwater snapshot at or before it
+    open_count = defaultdict(int)
+    for sid, _ in snaps:
+        ts = db.execute("select ts from snapshot where id = ?", (sid,)).fetchone()[0]
+        bsid = db.execute("select id from snapshot where house_id = ? and ts <= ? order by ts desc limit 1",
+                          (args.blackwater, ts)).fetchone()
+        if bsid:
+            for i in open_spreads(book(sid), book(bsid[0])):
+                open_count[i] += 1
+
+    flips = [{"id": i, "name": (items.get(i) or (None,))[0] or f"item {i}", "buy": buy, "buy_listings": bw[i][3],
+              "sell": now[i][1], "sell_listings": now[i][3], "profit": profit, "open": open_count[i]}
+             for i, (buy, profit) in open_spreads(now, bw).items()]
     flips.sort(key=lambda f: -f["profit"])
 
     # names nd qualities 4 anything shown tht th recipe crawl didnt cover, cached so this only costs calls once
@@ -464,19 +481,22 @@ def market_data(args, db):
             shown_ids.add(r["out"]["id"])
             shown_ids.update(m["id"] for m in r["mats"])
     quality = dict(db.execute("select id, quality from item_quality"))
-    todo = sorted(shown_ids - quality.keys())
-    names = {}
+    named = {i for (i,) in db.execute("select id from item where name is not null")}
+    # anything shown w/o a cached quality or name (flips can be any item, not just recipe mats)
+    todo = sorted((shown_ids - quality.keys()) | (shown_ids - named))
     if todo:
         api = Client(args.region, *creds())
         for i, it in zip(todo, api.get_many([f"/data/wow/item/{i}" for i in todo], "static")):
             quality[i] = it["quality"]["type"].lower() if it and it.get("quality") else "common"
-            if it:
-                names[i] = it["name"]
             db.execute("insert or replace into item_quality values (?, ?)", (i, quality[i]))
+            if it:
+                db.execute("insert into item values (?, ?, ?, ?, 1) on conflict(id) do update set name = excluded.name",
+                           (i, it["name"], it.get("sell_price"), it.get("purchase_price")))
         db.commit()
-    for m in shown:
-        if m["name"].startswith("item ") and m["id"] in names:
-            m["name"] = names[m["id"]]
+        names = dict(db.execute("select id, name from item where name is not null"))
+        for m in shown:
+            if m["name"].startswith("item ") and m["id"] in names:
+                m["name"] = names[m["id"]]
     flips = [f for f in flips if not f["name"].startswith("item ")][:10]
 
     return {
@@ -484,6 +504,45 @@ def market_data(args, db):
         "hours": round((snaps[-1][1] - snaps[0][1]) / 3600), "crafts": crafts, "gather": gather, "flips": flips,
         "quality": {i: quality[i] for i in shown_ids},
     }
+
+
+def gsc(c):
+    """copper as th game prints it, 4 discord"""
+    g_, s_, c_ = c // 10000, c // 100 % 100, c % 100
+    return " ".join(p for p in (f"{g_}g" if g_ else "", f"{s_}s" if s_ else "", f"{c_}c" if c_ and not g_ else "") if p) or "0c"
+
+
+def alert(args, db):
+    """Post flips tht opened since th last dump 2 discord. th first run only records state."""
+    data = json.loads(Path(args.data).read_text())
+    state_path = Path(args.state)
+    state = json.loads(state_path.read_text()) if state_path.exists() else None
+    if state and state.get("dump") == data["dump"]:
+        print("no new dump since last alert")
+        return
+    was_open = set(state["open"]) if state else None
+    flips = data["flips"]
+    fresh = [f for f in flips if was_open is not None and f["id"] not in was_open and f["profit"] >= args.min_profit]
+
+    if fresh and not Path(args.webhook_file).exists():
+        print(f"{len(fresh)} new flips but no webhook at {args.webhook_file}, skipping")
+    elif fresh:
+        lines = [f"**{len(fresh)} new flip{'s' if len(fresh) > 1 else ''}** (blackwater -> alliance)"]
+        for f in fresh[:10]:
+            lines.append(f"[{f['name']}](<https://www.wowhead.com/forever/item={f['id']}>): buy {gsc(f['buy'])} "
+                         f"({f['buy_listings']} listed), sell {gsc(f['sell'])} ({f['sell_listings']} listed), "
+                         f"**+{gsc(f['profit'])}**, open {f['open']}/{data['dumps']} dumps")
+        if args.site:
+            lines.append(f"<{args.site}#flips>")
+        body = json.dumps({"content": "\n".join(lines)[:2000], "allowed_mentions": {"parse": []}}).encode()
+        req = urllib.request.Request(Path(args.webhook_file).read_text().strip(), data=body, headers={
+            "Content-Type": "application/json", "User-Agent": "forever-ah/0.1"})
+        urllib.request.urlopen(req, timeout=30).close()
+        print(f"posted {len(fresh)} new flips")
+    else:
+        print("first run, recorded state" if was_open is None else "no new flips")
+
+    state_path.write_text(json.dumps({"dump": data["dump"], "open": [f["id"] for f in flips]}))
 
 
 def export(args, db):
@@ -517,6 +576,12 @@ def main():
     ex.add_argument("--blackwater", type=int, default=117, help="th neutral house alliance can also reach")
     ex.add_argument("--hours", type=int, default=24, help="trend nd sales window")
     ex.add_argument("--out", required=True, help="data.json path, next 2 th forever-ah-site files")
+    al = sub.add_parser("alert")
+    al.add_argument("--data", required=True, help="th data.json export just wrote")
+    al.add_argument("--state", required=True, help="where 2 remember wat was already open")
+    al.add_argument("--webhook-file", required=True, help="file holding th discord webhook url")
+    al.add_argument("--min-profit", type=int, default=5000, help="copper; default 50s")
+    al.add_argument("--site", help="site url 2 link at th bottom")
     an = sub.add_parser("analyze")
     an.add_argument("--house", type=int, default=111)
     an.add_argument("--profession", type=int, default=164)
@@ -538,7 +603,7 @@ def main():
     for col in ("spell_id", "learn_skill", "yellow_skill", "grey_skill"):
         if col not in have:
             db.execute(f"alter table recipe add column {col} integer")
-    {"scrape": scrape, "recipes": recipes, "analyze": analyze, "export": export}[args.cmd](args, db)
+    {"scrape": scrape, "recipes": recipes, "analyze": analyze, "export": export, "alert": alert}[args.cmd](args, db)
 
 
 if __name__ == "__main__":

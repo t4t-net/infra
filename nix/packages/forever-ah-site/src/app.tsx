@@ -184,10 +184,16 @@ raid-launch:  stones, flasks, thorium         `}<span className="c"># raids open
           buy in blackwater, sell here where the buyers are. the other direction looks great on paper and never sells.
           assumes a 15% cut on the neutral side.
         </p>
+        <p>
+          most spreads only last an hour, and by the time you're at the ah they're gone. the open column counts how
+          many of the last {D.dumps} dumps each one was open for. plan trips around the ones that are open nearly
+          every time.
+        </p>
         <Block
-          head={['item', 'blackwater', 'here', 'profit']}
-          rows={(D.flips as { id: number; name: string; buy: number; buy_listings: number; sell: number; sell_listings: number; profit: number }[]).map(f => [
+          head={['item', 'blackwater', 'here', 'profit', 'open']}
+          rows={(D.flips as { id: number; name: string; buy: number; buy_listings: number; sell: number; sell_listings: number; profit: number; open: number }[]).map(f => [
             item(f.id, f.name), [...money(f.buy), { t: ` (${f.buy_listings})`, c: 'c' }], [...money(f.sell), { t: ` (${f.sell_listings})`, c: 'c' }], money(f.profit),
+            [{ t: `${f.open}/${D.dumps}`, c: f.open * 2 < D.dumps ? 'c' : undefined }],
           ])}
         />
       </Section>

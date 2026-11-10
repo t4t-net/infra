@@ -216,3 +216,17 @@ a.item:hover { text-decoration-color: currentColor; }
 a.item.q-poor:hover { color: #9d9d9d; } a.item.q-common:hover { color: #ffffff; }
 a.item.q-uncommon:hover { color: #1eff00; } a.item.q-rare:hover { color: #0070dd; }
 a.item.q-epic:hover { color: #a335ee; } a.item.q-legendary:hover { color: #ff8000; }
+
+/* quest log colors, relative to the level picker */
+.con-red { color: #ff1a1a; } .con-orange { color: #ff8040; } .con-yellow { color: #ffff00; }
+.con-green { color: #40c040; } .con-grey { color: #808080; }
+a.con-red, a.con-orange, a.con-yellow, a.con-green, a.con-grey { text-decoration-color: color-mix(in srgb, currentColor 30%, transparent); }
+a.con-red:hover { color: #ff1a1a; } a.con-orange:hover { color: #ff8040; } a.con-yellow:hover { color: #ffff00; }
+a.con-green:hover { color: #40c040; } a.con-grey:hover { color: #808080; }
+
+.pickers { display: flex; flex-wrap: wrap; gap: .5rem 3ch; margin: 0 0 1rem; color: var(--mute); }
+.pickers select, .pickers input {
+  font: inherit; color: var(--text); background: var(--bg);
+  border: 1px dashed var(--rule); padding: 0 .5ch; margin-left: 1ch;
+}
+.pickers input { width: 5ch; }

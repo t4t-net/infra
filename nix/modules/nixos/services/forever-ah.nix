@@ -70,7 +70,11 @@ in
     # ~4k static api calls 4 all eight professions plus SkillLineAbility off th CDN 4 spell ids nd
     # skill ranges. recipes barely change so weekly is plenty.
     # th scrape's raw-auction watchlist comes from these, so kick it by hand on a fresh db
-    systemd.services.forever-ah-recipes = job "cache wow forever recipes" [ "recipes" ];
+    # quests: questie's forever db (~4mb of lua off github) + every quest's rewards from th api (~7k calls)
+    systemd.services.forever-ah-recipes = job "cache wow forever recipes nd quests" [
+      "recipes"
+      "quests"
+    ];
 
     # blizz publishes th us forever dumps at ~:13 every hour (seen 2026-11-09), so grab them fresh
     systemd.timers.forever-ah-scrape = {

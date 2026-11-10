@@ -3,6 +3,7 @@
 
   forever-ah scrape   snapshot every house as per-item aggregates, plus raw auctions 4 watched items
   forever-ah recipes  cache profession recipes + item vendor prices from th static api
+  forever-ah quests   cache quests: questie's levels/givers/chains + th api's rewards
   forever-ah analyze  craft profitability 4 one house from th latest snapshot
   forever-ah export   write a fresh data.json 4 th gold meta site
   forever-ah alert    post newly opened flips 2 discord
@@ -24,6 +25,7 @@ import urllib.request
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 
+import questie
 import tact
 from pathlib import Path
 
@@ -82,6 +84,29 @@ create table if not exists item (
   sell_price integer,             -- wat a vendor pays u, copper
   purchase_price integer,         -- wat a vendor charges, copper (set even 4 items no vendor sells)
   found integer not null          -- 0 when static-forever 404s
+);
+create table if not exists quest (
+  id integer primary key,
+  name text not null,
+  zone integer,                   -- AreaTable id; negative = QuestSort (class/profession quests)
+  zone_name text,
+  faction text,                   -- ALLIANCE, HORDE or null 4 both
+  req_level integer,
+  level integer,
+  type text,                      -- elite, dungeon, ...
+  objectives text,
+  starts text,                    -- json [{name, zone, x, y}], from questie's npc/object spawns
+  ends text,
+  pre_single text,                -- json [quest ids], any one of these first
+  pre_group text,                 -- json [quest ids], all of these first
+  next_in_chain integer,
+  breadcrumb_for integer,
+  repeatable integer not null,
+  xp integer,
+  money integer,                  -- copper
+  reward_choice text,             -- json [item ids], pick one
+  reward_fixed text,              -- json [item ids], always given
+  reputations text                -- json [[faction name, value]]
 );
 create table if not exists item_quality (
   id integer primary key,
@@ -315,6 +340,84 @@ def link_spells(args, db):
     db.commit()
     total = db.execute("select count(*) from recipe").fetchone()[0]
     print(f"client build {st.cdn.build}: {hit}/{total} recipes linked 2 their spell", flush=True)
+
+
+ALLIANCE_RACES, HORDE_RACES = 1 | 4 | 8 | 64, 2 | 16 | 32 | 128  # human dwarf nelf gnome / orc undead tauren troll
+
+
+def quests(args, db):
+    """Questie's levels, givers nd chains + th api's rewards, merged per quest."""
+    api = Client(args.region, *creds())
+    qdb, npcs, objs = questie.load("Quest"), questie.load("Npc"), questie.load("Object")
+    print(f"questie: {len(qdb)} quests, {len(npcs)} npcs, {len(objs)} objects", flush=True)
+
+    # th api lists quests by zone nd by category; together tht's every quest it knows
+    areas = {a["id"]: a["name"] for a in api.get("/data/wow/quest/area/index", "static")["areas"]}
+    cats = {c["id"]: c["name"] for c in api.get("/data/wow/quest/category/index", "static")["categories"]}
+    lists = api.get_many([f"/data/wow/quest/area/{a}" for a in areas] + [f"/data/wow/quest/category/{c}" for c in cats], "static")
+    ids = sorted({q["id"] for l in lists if l for q in l.get("quests", [])} | set(qdb))
+    details = dict(zip(ids, api.get_many([f"/data/wow/quest/{i}" for i in ids], "static")))
+    print(f"api: {sum(1 for d in details.values() if d)} of {len(ids)} quests", flush=True)
+
+    def where(starts, ends=False):
+        """questie's startedBy/finishedBy -> [{name, zone, x, y}] from th first spawn of each npc/object"""
+        out = []
+        for kind, table, keys in ((0, npcs, questie.NPC), (1, objs, questie.OBJECT)):
+            for gid in (starts[kind] if starts and kind < len(starts) and starts[kind] else []):
+                row = table.get(gid)
+                if not row:
+                    continue
+                spawns = questie.field(row, keys, "spawns") or {}
+                zone, pts = next(iter(spawns.items()), (questie.field(row, keys, "zoneID"), [None]))
+                pt = pts[0] if pts else None
+                out.append({"name": questie.field(row, keys, "name"), "zone": areas.get(zone, zone),
+                            "x": pt and pt[0], "y": pt and pt[1]})
+        return out
+
+    reward_items = set()
+    db.execute("delete from quest")
+    for i in ids:
+        row, d = qdb.get(i), details.get(i) or {}
+        if not row and not d:
+            continue
+        f = (lambda k: questie.field(row, questie.QUEST, k)) if row else (lambda k: None)
+        zone = f("zoneOrSort") or (d.get("area") or {}).get("id")
+        zone_name = areas.get(zone) or cats.get(-zone if zone and zone < 0 else zone) or (d.get("area") or {}).get("name")
+        faction = ((d.get("requirements") or {}).get("faction") or {}).get("type")
+        races = (f("requiredRaces") or 0) % (1 << 32)
+        if not faction and races:
+            a, h = races & ALLIANCE_RACES, races & HORDE_RACES
+            faction = "ALLIANCE" if a and not h else "HORDE" if h and not a else None
+        rw = d.get("rewards") or {}
+        items = rw.get("items") or {}
+        choice = [x["item"]["id"] for x in items.get("choice_of", [])]
+        fixed = [x["item"]["id"] for x in items.get("items", [])] if isinstance(items, dict) else []
+        reward_items.update(choice + fixed)
+        db.execute(
+            "insert into quest values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (i, d.get("title") or f("name"), zone, zone_name, faction, f("requiredLevel"), f("questLevel"),
+             (d.get("type") or {}).get("name"), " ".join(f("objectivesText") or []) or None,
+             json.dumps(where(f("startedBy"))), json.dumps(where(f("finishedBy"))),
+             json.dumps(f("preQuestSingle") or []), json.dumps(f("preQuestGroup") or []),
+             f("nextQuestInChain"), f("breadcrumbForQuestId"), int(bool((f("specialFlags") or 0) & 1)),
+             rw.get("experience"), (rw.get("money") or {}).get("value"), json.dumps(choice), json.dumps(fixed),
+             json.dumps([[r["reward"]["name"], r["value"]] for r in rw.get("reputations", [])])))
+    db.commit()
+
+    # reward items get names, vendor prices nd qualities now, so th hourly export never has 2 fetch them
+    have = {i for (i,) in db.execute("select id from item where name is not null")} & \
+           {i for (i,) in db.execute("select id from item_quality")}
+    todo = sorted(reward_items - have)
+    for i, it in zip(todo, api.get_many([f"/data/wow/item/{i}" for i in todo], "static")):
+        if not it:
+            continue
+        db.execute("insert into item values (?, ?, ?, ?, 1) on conflict(id) do update set name = excluded.name, "
+                   "sell_price = excluded.sell_price, purchase_price = excluded.purchase_price",
+                   (i, it["name"], it.get("sell_price"), it.get("purchase_price")))
+        db.execute("insert or replace into item_quality values (?, ?)", (i, it["quality"]["type"].lower()))
+    db.commit()
+    n = db.execute("select count(*), count(level), count(xp) from quest").fetchone()
+    print(f"stored {n[0]} quests ({n[1]} w a level, {n[2]} w rewards), {len(todo)} reward items looked up", flush=True)
 
 
 def g(c):
@@ -559,15 +662,47 @@ def alert(args, db):
     state_path.write_text(json.dumps({"dump": data["dump"], "open": [f["id"] for f in flips]}))
 
 
+def quest_data(args, db):
+    """Every quest alliance can do, w each reward choice priced: max of th ah floor nd wat a vendor pays."""
+    snap = db.execute("select id from snapshot where house_id = ? order by ts desc limit 1", (args.house,)).fetchone()
+    floor = dict(db.execute("select item_id, min(min_unit) from price where snapshot_id = ? group by item_id", (snap[0],))) if snap else {}
+    items = {i: (n, s) for i, n, s in db.execute("select id, name, sell_price from item")}
+    quality = dict(db.execute("select id, quality from item_quality"))
+
+    def reward(i):
+        name, sell = items.get(i, (None, None))
+        ah = floor.get(i)
+        return {"id": i, "name": name or f"item {i}", "q": quality.get(i, "common"), "ah": ah, "vendor": sell,
+                "value": max(int((ah or 0) * 0.95), sell or 0)}
+
+    out = []
+    for (i, name, zone, req, lvl, typ, starts, pre_single, pre_group, nxt, rep, xp, money, choice, fixed,
+         reps) in db.execute(
+            "select id, name, zone_name, req_level, level, type, starts, pre_single, pre_group, next_in_chain, "
+            "repeatable, xp, money, reward_choice, reward_fixed, reputations from quest "
+            "where (faction is null or faction = 'ALLIANCE') and name not like '<%' and zone_name is not null"):
+        out.append({"id": i, "name": name, "zone": zone, "req": req, "lvl": lvl, "type": typ, "starts": json.loads(starts or "[]"),
+                    "pre": json.loads(pre_single or "[]") + json.loads(pre_group or "[]"), "next": nxt, "rep": bool(rep),
+                    "xp": xp, "money": money, "choice": [reward(x) for x in json.loads(choice or "[]")],
+                    "fixed": [reward(x) for x in json.loads(fixed or "[]")], "reps": json.loads(reps or "[]")})
+    return {"quests": out}
+
+
+def write_json(path, data):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(json.dumps(data, separators=(",", ":")))
+    tmp.replace(path)
+
+
 def export(args, db):
-    """Write a fresh data.json 4 th site, renamed into place so th page never fetches half of one."""
+    """Write fresh data.json + quests.json 4 th site, renamed into place so th page never fetches half of one."""
     data = market_data(args, db)
     out = Path(args.out)
-    out.parent.mkdir(parents=True, exist_ok=True)
-    tmp = out.with_name(out.name + ".tmp")
-    tmp.write_text(json.dumps(data, separators=(",", ":")))
-    tmp.replace(out)
-    print(f"exported {data['dumps']} dumps over {data['hours']}h 2 {out}")
+    write_json(out, data)
+    q = quest_data(args, db)
+    write_json(out.with_name("quests.json"), q)
+    print(f"exported {data['dumps']} dumps over {data['hours']}h nd {len(q['quests'])} quests 2 {out.parent}")
 
 
 def main():
@@ -585,6 +720,7 @@ def main():
     rp.add_argument("--product", default="wowf", help="client product on blizzard's version service (wowf is forever)")
     rp.add_argument("--cache", default=os.environ.get("FOREVER_AH_CDN_CACHE", "cdn-cache"),
                     help="CDN cache; content-addressed, so it only grows across patches")
+    sub.add_parser("quests")
     ex = sub.add_parser("export")
     ex.add_argument("--house", type=int, default=111)
     ex.add_argument("--blackwater", type=int, default=117, help="th neutral house alliance can also reach")
@@ -619,7 +755,7 @@ def main():
     for col in ("spell_id", "learn_skill", "yellow_skill", "grey_skill"):
         if col not in have:
             db.execute(f"alter table recipe add column {col} integer")
-    {"scrape": scrape, "recipes": recipes, "analyze": analyze, "export": export, "alert": alert}[args.cmd](args, db)
+    {"scrape": scrape, "recipes": recipes, "quests": quests, "analyze": analyze, "export": export, "alert": alert}[args.cmd](args, db)
 
 
 if __name__ == "__main__":

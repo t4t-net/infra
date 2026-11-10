@@ -107,7 +107,7 @@ function Mats({ rows }: { rows: Market[] }) {
 }
 
 const PROFS = ['mining', 'herbalism', 'skinning', 'blacksmithing', 'engineering', 'tailoring', 'leatherworking', 'alchemy', 'enchanting', 'cooking'] as const
-const VIEWS = ['meta', ...PROFS, 'flips'] as const
+const VIEWS = ['meta', 'quests', ...PROFS, 'flips'] as const
 type View = typeof VIEWS[number]
 
 const TAKES: Record<string, string> = {
@@ -163,7 +163,93 @@ function Section({ title, children }: { title: string; children: ComponentChildr
   return <section><h2>{title}</h2>{children}</section>
 }
 
+// ---- quests: questie's levels, givers nd chains + blizzard's rewards, priced against th ah
+type Reward = { id: number; name: string; q: string; ah: number | null; vendor: number | null; value: number }
+type Quest = {
+  id: number; name: string; zone: string; req: number | null; lvl: number | null; type: string | null
+  starts: { name: string; x: number | null; y: number | null }[]; pre: number[]; next: number | null; rep: boolean
+  xp: number | null; money: number | null; choice: Reward[]; fixed: Reward[]
+}
+
+// th game's quest log colors, relative 2 ur level (classic's grey cutoff)
+function con(lvl: number | null, me: number): string {
+  if (lvl == null) return 'c'
+  const grey = me <= 5 ? 0 : me < 40 ? me - Math.floor(me / 10) - 5 : me - Math.floor(me / 5) - 1
+  const d = lvl - me
+  return d >= 5 ? 'con-red' : d >= 3 ? 'con-orange' : d >= -2 ? 'con-yellow' : lvl > grey ? 'con-green' : 'con-grey'
+}
+
+function stored<T>(key: string, init: T): [T, (v: T) => void] {
+  const [v, setV] = useState<T>(() => {
+    try { const s = localStorage.getItem(key); return s == null ? init : JSON.parse(s) } catch { return init }
+  })
+  return [v, (x: T) => { setV(x); try { localStorage.setItem(key, JSON.stringify(x)) } catch {} }]
+}
+
+function Quests() {
+  const [all, setAll] = useState<Quest[] | null>(null)
+  const [err, setErr] = useState<string | null>(null)
+  const [zone, setZone] = stored('quest-zone', 'Loch Modan')
+  const [me, setMe] = stored('quest-level', 15)
+  useEffect(() => {
+    fetch('quests.json', { cache: 'no-store' }).then(r => r.json()).then(d => setAll(d.quests)).catch(e => setErr(String(e)))
+  }, [])
+  if (err) return <Section title="quests"><p className="mute">couldn't load quests ({err}).</p></Section>
+  if (!all) return <Section title="quests"><p className="mute">loading quests...</p></Section>
+
+  const byId = new Map(all.map(q => [q.id, q]))
+  const zones = [...new Set(all.map(q => q.zone))].sort()
+  const here = all.filter(q => q.zone === zone && (q.req ?? 0) <= me)
+    .sort((a, b) => (a.lvl ?? 999) - (b.lvl ?? 999) || (a.req ?? 0) - (b.req ?? 0) || a.name.localeCompare(b.name))
+  const later = all.filter(q => q.zone === zone && (q.req ?? 0) > me).length
+  const best = (q: Quest) => [...q.choice, ...q.fixed].sort((a, b) => b.value - a.value)[0]
+  const quest = (q: Quest): Run[] => [{ t: q.name, c: con(q.lvl, me), href: `https://www.wowhead.com/forever/quest=${q.id}`, external: true }]
+
+  return (
+    <Section title="quests">
+      <p>
+        every quest alliance can do, from questie's database (levels, givers, chains) and blizzard's own
+        (xp, money, rewards). colors match your quest log. reward value is whichever is more: undercutting the
+        ah, or vendoring it.
+      </p>
+      <div className="pickers">
+        <label>zone <select value={zone} onChange={e => setZone((e.target as HTMLSelectElement).value)}>
+          {zones.map(z => <option key={z} value={z}>{z}</option>)}
+        </select></label>
+        <label>your level <input type="number" min={1} max={60} value={me}
+          onInput={e => setMe(Math.max(1, Math.min(60, Number((e.target as HTMLInputElement).value) || 1)))} /></label>
+      </div>
+      {here.length ? <Block
+        head={['lvl', 'quest', 'xp', 'money', 'best reward', 'giver']}
+        rows={here.map(q => {
+          const b = best(q), g = q.starts[0]
+          return [
+            [{ t: q.lvl == null ? '?' : String(q.lvl), c: con(q.lvl, me) }],
+            quest(q),
+            q.xp ? q.xp.toLocaleString() : [{ t: '-', c: 'c' }],
+            q.money ? money(q.money) : [{ t: '-', c: 'c' }],
+            b ? [...item(b.id, b.name).map(r => ({ ...r, c: `item q-${b.q}` })), { t: ' ' }, ...money(b.value)] : [{ t: '-', c: 'c' }],
+            g ? `${g.name}${g.x != null ? ` ${Math.round(g.x)},${Math.round(g.y ?? 0)}` : ''}` : [{ t: '?', c: 'c' }],
+          ]
+        })}
+        notes={here.map(q => {
+          const bits: Run[] = []
+          const add = (r: Run[]) => { if (bits.length) bits.push({ t: ' · ' }); bits.push(...r) }
+          if (q.type && q.type !== 'Normal') add([{ t: q.type.toLowerCase() }])
+          if (q.pre.length) add([{ t: 'after ' }, ...q.pre.slice(0, 2).flatMap((p, i) => [...(i ? [{ t: ' or ' }] : []), { t: byId.get(p)?.name ?? `quest ${p}` }])])
+          if (q.next) add([{ t: 'leads to ' }, { t: byId.get(q.next)?.name ?? `quest ${q.next}` }])
+          if (q.choice.length > 1) add([{ t: 'pick: ' }, ...q.choice.flatMap((c, i) => [...(i ? [{ t: ', ' }] : []), ...item(c.id, c.name).map(r => ({ ...r, c: `item q-${c.q}` })), { t: ` ${Math.round(c.value / 100)}s` }])])
+          if (q.lvl == null) add([{ t: 'new in forever, level unknown' }])
+          return bits
+        })}
+      /> : <p className="mute">nothing in {zone} at level {me} yet.</p>}
+      {later > 0 && <p className="note">{later} more {zone} quests need a higher level.</p>}
+    </Section>
+  )
+}
+
 function ViewBody({ view }: { view: View }) {
+  if (view === 'quests') return <Quests />
   const crafts = D.crafts as Record<string, { count: number; priced: number; losers: number; top: Craft[]; starters: Craft[] }>
   const gather = D.gather as Record<string, Market[]>
 

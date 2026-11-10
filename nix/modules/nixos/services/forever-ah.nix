@@ -48,12 +48,12 @@ in
     # th scrape's raw-auction watchlist comes from these, so kick it by hand on a fresh db
     systemd.services.forever-ah-recipes = unit "cache wow forever bs/mining recipes" "recipes";
 
-    # blizz refreshes th AH dump about hourly
+    # blizz publishes th us forever dumps at ~:13 every hour (seen 2026-11-09), so grab them fresh
     systemd.timers.forever-ah-scrape = {
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        OnCalendar = "hourly";
-        RandomizedDelaySec = "5m";
+        OnCalendar = "*-*-* *:20:00";
+        RandomizedDelaySec = "2m";
         Persistent = true;
       };
     };

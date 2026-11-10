@@ -32,8 +32,12 @@ let
     inherit description;
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
-    # progress lines otherwise sit in python's buffer until exit nd th journal looks frozen
-    environment.PYTHONUNBUFFERED = "1";
+    environment = {
+      # progress lines otherwise sit in python's buffer until exit nd th journal looks frozen
+      PYTHONUNBUFFERED = "1";
+      # client db2 tables come off blizzard's CDN; ~300mb of archive indexes th first time, reused after
+      FOREVER_AH_CDN_CACHE = "${state}/cdn-cache";
+    };
     serviceConfig = sandbox // {
       Type = "oneshot";
       ExecStart = map (c: "${forever-ah} ${c}") commands;
@@ -58,7 +62,8 @@ in
       "scrape"
       "export --out ${www}/data.json"
     ];
-    # ~2k static api calls 4 all eight professions, recipes barely change so weekly is plenty.
+    # ~4k static api calls 4 all eight professions plus SkillLineAbility off th CDN 4 spell ids nd
+    # skill ranges. recipes barely change so weekly is plenty.
     # th scrape's raw-auction watchlist comes from these, so kick it by hand on a fresh db
     systemd.services.forever-ah-recipes = job "cache wow forever recipes" [ "recipes" ];
 

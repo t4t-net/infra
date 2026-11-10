@@ -21,6 +21,8 @@ import urllib.parse
 import urllib.request
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
+
+import tact
 from pathlib import Path
 
 SCHEMA = """
@@ -263,7 +265,8 @@ def recipes(args, db):
             crafted = rec.get("crafted_item") or rec.get("alliance_crafted_item")
             qty = rec.get("crafted_quantity", {})
             db.execute(
-                "insert or replace into recipe values (?, ?, ?, ?, ?, ?, ?)",
+                "insert or replace into recipe (id, profession_id, category, name, crafted_item_id, crafted_min, crafted_max) "
+                "values (?, ?, ?, ?, ?, ?, ?)",
                 (rec["id"], prof, category, rec["name"], crafted and crafted["id"],
                  qty.get("minimum", qty.get("value", 1)), qty.get("maximum", qty.get("value", 1))),
             )
@@ -286,7 +289,30 @@ def recipes(args, db):
             db.execute("insert or replace into item values (?, ?, ?, ?, 1)", (iid, it["name"], it.get("sell_price"), it.get("purchase_price")))
     db.commit()
     missing = db.execute("select count(*) from item where found = 0").fetchone()[0]
-    print(f"items: {len(item_ids)} referenced, {missing} missing from static-forever")
+    print(f"items: {len(item_ids)} referenced, {missing} missing from static-forever", flush=True)
+    link_spells(args, db)
+
+
+# th api's recipe id is th client's SkillLineAbility row id, nd only tht table knows th spell
+SKILL_LINE_ABILITY = 1266278  # FileDataID
+
+
+def link_spells(args, db):
+    """Fill each recipe's spell id nd skill ranges from forever's SkillLineAbility.db2, read off blizzard's CDN."""
+    st = tact.Storage(args.product, args.cache)
+    rows = tact.read_wdc5(st.files([SKILL_LINE_ABILITY])[SKILL_LINE_ABILITY],
+                          tact.http(tact.DBD.format(table="SkillLineAbility")).decode())
+    sla = {r["ID"]: r for r in rows}
+    hit = 0
+    for rid, prof in db.execute("select id, profession_id from recipe").fetchall():
+        r = sla.get(rid)
+        if r and r["SkillLine"] == prof:
+            db.execute("update recipe set spell_id = ?, learn_skill = ?, yellow_skill = ?, grey_skill = ? where id = ?",
+                       (r["Spell"], r["MinSkillLineRank"], r["TrivialSkillLineRankLow"], r["TrivialSkillLineRankHigh"], rid))
+            hit += 1
+    db.commit()
+    total = db.execute("select count(*) from recipe").fetchone()[0]
+    print(f"client build {st.cdn.build}: {hit}/{total} recipes linked 2 their spell", flush=True)
 
 
 def g(c):
@@ -387,8 +413,9 @@ def market_data(args, db):
     crafts = {}
     for pid, pname in PROFESSIONS.items():
         rows = []
-        for rid, rname, out, cmin, cmax in db.execute(
-                "select id, name, crafted_item_id, crafted_min, crafted_max from recipe where profession_id = ? and crafted_item_id is not null", (pid,)):
+        for rid, rname, out, cmin, cmax, spell in db.execute(
+                "select id, name, crafted_item_id, crafted_min, crafted_max, spell_id from recipe "
+                "where profession_id = ? and crafted_item_id is not null", (pid,)):
             o = now.get(out)
             if not o or o[3] < 5:
                 continue
@@ -407,7 +434,7 @@ def market_data(args, db):
                 continue
             per = (cmin + cmax) / 2
             rev = int(o[1] * per * 0.95)
-            rows.append({"recipe": rname, "makes": per, "cost": cost, "revenue": rev, "profit": rev - cost,
+            rows.append({"recipe": rname, "spell": spell, "makes": per, "cost": cost, "revenue": rev, "profit": rev - cost,
                          "mats": mats, "out": market(out)})
         rows.sort(key=lambda r: -r["profit"])
         crafts[pname] = {
@@ -482,6 +509,9 @@ def main():
     sp.add_argument("--keep-days", type=int, default=7, help="prune raw auctions older than this")
     rp = sub.add_parser("recipes")
     rp.add_argument("--profession", type=int, action="append", help="profession ids (default: all crafting professions)")
+    rp.add_argument("--product", default="wowf", help="client product on blizzard's version service (wowf is forever)")
+    rp.add_argument("--cache", default=os.environ.get("FOREVER_AH_CDN_CACHE", "cdn-cache"),
+                    help="CDN cache; content-addressed, so it only grows across patches")
     ex = sub.add_parser("export")
     ex.add_argument("--house", type=int, default=111)
     ex.add_argument("--blackwater", type=int, default=117, help="th neutral house alliance can also reach")
@@ -504,6 +534,10 @@ def main():
     db.executescript(SCHEMA)
     if "data_ts" not in {c[1] for c in db.execute("pragma table_info(snapshot)")}:
         db.execute("alter table snapshot add column data_ts integer")
+    have = {c[1] for c in db.execute("pragma table_info(recipe)")}
+    for col in ("spell_id", "learn_skill", "yellow_skill", "grey_skill"):
+        if col not in have:
+            db.execute(f"alter table recipe add column {col} integer")
     {"scrape": scrape, "recipes": recipes, "analyze": analyze, "export": export}[args.cmd](args, db)
 
 

@@ -18,6 +18,10 @@ type Cell = string | Run[]
 // every item links 2 its wowhead page, in its rarity color
 const item = (id: number, name: string): Run[] =>
   [{ t: name, c: `item q-${D.quality[id] ?? 'common'}`, href: `https://www.wowhead.com/forever/item=${id}`, external: true }]
+// recipes link 2 their spell (th recipe tooltip, w reagents), colored by wat they make
+const recipe = (r: Craft): Run[] => r.spell
+  ? [{ ...item(r.out.id, r.recipe)[0], href: `https://www.wowhead.com/forever/spell=${r.spell}` }]
+  : item(r.out.id, r.recipe)
 const runs = (x: Cell): Run[] => (typeof x === 'string' ? [{ t: x }] : x)
 const width = (x: Cell) => runs(x).reduce((a, r) => a + [...r.t].length, 0)
 
@@ -64,7 +68,7 @@ function Block({ head, rows, notes }: { head: string[]; rows: Cell[][]; notes?: 
 }
 
 type Market = { id: number; name: string; floor: number | null; median: number | null; qty: number | null; listings: number | null; floor_then: number | null; sold: number | null; vendor: number | null }
-type Craft = { recipe: string; makes: number; cost: number; revenue: number; profit: number; mats: { id: number; name: string; qty: number; vendor?: boolean }[]; out: Market }
+type Craft = { recipe: string; spell: number | null; makes: number; cost: number; revenue: number; profit: number; mats: { id: number; name: string; qty: number; vendor?: boolean }[]; out: Market }
 
 function Crafts({ rows }: { rows: Craft[] }) {
   if (!rows.length) return <p className="mute">nothing here clears a profit right now.</p>
@@ -72,7 +76,7 @@ function Crafts({ rows }: { rows: Craft[] }) {
     <Block
       head={['recipe', 'mats', 'sells', 'profit', 'listed', `${D.hours}h`, 'sold']}
       rows={rows.map(r => [
-        [...item(r.out.id, r.recipe), ...(r.makes > 1 ? [{ t: ` x${r.makes}`, c: 'c' }] : [])], money(r.cost), money(r.revenue), money(r.profit),
+        [...recipe(r), ...(r.makes > 1 ? [{ t: ` x${r.makes}`, c: 'c' }] : [])], money(r.cost), money(r.revenue), money(r.profit),
         String(r.out.listings ?? 0), trend(r.out.floor, r.out.floor_then), r.out.sold == null ? [{ t: '-', c: 'c' }] : String(r.out.sold),
       ])}
       notes={rows.map(r => r.mats.flatMap((m, i) => [{ t: `${i ? ', ' : ''}${m.qty} ` }, ...item(m.id, m.name), ...(m.vendor ? [{ t: ' (vendor)' }] : [])]))}
@@ -165,7 +169,7 @@ raid-launch:  stones, flasks, thorium         `}<span className="c"># raids open
         <h3>best craft per profession right now</h3>
         <Block
           head={['profession', 'recipe', 'profit', 'listed']}
-          rows={best.map(([k, v]) => [[{ t: k, href: `#${k}` }], item(v.top[0].out.id, v.top[0].recipe), money(v.top[0].profit), String(v.top[0].out.listings ?? 0)])}
+          rows={best.map(([k, v]) => [[{ t: k, href: `#${k}` }], recipe(v.top[0]), money(v.top[0].profit), String(v.top[0].out.listings ?? 0)])}
         />
         <p className="note">prices move fast, especially for anything only a few people can make yet. read the trend column before you commit to anything.</p>
       </Section>

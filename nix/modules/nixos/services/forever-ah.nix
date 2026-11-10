@@ -47,7 +47,7 @@ let
 in
 {
   config = {
-    sops.secrets = lib.genAttrs [ "forever-ah/client_id" "forever-ah/client_secret" ] (name: {
+    sops.secrets = lib.genAttrs [ "forever-ah/client_id" "forever-ah/client_secret" "forever-ah/discord_webhook" ] (name: {
       sopsFile = ../../../machines/nixos/psychoboost/secrets/forever-ah.yaml;
       key = lib.removePrefix "forever-ah/" name;
     });
@@ -57,11 +57,16 @@ in
       BNET_CLIENT_SECRET=${config.sops.placeholder."forever-ah/client_secret"}
     '';
 
-    # each scrape rewrites data.json, so th page is never more than an hour behind blizz
-    systemd.services.forever-ah-scrape = job "snapshot every wow forever auction house" [
+    # each scrape rewrites data.json, so th page is never more than an hour behind blizz, then
+    # pings discord about any flip tht just opened
+    systemd.services.forever-ah-scrape = lib.recursiveUpdate (job "snapshot every wow forever auction house" [
       "scrape"
       "export --out ${www}/data.json"
-    ];
+      "alert --data ${www}/data.json --state ${state}/alert-state.json --webhook-file %d/discord-webhook --site https://forever-gold.tail09d5b.ts.net/"
+    ]) {
+      # th dynamic user cant read a root-owned sops file, so systemd hands this unit its own copy
+      serviceConfig.LoadCredential = [ "discord-webhook:${config.sops.secrets."forever-ah/discord_webhook".path}" ];
+    };
     # ~4k static api calls 4 all eight professions plus SkillLineAbility off th CDN 4 spell ids nd
     # skill ranges. recipes barely change so weekly is plenty.
     # th scrape's raw-auction watchlist comes from these, so kick it by hand on a fresh db

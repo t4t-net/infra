@@ -192,9 +192,16 @@ function Quests() {
   const [zone, setZone] = stored('quest-zone', 'Loch Modan')
   const [me, setMe] = stored('quest-level', 15)
   useEffect(() => {
-    fetch('quests.json', { cache: 'no-store' }).then(r => r.json()).then(d => setAll(d.quests)).catch(e => setErr(String(e)))
+    fetch('quests.json', { cache: 'no-store' })
+      .then(r => {
+        // a missing file comes back as an html 404 page, which r.json() would choke on
+        if (r.status === 404) throw new Error('not exported yet, the next hourly update at :20 writes it')
+        if (!r.ok) throw new Error(`quests.json: ${r.status}`)
+        return r.json()
+      })
+      .then(d => setAll(d.quests)).catch(e => setErr(e instanceof Error ? e.message : String(e)))
   }, [])
-  if (err) return <Section title="quests"><p className="mute">couldn't load quests ({err}).</p></Section>
+  if (err) return <Section title="quests"><p className="mute">no quests yet: {err}.</p></Section>
   if (!all) return <Section title="quests"><p className="mute">loading quests...</p></Section>
 
   const byId = new Map(all.map(q => [q.id, q]))

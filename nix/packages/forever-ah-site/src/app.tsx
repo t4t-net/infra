@@ -45,6 +45,15 @@ function trend(now?: number | null, then?: number | null): Run[] {
   return [{ t: `${p > 0 ? '+' : ''}${p}%`, c: p < 0 ? 'down' : undefined }]
 }
 
+// how long until th next sale if urs is th cheapest listing; "slow" means none sold while we watched
+function wait(m: Market): Run[] {
+  if (m.sold == null) return [{ t: '-', c: 'c' }]
+  if (!m.wait_h) return [{ t: 'slow', c: 'down' }]
+  const h = m.wait_h
+  const t = h < 1 ? `~${Math.max(1, Math.round(h * 60))}m` : h < 48 ? `~${Math.round(h)}h` : `~${Math.round(h / 24)}d`
+  return [{ t, c: h > 12 ? 'down' : undefined }]
+}
+
 function Runs({ cell }: { cell: Cell }) {
   return <>{runs(cell).map(r =>
     r.href ? <a href={r.href} className={r.c} {...(r.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{r.t}</a>
@@ -67,17 +76,18 @@ function Block({ head, rows, notes }: { head: string[]; rows: Cell[][]; notes?: 
   )
 }
 
-type Market = { id: number; name: string; floor: number | null; median: number | null; qty: number | null; listings: number | null; floor_then: number | null; sold: number | null; vendor: number | null }
+type Market = { id: number; name: string; wait_h: number | null; deposit_risk: number | null; floor: number | null; median: number | null; qty: number | null; listings: number | null; floor_then: number | null; sold: number | null; vendor: number | null }
 type Craft = { recipe: string; spell: number | null; makes: number; cost: number; revenue: number; profit: number; mats: { id: number; name: string; qty: number; vendor?: boolean }[]; out: Market }
 
 function Crafts({ rows }: { rows: Craft[] }) {
   if (!rows.length) return <p className="mute">nothing here clears a profit right now.</p>
   return (
     <Block
-      head={['recipe', 'mats', 'sells', 'profit', 'listed', `${D.hours}h`, 'sold']}
+      head={['recipe', 'mats', 'sells', 'profit', 'listed', `${D.hours}h`, 'sold', 'wait']}
       rows={rows.map(r => [
         [...recipe(r), ...(r.makes > 1 ? [{ t: ` x${r.makes}`, c: 'c' }] : [])], money(r.cost), money(r.revenue), money(r.profit),
         String(r.out.listings ?? 0), trend(r.out.floor, r.out.floor_then), r.out.sold == null ? [{ t: '-', c: 'c' }] : String(r.out.sold),
+        wait(r.out),
       ])}
       notes={rows.map(r => r.mats.flatMap((m, i) => [{ t: `${i ? ', ' : ''}${m.qty} ` }, ...item(m.id, m.name), ...(m.vendor ? [{ t: ' (vendor)' }] : [])]))}
     />
@@ -87,10 +97,10 @@ function Crafts({ rows }: { rows: Craft[] }) {
 function Mats({ rows }: { rows: Market[] }) {
   return (
     <Block
-      head={['item', 'cheapest', 'median', `${D.hours}h`, 'on ah', 'sold', 'vendor']}
+      head={['item', 'cheapest', 'median', `${D.hours}h`, 'on ah', 'sold', 'wait', 'vendor']}
       rows={rows.map(m => [
         item(m.id, m.name), money(m.floor), money(m.median), trend(m.floor, m.floor_then), (m.qty ?? 0).toLocaleString(),
-        m.sold == null ? [{ t: '-', c: 'c' }] : m.sold.toLocaleString(), m.vendor ? money(m.vendor) : [{ t: '-', c: 'c' }],
+        m.sold == null ? [{ t: '-', c: 'c' }] : m.sold.toLocaleString(), wait(m), m.vendor ? money(m.vendor) : [{ t: '-', c: 'c' }],
       ])}
     />
   )
@@ -251,7 +261,9 @@ export function App() {
           </p>
           <p>
             everything here is one house. prices assume you buy mats off the ah
-            and sell by undercutting the cheapest listing, after the 5% cut.
+            and sell by undercutting the cheapest listing, after the 5% cut. listing costs a 1s
+            deposit you only get back if it sells, so profit also subtracts the chance a slow seller
+            expires on you. wait is roughly how long until the next sale if yours is the cheapest.
           </p>
         </section>
 

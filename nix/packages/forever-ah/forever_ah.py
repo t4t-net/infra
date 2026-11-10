@@ -13,6 +13,7 @@ import argparse
 import base64
 import email.utils
 import json
+import math
 import os
 import sqlite3
 import threading
@@ -397,17 +398,28 @@ def market_data(args, db):
             if gone > 0:
                 sold[iid][0] += gone
                 sold[iid][1] += gone * price
-    # anything w raw listings in th window is tracked; others get "-" instead of a fake zero
+    # items r tracked from th first dump they have raw listings in; items added 2 th watchlist mid-window
+    # (or never listed) get "-" instead of a fake zero. under an hour of tracking measures nothing yet
+    dump_time = dict(snaps)
     marks = ",".join("?" * len(snaps))
-    watched = {i for (i,) in db.execute(f"select distinct item_id from auction where snapshot_id in ({marks})", [s for s, _ in snaps])}
+    first_seen = dict(db.execute(f"select item_id, min(snapshot_id) from auction where snapshot_id in ({marks}) group by item_id",
+                                 [s for s, _ in snaps]))
+    tracked_h = {i: (snaps[-1][1] - dump_time[sid]) / 3600 for i, sid in first_seen.items()}
 
     def market(i):
         n, t, s = now.get(i), then.get(i), sold.get(i)
+        hours = tracked_h.get(i, 0)
+        units = (s[0] if s else 0) if hours >= 1 else None
+        # sales per hour; as th cheapest listing urs is next in line, so a sale is ~1/rate away. th deposit
+        # only comes back on a sale, so whats at risk is th chance of none before th auction runs out
+        rate = units / hours if units is not None else None
         return {
             "id": i, "name": (items.get(i) or (None,))[0] or f"item {i}",
             "floor": n and n[1], "median": n and n[0], "qty": n and n[2], "listings": n and n[3],
             "floor_then": t and t[1],
-            "sold": (s[0] if s else 0) if i in watched else None,
+            "sold": units,
+            "wait_h": (1 / rate if rate else None) if rate is not None else None,
+            "deposit_risk": round(args.deposit * math.exp(-rate * args.auction_hours)) if rate is not None else None,
             "vendor": (items.get(i) or (None, None))[1],
         }
 
@@ -435,8 +447,10 @@ def market_data(args, db):
                 continue
             per = (cmin + cmax) / 2
             rev = int(o[1] * per * 0.95)
-            rows.append({"recipe": rname, "spell": spell, "makes": per, "cost": cost, "revenue": rev, "profit": rev - cost,
-                         "mats": mats, "out": market(out)})
+            m = market(out)
+            profit = rev - cost - (m["deposit_risk"] or 0)
+            rows.append({"recipe": rname, "spell": spell, "makes": per, "cost": cost, "revenue": rev, "profit": profit,
+                         "mats": mats, "out": m})
         rows.sort(key=lambda r: -r["profit"])
         crafts[pname] = {
             "count": db.execute("select count(*) from recipe where profession_id = ?", (pid,)).fetchone()[0],
@@ -575,6 +589,8 @@ def main():
     ex.add_argument("--house", type=int, default=111)
     ex.add_argument("--blackwater", type=int, default=117, help="th neutral house alliance can also reach")
     ex.add_argument("--hours", type=int, default=24, help="trend nd sales window")
+    ex.add_argument("--deposit", type=int, default=100, help="copper per auction, lost if it expires or gets cancelled")
+    ex.add_argument("--auction-hours", type=int, default=24, help="how long a listing runs b4 it expires")
     ex.add_argument("--out", required=True, help="data.json path, next 2 th forever-ah-site files")
     al = sub.add_parser("alert")
     al.add_argument("--data", required=True, help="th data.json export just wrote")

@@ -4,7 +4,7 @@
   forever-ah scrape   snapshot every house as per-item aggregates, plus raw auctions 4 watched items
   forever-ah recipes  cache profession recipes + item vendor prices from th static api
   forever-ah analyze  craft profitability 4 one house from th latest snapshot
-  forever-ah export   write th gold meta site + a fresh data.json
+  forever-ah export   write a fresh data.json 4 th gold meta site
 
 creds: BNET_CLIENT_ID / BNET_CLIENT_SECRET, or ~/.secrets/battle-net-client-{id,secret}
 """
@@ -13,7 +13,6 @@ import base64
 import email.utils
 import json
 import os
-import shutil
 import sqlite3
 import threading
 import time
@@ -461,25 +460,13 @@ def market_data(args, db):
 
 
 def export(args, db):
-    """Write th built site plus a fresh data.json 2 args.out, swapped in whole so it never serves half a site."""
+    """Write a fresh data.json 4 th site, renamed into place so th page never fetches half of one."""
     data = market_data(args, db)
     out = Path(args.out)
-    new, old = out.with_name(out.name + ".new"), out.with_name(out.name + ".old")
-    shutil.rmtree(new, ignore_errors=True)
-    # copyfile, not copytree: th nix store copies r read-only nd th next export has 2 replace them
-    for src in Path(args.site).rglob("*"):
-        dst = new / src.relative_to(args.site)
-        if src.is_dir():
-            dst.mkdir(parents=True, exist_ok=True)
-        else:
-            dst.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(src, dst)
-    (new / "data.json").write_text(json.dumps(data, separators=(",", ":")))
-    shutil.rmtree(old, ignore_errors=True)
-    if out.exists():
-        out.rename(old)
-    new.rename(out)
-    shutil.rmtree(old, ignore_errors=True)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    tmp = out.with_name(out.name + ".tmp")
+    tmp.write_text(json.dumps(data, separators=(",", ":")))
+    tmp.replace(out)
     print(f"exported {data['dumps']} dumps over {data['hours']}h 2 {out}")
 
 
@@ -499,8 +486,7 @@ def main():
     ex.add_argument("--house", type=int, default=111)
     ex.add_argument("--blackwater", type=int, default=117, help="th neutral house alliance can also reach")
     ex.add_argument("--hours", type=int, default=24, help="trend nd sales window")
-    ex.add_argument("--site", required=True, help="built forever-ah-site directory")
-    ex.add_argument("--out", required=True)
+    ex.add_argument("--out", required=True, help="data.json path, next 2 th forever-ah-site files")
     an = sub.add_parser("analyze")
     an.add_argument("--house", type=int, default=111)
     an.add_argument("--profession", type=int, default=164)

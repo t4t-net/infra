@@ -53,10 +53,10 @@ in
       BNET_CLIENT_SECRET=${config.sops.placeholder."forever-ah/client_secret"}
     '';
 
-    # each scrape regenerates th site, so th page is never more than an hour behind blizz
+    # each scrape rewrites data.json, so th page is never more than an hour behind blizz
     systemd.services.forever-ah-scrape = job "snapshot every wow forever auction house" [
       "scrape"
-      "export --site ${pkgs.rv32ima.forever-ah-site} --out ${www}"
+      "export --out ${www}/data.json"
     ];
     # ~2k static api calls 4 all eight professions, recipes barely change so weekly is plenty.
     # th scrape's raw-auction watchlist comes from these, so kick it by hand on a fresh db
@@ -85,8 +85,14 @@ in
       description = "wow forever gold meta site";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = sandbox // {
-        # th first export only happens at th next scrape, nd sws exits if its root is missing
-        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${www}";
+        # th site comes from th store, data.json from th hourly export. naming th site's store path here
+        # means a new build restarts this unit on switch, so code changes go live without waiting 4 :20
+        ExecStartPre = pkgs.writeShellScript "forever-gold-site" ''
+          set -euo pipefail
+          mkdir -p ${www}
+          rm -rf ${www}/assets ${www}/index.html ${www}/nyan.gif
+          cp -rT --no-preserve=mode ${pkgs.rv32ima.forever-ah-site} ${www}
+        '';
         ExecStart = "${lib.getExe pkgs.static-web-server} --host 127.0.0.1 --port ${toString port} --root ${www}";
         Restart = "on-failure";
       };

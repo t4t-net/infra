@@ -493,6 +493,9 @@ def market_data(args, db):
     sold = defaultdict(lambda: [0, 0])
     pulled = defaultdict(int)
     recent = defaultdict(int)  # units sold in th last args.dry_dumps dumps
+    # dumps w any sales. buyers come in sprees (heavy dynamite: 142 units in 4 buyouts over 12h, nothing between),
+    # so timing a listing off units/h said ~5m when th real answer was th next spree, hours away
+    events = defaultdict(int)
     for n, ((a, _), (b, _)) in enumerate(zip(snaps, snaps[1:])):
         after = dict(db.execute("select auction_id, quantity from auction where snapshot_id = ?", (b,)))
         rows = db.execute("select auction_id, item_id, unit_price, quantity, time_left from auction where snapshot_id = ?",
@@ -501,6 +504,7 @@ def market_data(args, db):
         for aid, iid, price, _, _ in rows:
             if aid in after and price is not None and price < floor.get(iid, math.inf):
                 floor[iid] = price
+        bought = set()
         for aid, iid, price, q, tl in rows:
             gone = q - after.get(aid, 0)
             if price is None or tl == "SHORT" or gone <= 0:
@@ -508,10 +512,13 @@ def market_data(args, db):
             if price > floor.get(iid, math.inf):
                 pulled[iid] += gone
                 continue
+            bought.add(iid)
             sold[iid][0] += gone
             sold[iid][1] += gone * price
             if n >= len(snaps) - 1 - args.dry_dumps:
                 recent[iid] += gone
+        for iid in bought:
+            events[iid] += 1
     recent_h = (snaps[-1][1] - snaps[max(0, len(snaps) - 1 - args.dry_dumps)][1]) / 3600
     # items r tracked from th first dump they have raw listings in; items added 2 th watchlist mid-window
     # (or never listed) get "-" instead of a fake zero. under an hour of tracking measures nothing yet
@@ -529,26 +536,30 @@ def market_data(args, db):
         "select a.item_id, sum(a.quantity) from auction a join price p on p.snapshot_id = a.snapshot_id "
         "and p.item_id = a.item_id where a.snapshot_id = ? and a.unit_price = p.min_unit group by a.item_id", (last,)))
 
-    def sell_odds(rate, ahead):
-        """chance at least ahead+1 units sell b4 a listing expires, sales being poisson at rate/h"""
+    def sell_odds(rate, need):
+        """chance of at least `need` buying sprees b4 a listing expires, sprees being poisson at rate/h"""
         mu = rate * args.auction_hours
         if not mu:
             return 0.0
-        return max(0.0, 1 - sum(math.exp(k * math.log(mu) - mu - math.lgamma(k + 1)) for k in range(ahead + 1)))
+        return max(0.0, 1 - sum(math.exp(k * math.log(mu) - mu - math.lgamma(k + 1)) for k in range(need)))
 
-    def market(i):
+    def market(i, stack=1):
+        """stack is how many u list at once, a craft's avg yield"""
         n, t, s = now.get(i), then.get(i), sold.get(i)
         hours = tracked_h.get(i, 0)
         units = (s[0] if s else 0) if hours >= 1 else None
-        rate = units / hours if units is not None else None
+        rate = events[i] / hours if units is not None else None
         pinned = n is not None and n[1] <= (100 if i in single else 1)
         ahead = at_floor.get(i, n[2] if n else 0) if pinned else 0
+        # each spree eats ~per_spree units off th bottom of th book, so urs go after enough sprees 2 clear
+        # th queue ahead nd ur whole stack
+        need = math.ceil((ahead + stack) / (units / events[i])) if units else None
         # th deposit only comes back on a sale, so every listing tht expires first loses one. thats geometric
         # in th odds of selling per listing; past 2 weeks of relisting u'd give up nd vendor it
         if rate is None:
             deposits = None
         else:
-            p = sell_odds(rate, ahead)
+            p = sell_odds(rate, need) if need else 0.0
             deposits = round(args.deposit * min((1 - p) / p if p else math.inf, args.max_relists))
         # no real market, just sellers undercutting each other: way more pulled nd reposted than bought, or sales
         # tht stopped dead (th window's rate says there shud have been a handful by now) while sellers keep
@@ -568,8 +579,8 @@ def market_data(args, db):
             "pulled": pulled.get(i, 0) if units is not None else None,
             "war": war,
             "sold_at": round(s[1] / s[0]) if units else None,
-            # sales per hour; as th cheapest listing urs sells after everything queued ahead of it
-            "wait_h": (ahead + 1) / rate if rate else None,
+            # as th cheapest listing urs sells in th spree tht clears everything queued ahead of it
+            "wait_h": need / rate if rate else None,
             "ahead": ahead,
             "deposit_risk": deposits,
             "vendor": (items.get(i) or (None, None))[1],
@@ -643,7 +654,7 @@ def market_data(args, db):
             if not ok or not cost:
                 continue
             per = (cmin + cmax) / 2
-            m = market(out)
+            m = market(out, per)
             # th sales rate was earned at wat things actually sold 4, so never price above tht. a reseller who
             # buys out th floor nd relists at 4x right b4 a dump would otherwise turn a loser into a top craft
             rev = int(min(o[1], m["sold_at"] or o[1]) * per * 0.95)

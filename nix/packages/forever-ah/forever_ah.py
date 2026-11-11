@@ -17,6 +17,7 @@ import json
 import math
 import os
 import sqlite3
+import sys
 import threading
 import time
 import urllib.error
@@ -85,6 +86,19 @@ create table if not exists item (
   purchase_price integer,         -- wat a vendor charges, copper (set even 4 items no vendor sells)
   found integer not null          -- 0 when static-forever 404s
 );
+-- ItemSparse rows blizz patched server side (iron grenade vendors 4 125c, not th api's 500c), from a
+-- client's DBCache.bin. its own table cuz scrape's backfill rewrites item from th api
+create table if not exists item_hotfix (
+  id integer primary key,
+  name text not null,             -- also names forever-only items th api 404s on
+  sell_price integer not null,
+  purchase_price integer not null,
+  push_id integer not null
+);
+create view if not exists item_live as
+  select i.id, coalesce(i.name, h.name) as name, coalesce(h.sell_price, i.sell_price) as sell_price,
+         coalesce(h.purchase_price, i.purchase_price) as purchase_price
+  from item i left join item_hotfix h on h.id = i.id;
 create table if not exists quest (
   id integer primary key,
   name text not null,
@@ -361,6 +375,34 @@ def link_spells(args, db):
     print(f"client build {st.cdn.build}: {hit}/{total} recipes linked 2 their spell", flush=True)
 
 
+ITEM_SPARSE = 1572924  # FileDataID
+ITEM_SPARSE_HASH = 0x919BE54E  # table hash, wat DBCache.bin keys rows by
+
+
+def hotfixes(args, db):
+    """Load vendor prices from a client's DBCache.bin. th client only refreshes it at login, so recopy it now nd then."""
+    build, rows = tact.read_dbcache(Path(args.dbcache).read_bytes())
+    st = tact.Storage(args.product, args.cache)
+    # hotfix rows r laid out like th live db2's records, so th cdn's copy tells us which layout 2 walk
+    fields = tact.inline_fields(st.files([ITEM_SPARSE])[ITEM_SPARSE], tact.http(tact.DBD.format(table="ItemSparse")).decode())
+    if not st.cdn.build.endswith(f".{build}"):
+        sys.exit(f"DBCache is from build {build} but th cdn serves {st.cdn.build}, log in on th new client nd recopy it")
+    fixed = []
+    for (table, rid), (push, status, rec) in rows.items():
+        if table != ITEM_SPARSE_HASH or status != tact.HOTFIX_VALID:
+            continue
+        row, end = tact.walk_record(rec, fields)
+        if not 0 <= len(rec) - end < 4:
+            sys.exit(f"item {rid}: walked {end} of {len(rec)} bytes, dbd layout doesnt match")
+        fixed.append((rid, row["Display_lang"], row["SellPrice"], row["BuyPrice"], push))
+    # th cache is a full picture of wat th server pushed, so replace rather than merge
+    db.execute("delete from item_hotfix")
+    db.executemany("insert into item_hotfix values (?, ?, ?, ?, ?)", fixed)
+    db.commit()
+    moved = db.execute("select count(*) from item i join item_hotfix h on h.id = i.id where i.sell_price != h.sell_price").fetchone()[0]
+    print(f"build {build}: {len(fixed)} hotfixed items, {moved} vendor prices differ from th api", flush=True)
+
+
 ALLIANCE_RACES, HORDE_RACES = 1 | 4 | 8 | 64, 2 | 16 | 32 | 128  # human dwarf nelf gnome / orc undead tauren troll
 
 
@@ -455,7 +497,7 @@ def analyze(args, db):
             "select item_id, median_unit, min_unit, auctions from price p join snapshot s on s.id = p.snapshot_id "
             "where s.ts = ? and s.house_id = ? order by quantity", (ts, args.house)):
         ah[item_id] = (med, mn, n)
-    items = {i: (name, buy) for i, name, buy in db.execute("select id, name, purchase_price from item")}
+    items = {i: (name, buy) for i, name, buy in db.execute("select id, name, purchase_price from item_live")}
 
     rows = []
     for rid, name, crafted, cmin, cmax in db.execute(
@@ -504,7 +546,7 @@ def market_data(args, db):
 
     now, then = book(snaps[-1][0]), book(snaps[0][0])
     bw = book(bw_last[0]) if bw_last else {}
-    items = {i: (n, s, b) for i, n, s, b in db.execute("select id, name, sell_price, purchase_price from item")}
+    items = {i: (n, s, b) for i, n, s, b in db.execute("select id, name, sell_price, purchase_price from item_live")}
 
     # sales: listings tht vanished w time left. buyers take th cheapest first, so one tht vanished while a cheaper
     # listing from th same dump is still up was pulled (cancelled or reposted), not bought. th next dump's floor
@@ -830,7 +872,7 @@ def quest_data(args, db):
     """Every quest alliance can do, w each reward choice priced: max of th ah floor nd wat a vendor pays."""
     snap = db.execute("select id from snapshot where house_id = ? order by ts desc limit 1", (args.house,)).fetchone()
     floor = dict(db.execute("select item_id, min(min_unit) from price where snapshot_id = ? group by item_id", (snap[0],))) if snap else {}
-    items = {i: (n, s) for i, n, s in db.execute("select id, name, sell_price from item")}
+    items = {i: (n, s) for i, n, s in db.execute("select id, name, sell_price from item_live")}
     quality = dict(db.execute("select id, quality from item_quality"))
 
     def reward(i):
@@ -885,6 +927,11 @@ def main():
     rp.add_argument("--cache", default=os.environ.get("FOREVER_AH_CDN_CACHE", "cdn-cache"),
                     help="CDN cache; content-addressed, so it only grows across patches")
     sub.add_parser("quests")
+    hp = sub.add_parser("hotfixes")
+    hp.add_argument("dbcache", help="Cache/ADB/enUS/DBCache.bin from a forever client")
+    hp.add_argument("--product", default="wowf", help="client product on blizzard's version service (wowf is forever)")
+    hp.add_argument("--cache", default=os.environ.get("FOREVER_AH_CDN_CACHE", "cdn-cache"),
+                    help="CDN cache; content-addressed, so it only grows across patches")
     ex = sub.add_parser("export")
     ex.add_argument("--house", type=int, default=111)
     ex.add_argument("--blackwater", type=int, default=117, help="th neutral house alliance can also reach")
@@ -923,7 +970,7 @@ def main():
     for col in ("spell_id", "learn_skill", "yellow_skill", "grey_skill"):
         if col not in have:
             db.execute(f"alter table recipe add column {col} integer")
-    {"scrape": scrape, "recipes": recipes, "quests": quests, "analyze": analyze, "export": export, "alert": alert}[args.cmd](args, db)
+    {"scrape": scrape, "recipes": recipes, "quests": quests, "hotfixes": hotfixes, "analyze": analyze, "export": export, "alert": alert}[args.cmd](args, db)
 
 
 if __name__ == "__main__":

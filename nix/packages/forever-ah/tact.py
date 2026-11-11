@@ -298,7 +298,7 @@ def read_wdc5(data, dbd_text):
     rel = next((f for f in fields if "relation" in f["ann"]), None)
     idf = next((f for f in fields if "id" in f["ann"]), None)
     if flags & 0x1:
-        raise ValueError("sparse (offset map) tables not handled")
+        return read_sparse(data, sections, inline, idf)
 
     rows = []
     for tact_key, off, n, st_size, _, idl_size, rel_size, _, copy_count in sections:
@@ -360,3 +360,76 @@ def read_wdc5(data, dbd_text):
             if src:
                 rows.append({**src, (idf["name"] if idf else "ID"): new})
     return rows
+
+
+def inline_fields(data, dbd_text):
+    """th dbd fields actually stored in each record of this db2, 4 walking hotfix rows of th same table"""
+    layout_hash, flags = struct.unpack("<I", data[156:160])[0], struct.unpack("<H", data[172:174])[0]
+    return [f for f in parse_dbd(dbd_text, layout_hash)
+            if "noninline" not in f["ann"] and not ("id" in f["ann"] and flags & 0x4)]
+
+
+def walk_record(b, fields, p=0):
+    """unpacked record: fields back 2 back, strings inline nd nul terminated. returns (row, end offset)"""
+    row = {}
+    for f in fields:
+        vals = []
+        for _ in range(f["array"]):
+            if f["type"] in ("string", "locstring"):
+                z = b.index(b"\0", p)
+                vals.append(b[p:z].decode(errors="replace"))
+                p = z + 1
+            elif f["type"] == "float":
+                vals.append(struct.unpack("<f", b[p:p + 4])[0])
+                p += 4
+            else:
+                n = f["bits"] // 8
+                vals.append(int.from_bytes(b[p:p + n], "little", signed=not f["unsigned"]))
+                p += n
+        row[f["name"]] = vals if f["array"] > 1 else vals[0]
+    return row, p
+
+
+def read_sparse(data, sections, fields, idf):
+    """offset map tables (ItemSparse etc) store records unpacked, so walk each one by its dbd types"""
+    rows = []
+    for tact_key, off, _, _, end, idl_size, rel_size, map_count, copy_count in sections:
+        if tact_key and not any(data[off:end]):
+            continue
+        q = end + idl_size + copy_count * 8
+        spans = [struct.unpack("<IH", data[q + i * 6:q + i * 6 + 6]) for i in range(map_count)]
+        q += map_count * 6 + rel_size
+        ids = struct.unpack(f"<{map_count}I", data[q:q + map_count * 4])
+        for rid, (o, size) in zip(ids, spans):
+            row, p = walk_record(data, fields, o)
+            # records r zero padded 2 4 bytes
+            if not 0 <= o + size - p < 4 or any(data[p:o + size]):
+                raise ValueError(f"record {rid}: walked {p - o} of {size} bytes")
+            if idf:
+                row[idf["name"]] = rid
+            rows.append(row)
+    return rows
+
+
+# ---- hotfixes
+# blizz patches db2 rows server side nd pushes them at login, nd th client caches them in
+# Cache/ADB/<locale>/DBCache.bin. th cdn files nd th battle.net api both serve th unpatched rows
+
+HOTFIX_VALID = 1  # 2 = row deleted, 3/4 = not 4 this client
+
+
+def read_dbcache(data):
+    """(build, {(table hash, record id): (push id, status, record bytes)}), newest push per row"""
+    if data[:4] != b"XFTH":
+        raise ValueError(f"not a DBCache: {data[:4]!r}")
+    _, build = struct.unpack("<II", data[4:12])
+    rows, p = {}, 44
+    while p + 32 <= len(data):
+        magic, _, push, _, table, rec, size, status = struct.unpack("<4siiIIIIB", data[p:p + 29])
+        if magic != b"XFTH":
+            raise ValueError(f"lost sync at {p:#x}")
+        p += 32
+        if (table, rec) not in rows or push >= rows[table, rec][0]:
+            rows[table, rec] = (push, status, data[p:p + size])
+        p += size
+    return build, rows

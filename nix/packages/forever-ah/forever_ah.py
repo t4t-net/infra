@@ -543,6 +543,7 @@ def market_data(args, db):
             "floor": n and n[1], "median": n and n[0], "qty": n and n[2], "listings": n and n[3],
             "floor_then": t and t[1],
             "sold": units,
+            "sold_at": round(s[1] / s[0]) if units else None,
             # sales per hour; as th cheapest listing urs sells after everything queued ahead of it
             "wait_h": (ahead + 1) / rate if rate else None,
             "ahead": ahead,
@@ -618,8 +619,10 @@ def market_data(args, db):
             if not ok or not cost:
                 continue
             per = (cmin + cmax) / 2
-            rev = int(o[1] * per * 0.95)
             m = market(out)
+            # th sales rate was earned at wat things actually sold 4, so never price above tht. a reseller who
+            # buys out th floor nd relists at 4x right b4 a dump would otherwise turn a loser into a top craft
+            rev = int(min(o[1], m["sold_at"] or o[1]) * per * 0.95)
             profit = rev - cost - (m["deposit_risk"] or 0)
             row = {"recipe": rname, "spell": spell, "makes": per, "cost": cost, "revenue": rev, "profit": profit,
                    "mats": mats, "out": m}

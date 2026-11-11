@@ -78,7 +78,7 @@ function Block({ head, rows, notes }: { head: string[]; rows: Cell[][]; notes?: 
   )
 }
 
-type Market = { id: number; name: string; wait_h: number | null; ahead: number; deposit_risk: number | null; floor: number | null; median: number | null; qty: number | null; listings: number | null; floor_then: number | null; sold: number | null; vendor: number | null }
+type Market = { id: number; name: string; wait_h: number | null; ahead: number; deposit_risk: number | null; floor: number | null; median: number | null; qty: number | null; listings: number | null; floor_then: number | null; sold: number | null; sold_at: number | null; vendor: number | null }
 type Farm = { cost: number; profit: number; mats: { id: number; name: string; qty: number; src: 'farm' | 'ah' | 'vendor' }[] }
 type Craft = { recipe: string; spell: number | null; makes: number; cost: number; revenue: number; profit: number; mats: { id: number; name: string; qty: number; vendor?: boolean }[]; out: Market; farm?: Farm }
 
@@ -86,11 +86,11 @@ function Crafts({ rows }: { rows: Craft[] }) {
   if (!rows.length) return <p className="mute">nothing here clears a profit right now.</p>
   return (
     <Block
-      head={['recipe', 'mats', 'sells', 'profit', 'listed', `${D.hours}h`, 'sold', 'wait']}
+      head={['recipe', 'mats', 'sells', 'profit', 'listed', `${D.hours}h`, 'sold', 'sold at', 'wait']}
       rows={rows.map(r => [
         [...recipe(r), ...(r.makes > 1 ? [{ t: ` x${r.makes}`, c: 'c' }] : [])], money(r.cost), money(r.revenue), money(r.profit),
         String(r.out.listings ?? 0), trend(r.out.floor, r.out.floor_then), r.out.sold == null ? [{ t: '-', c: 'c' }] : String(r.out.sold),
-        wait(r.out),
+        money(r.out.sold_at), wait(r.out),
       ])}
       notes={rows.map(r => r.mats.flatMap((m, i) => [{ t: `${i ? ', ' : ''}${m.qty} ` }, ...item(m.id, m.name), ...(m.vendor ? [{ t: ' (vendor)' }] : [])]))}
     />

@@ -268,12 +268,31 @@ def scrape(args, db):
         db.commit()
         print(f"{h['id']:>4} {h['name']:<28} {len(regular) + len(commodities):>6} auctions")
 
+    backfill_items(args, db, ts)
+
     # raw listings r th bulk of th db nd only matter 4 recent sell-through; per-item prices stay forever
     cutoff = ts - args.keep_days * 86400
     gone = db.execute("delete from auction where snapshot_id in (select id from snapshot where ts < ?)", (cutoff,)).rowcount
     db.commit()
     if gone:
         print(f"pruned {gone} raw listings older than {args.keep_days}d")
+
+
+def backfill_items(args, db, ts):
+    """Vendor prices 4 everything in th scrape at ts, not just recipe items, so export can spot listings under
+    wat a vendor pays. th first run is ~5k items; after tht its th handful tht showed up new"""
+    todo = [i for (i,) in db.execute("select distinct item_id from price where snapshot_id in "
+                                     "(select id from snapshot where ts = ?) and item_id not in (select id from item)", (ts,))]
+    if not todo:
+        return
+    api = Client(args.region, *creds())
+    for iid, it in zip(todo, api.get_many([f"/data/wow/item/{i}" for i in todo], "static")):
+        if it is None:
+            db.execute("insert or replace into item values (?, null, null, null, 0)", (iid,))
+        else:
+            db.execute("insert or replace into item values (?, ?, ?, ?, 1)", (iid, it["name"], it.get("sell_price"), it.get("purchase_price")))
+    db.commit()
+    print(f"fetched {len(todo)} new items")
 
 
 def recipes(args, db):
@@ -711,8 +730,32 @@ def market_data(args, db):
              for i, (buy, profit) in open_spreads(now, bw).items()]
     flips.sort(key=lambda f: -f["profit"])
 
+    # listed under wat a vendor pays: buy nd vendor it. gear only lists in whole silvers, so undercutting a wall
+    # at 4s lands on 3s even when it vendors 4 3s07c. th scan only knows th floor; raw listings (watched items)
+    # say how many r actually under
+    under = defaultdict(int)
+    for i, p, q in db.execute("select item_id, unit_price, quantity from auction where snapshot_id = ?", (last,)):
+        sell = (items.get(i) or (None, None))[1]
+        if p is not None and sell and p < sell:
+            under[i] += q
+    floors = [book(sid) for sid, _ in snaps]
+    vendor = []
+    for i, (_, mn, q, n) in now.items():
+        sell = (items.get(i) or (None, None))[1]
+        if not sell or mn >= sell:
+            continue
+        streak = 0
+        for b in reversed(floors):
+            if i not in b or b[i][1] >= sell:
+                break
+            streak += 1
+        vendor.append({"id": i, "name": items[i][0] or f"item {i}", "floor": mn, "vendor": sell, "profit": sell - mn,
+                       "under": under.get(i), "listings": n, "open": streak})
+    vendor.sort(key=lambda v: -v["profit"])
+    vendor = vendor[:20]
+
     # names nd qualities 4 anything shown tht th recipe crawl didnt cover, cached so this only costs calls once
-    shown = [m for ms in gather.values() for m in ms] + flips
+    shown = [m for ms in gather.values() for m in ms] + flips + vendor
     shown_ids = {m["id"] for m in shown}
     for v in crafts.values():
         for r in v["top"] + v["starters"] + v["farmed"]:
@@ -739,7 +782,7 @@ def market_data(args, db):
 
     return {
         "house": args.house, "dump": snaps[-1][1], "first_dump": snaps[0][1], "dumps": len(snaps),
-        "hours": round((snaps[-1][1] - snaps[0][1]) / 3600), "crafts": crafts, "gather": gather, "flips": flips,
+        "hours": round((snaps[-1][1] - snaps[0][1]) / 3600), "crafts": crafts, "gather": gather, "flips": flips, "vendor": vendor,
         "quality": {i: quality[i] for i in shown_ids},
     }
 

@@ -328,6 +328,20 @@ raid-launch:  stones, flasks, thorium         `}<span className="c"># raids open
             [{ t: `${f.open}/${D.dumps}`, c: f.open * 2 < D.dumps ? 'c' : undefined }],
           ])}
         />
+        <h3>under vendor price</h3>
+        <p>
+          listed for less than a vendor pays, so buy it and sell it to any vendor. gear can only be listed in whole
+          silvers, so when sellers undercut a wall at 4s they land on 3s even if it vendors for 3s 7c. most of these
+          are a few copper each and get sniped within the hour; the open column counts the dumps in a row it's been
+          up. under is how many are below vendor, when we track that item's listings.
+        </p>
+        <Block
+          head={['item', 'listed', 'vendor', 'profit', 'under', 'open']}
+          rows={((D.vendor ?? []) as { id: number; name: string; floor: number; vendor: number; profit: number; under: number | null; listings: number; open: number }[]).map(v => [
+            item(v.id, v.name), money(v.floor), money(v.vendor), money(v.profit),
+            [{ t: v.under == null ? '-' : String(v.under), c: 'c' }], [{ t: `${v.open}/${D.dumps}`, c: 'c' }],
+          ])}
+        />
       </Section>
     )
   }

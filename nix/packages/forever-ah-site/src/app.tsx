@@ -77,7 +77,8 @@ function Block({ head, rows, notes }: { head: string[]; rows: Cell[][]; notes?: 
 }
 
 type Market = { id: number; name: string; wait_h: number | null; deposit_risk: number | null; floor: number | null; median: number | null; qty: number | null; listings: number | null; floor_then: number | null; sold: number | null; vendor: number | null }
-type Craft = { recipe: string; spell: number | null; makes: number; cost: number; revenue: number; profit: number; mats: { id: number; name: string; qty: number; vendor?: boolean }[]; out: Market }
+type Farm = { cost: number; profit: number; mats: { id: number; name: string; qty: number; src: 'farm' | 'ah' | 'vendor' }[] }
+type Craft = { recipe: string; spell: number | null; makes: number; cost: number; revenue: number; profit: number; mats: { id: number; name: string; qty: number; vendor?: boolean }[]; out: Market; farm?: Farm }
 
 function Crafts({ rows }: { rows: Craft[] }) {
   if (!rows.length) return <p className="mute">nothing here clears a profit right now.</p>
@@ -90,6 +91,21 @@ function Crafts({ rows }: { rows: Craft[] }) {
         wait(r.out),
       ])}
       notes={rows.map(r => r.mats.flatMap((m, i) => [{ t: `${i ? ', ' : ''}${m.qty} ` }, ...item(m.id, m.name), ...(m.vendor ? [{ t: ' (vendor)' }] : [])]))}
+    />
+  )
+}
+
+// same crafts, but gathered mats cost nothing; vs raw is wat crafting earns over just selling those mats
+function FarmCrafts({ rows }: { rows: Craft[] }) {
+  if (!rows.length) return <p className="mute">nothing here clears a profit right now.</p>
+  return (
+    <Block
+      head={['recipe', 'buy', 'sells', 'profit', 'vs raw', 'listed', 'wait']}
+      rows={rows.map(r => [
+        [...recipe(r), ...(r.makes > 1 ? [{ t: ` x${r.makes}`, c: 'c' }] : [])], money(r.farm!.cost), money(r.revenue), money(r.farm!.profit),
+        money(r.profit), String(r.out.listings ?? 0), wait(r.out),
+      ])}
+      notes={rows.map(r => r.farm!.mats.flatMap((m, i) => [{ t: `${i ? ', ' : ''}${m.qty} ` }, ...item(m.id, m.name), ...(m.src !== 'farm' ? [{ t: ` (${m.src})` }] : [])]))}
     />
   )
 }
@@ -257,11 +273,12 @@ function Quests() {
 
 function ViewBody({ view }: { view: View }) {
   if (view === 'quests') return <Quests />
-  const crafts = D.crafts as Record<string, { count: number; priced: number; losers: number; top: Craft[]; starters: Craft[] }>
+  const crafts = D.crafts as Record<string, { count: number; priced: number; losers: number; top: Craft[]; starters: Craft[]; farmed?: Craft[] }>
   const gather = D.gather as Record<string, Market[]>
 
   if (view === 'meta') {
     const best = Object.entries(crafts).filter(([, v]) => v.top.length)
+    const farmed = Object.entries(crafts).filter(([, v]) => v.farmed?.length)
     return (
       <Section title="the meta">
         <pre>{`early-game:   `}<a href="#mining">gather</a>{` and sell raw, gems too     `}<span className="c"># mats outsell crafts in launch week</span>{`
@@ -269,11 +286,17 @@ skill-ups:    craft whatever loses least      `}<span className="c"># most low-l
 mid-game:     consumables + parts             `}<span className="c"># </span><a href="#engineering">engineering</a><span className="c">, </span><a href="#alchemy">alchemy</a>{`
 capital:      buy in blackwater, sell here    `}<span className="c"># </span><a href="#flips">flips</a>{`
 raid-launch:  stones, flasks, thorium         `}<span className="c"># raids open dec 9</span></pre>
-        <h3>best craft per profession right now</h3>
+        <h3>best craft per profession right now, buying mats</h3>
         <Block
           head={['profession', 'recipe', 'profit', 'listed']}
           rows={best.map(([k, v]) => [[{ t: k, href: `#${k}` }], recipe(v.top[0]), money(v.top[0].profit), String(v.top[0].out.listings ?? 0)])}
         />
+        <h3>best craft per profession, farming mats yourself</h3>
+        <Block
+          head={['profession', 'recipe', 'profit', 'vs raw', 'listed']}
+          rows={farmed.map(([k, v]) => [[{ t: k, href: `#${k}` }], recipe(v.farmed![0]), money(v.farmed![0].farm!.profit), money(v.farmed![0].profit), String(v.farmed![0].out.listings ?? 0)])}
+        />
+        <p className="note">vs raw is what crafting earns on top of just selling the mats you gathered. if it's negative, sell the mats instead.</p>
         <p className="note">prices move fast, especially for anything only a few people can make yet. read the trend column before you commit to anything.</p>
       </Section>
     )
@@ -310,9 +333,18 @@ raid-launch:  stones, flasks, thorium         `}<span className="c"># raids open
       {g && <><h3>raw mats</h3><Mats rows={g} /></>}
       {view === 'skinning' && <><h3>cloth</h3><Mats rows={gather.cloth} /></>}
       {c && <>
-        <h3>crafts that clear a profit</h3>
+        <h3>crafts that clear a profit, buying mats off the ah</h3>
         <Crafts rows={c.top} />
         {c.starters.length > 0 && <><h3>cheap ones, under 25s in mats</h3><Crafts rows={c.starters} /></>}
+        {c.farmed && <>
+          <h3>if you farm the mats yourself</h3>
+          <p className="note">
+            gathered mats count as free, bars get smelted from your own ore. vendor mats and anything you can't
+            gather (dust, drops, other professions' parts) still get bought. vs raw is what the craft earns over
+            just selling those mats, so a negative one means sell the mats instead.
+          </p>
+          <FarmCrafts rows={c.farmed} />
+        </>}
         <p className="note">{c.count} recipes, {c.priced} with a real market, {c.losers} of those sell for less than their mats.</p>
       </>}
     </Section>
@@ -353,8 +385,8 @@ export function App() {
             individual listings so we can tell what sold from what just sat there.
           </p>
           <p>
-            everything here is one house. prices assume you buy mats off the ah
-            and sell by undercutting the cheapest listing, after the 5% cut. listing costs a 1s
+            everything here is one house. prices assume you buy mats off the ah, except the
+            farm-it-yourself tables, and sell by undercutting the cheapest listing, after the 5% cut. listing costs a 1s
             deposit you only get back if it sells, so profit also subtracts the chance a slow seller
             expires on you. wait is roughly how long until the next sale if yours is the cheapest.
           </p>

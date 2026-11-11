@@ -4,3 +4,4 @@ nix/result
 .direnv
 
 .terragrunt-cache/
+__pycache__/

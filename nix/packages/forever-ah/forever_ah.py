@@ -526,6 +526,51 @@ def market_data(args, db):
             "vendor": (items.get(i) or (None, None))[1],
         }
 
+    # farming it urself: gathered mats r free, vendor mats cost wat th vendor charges, nd intermediates (bars,
+    # bolts, leather) r made from their own mats if this profession or mining smelting can. anything else
+    # (dust, drops, other professions' parts) still gets bought at median
+    gathered = {i for ids in GATHERED.values() for i in ids}
+    makers = defaultdict(list)  # item -> [(profession, recipe id, makes per craft)]
+    for rid, pid, out, cmin, cmax in db.execute(
+            "select id, profession_id, crafted_item_id, crafted_min, crafted_max from recipe where crafted_item_id is not null"):
+        makers[out].append((pid, rid, (cmin + cmax) / 2))
+    reagents = defaultdict(list)
+    for rid, i, q in db.execute("select recipe_id, item_id, quantity from reagent"):
+        reagents[rid].append((i, q))
+
+    def farmed(i, prof, busy=frozenset()):
+        """(copper, {(item, source): qty}) 4 one of item i, or None if theres no way 2 get it"""
+        nm, _, buy = items.get(i, (None, None, None))
+        if nm in VENDOR_MATS and buy:
+            return buy, {(i, "vendor"): 1}
+        best = None
+        for pid, rid, per in makers.get(i, []):
+            # leather etc drop as-is, only bars get made (else heavy leather turns into 17k ruined scraps lol)
+            if pid not in ((186,) if i in gathered else (prof, 186)) or rid in busy:
+                continue
+            got = farm_recipe(rid, prof, busy | {rid})
+            if got and (best is None or got[0] / per < best[0]):
+                best = (got[0] / per, {k: q / per for k, q in got[1].items()})
+        if best and any(src == "farm" for _, src in best[1]):
+            return best
+        # GATHERED has bars in it 4 th mining page, so this comes after th smelt check
+        if i in gathered:
+            return 0, {(i, "farm"): 1}
+        if i in now:
+            return now[i][0], {(i, "ah"): 1}
+        return best
+
+    def farm_recipe(rid, prof, busy=frozenset()):
+        cost, need = 0, defaultdict(float)
+        for i, q in reagents[rid]:
+            got = farmed(i, prof, busy)
+            if got is None:
+                return None
+            cost += got[0] * q
+            for k, n in got[1].items():
+                need[k] += n * q
+        return cost, need
+
     crafts = {}
     for pid, pname in PROFESSIONS.items():
         rows = []
@@ -552,14 +597,25 @@ def market_data(args, db):
             rev = int(o[1] * per * 0.95)
             m = market(out)
             profit = rev - cost - (m["deposit_risk"] or 0)
-            rows.append({"recipe": rname, "spell": spell, "makes": per, "cost": cost, "revenue": rev, "profit": profit,
-                         "mats": mats, "out": m})
+            row = {"recipe": rname, "spell": spell, "makes": per, "cost": cost, "revenue": rev, "profit": profit,
+                   "mats": mats, "out": m}
+            f = farm_recipe(rid, pid)
+            # only worth its own row when some of it is actually farmed, otherwise its just th ah number again
+            if f and any(src == "farm" for _, src in f[1]):
+                row["farm"] = {
+                    "cost": round(f[0]), "profit": round(rev - f[0] - (m["deposit_risk"] or 0)),
+                    "mats": [{"id": i, "name": (items.get(i) or (None,))[0] or f"item {i}", "qty": round(q, 2) if q % 1 else int(q), "src": src}
+                             for (i, src), q in sorted(f[1].items(), key=lambda kv: kv[0][1] != "farm")],
+                }
+            rows.append(row)
         rows.sort(key=lambda r: -r["profit"])
+        farm = sorted([r for r in rows if "farm" in r and r["farm"]["profit"] > 0], key=lambda r: -r["farm"]["profit"])
         crafts[pname] = {
             "count": db.execute("select count(*) from recipe where profession_id = ?", (pid,)).fetchone()[0],
             "priced": len(rows),
             "top": [r for r in rows if r["profit"] > 0][:14],
             "starters": sorted([r for r in rows if r["profit"] > 0 and r["cost"] <= 2500], key=lambda r: -r["profit"])[:8],
+            "farmed": farm[:14],
             "losers": len([r for r in rows if r["profit"] <= 0]),
         }
 
@@ -594,9 +650,9 @@ def market_data(args, db):
     shown = [m for ms in gather.values() for m in ms] + flips
     shown_ids = {m["id"] for m in shown}
     for v in crafts.values():
-        for r in v["top"] + v["starters"]:
+        for r in v["top"] + v["starters"] + v["farmed"]:
             shown_ids.add(r["out"]["id"])
-            shown_ids.update(m["id"] for m in r["mats"])
+            shown_ids.update(m["id"] for m in r["mats"] + r.get("farm", {}).get("mats", []))
     quality = dict(db.execute("select id, quality from item_quality"))
     named = {i for (i,) in db.execute("select id from item where name is not null")}
     # anything shown w/o a cached quality or name (flips can be any item, not just recipe mats)

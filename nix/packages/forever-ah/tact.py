@@ -416,6 +416,7 @@ def read_sparse(data, sections, fields, idf):
 # Cache/ADB/<locale>/DBCache.bin. th cdn files nd th battle.net api both serve th unpatched rows
 
 HOTFIX_VALID = 1  # 2 = row deleted, 3/4 = not 4 this client
+HOTFIX_LOOKUP = 0x1000000  # push id flag on rows th server sent when th client asked about an item it lacked
 
 
 def read_dbcache(data):

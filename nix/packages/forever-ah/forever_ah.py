@@ -91,8 +91,8 @@ create table if not exists item (
 create table if not exists item_hotfix (
   id integer primary key,
   name text not null,             -- also names forever-only items th api 404s on
-  sell_price integer not null,
-  purchase_price integer not null,
+  sell_price integer,             -- null 4 items th server sent on lookup, their prices r junk
+  purchase_price integer,
   push_id integer not null
 );
 create view if not exists item_live as
@@ -394,7 +394,12 @@ def hotfixes(args, db):
         row, end = tact.walk_record(rec, fields)
         if not 0 <= len(rec) - end < 4:
             sys.exit(f"item {rid}: walked {end} of {len(rec)} bytes, dbd layout doesnt match")
-        fixed.append((rid, row["Display_lang"], row["SellPrice"], row["BuyPrice"], push))
+        # items th client didnt ship w come back from a server lookup under push 0x1000000 | id instead of a
+        # real push. th names r right but th prices arent (moongazer's wand: 373s here, 8s86c in game)
+        if push & tact.HOTFIX_LOOKUP:
+            fixed.append((rid, row["Display_lang"], None, None, push))
+        else:
+            fixed.append((rid, row["Display_lang"], row["SellPrice"], row["BuyPrice"], push))
     # th cache is a full picture of wat th server pushed, so replace rather than merge
     db.execute("delete from item_hotfix")
     db.executemany("insert into item_hotfix values (?, ?, ?, ?, ?)", fixed)
@@ -966,6 +971,10 @@ def main():
     db.executescript(SCHEMA)
     if "data_ts" not in {c[1] for c in db.execute("pragma table_info(snapshot)")}:
         db.execute("alter table snapshot add column data_ts integer")
+    # item_hotfix's prices started out not null, nd its just a copy of th last DBCache load
+    if any(c[1] == "sell_price" and c[3] for c in db.execute("pragma table_info(item_hotfix)")):
+        db.execute("drop table item_hotfix")
+        db.executescript(SCHEMA)
     have = {c[1] for c in db.execute("pragma table_info(recipe)")}
     for col in ("spell_id", "learn_skill", "yellow_skill", "grey_skill"):
         if col not in have:

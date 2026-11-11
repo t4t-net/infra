@@ -45,13 +45,15 @@ function trend(now?: number | null, then?: number | null): Run[] {
   return [{ t: `${p > 0 ? '+' : ''}${p}%`, c: p < 0 ? 'down' : undefined }]
 }
 
-// how long until th next sale if urs is th cheapest listing; "slow" means none sold while we watched
+// how long until urs sells as th cheapest listing; "slow" means none sold while we watched. "ahead" is th
+// queue u join when th floor is at th ah's minimum nd cant be undercut
 function wait(m: Market): Run[] {
-  if (m.sold == null) return [{ t: '-', c: 'c' }]
-  if (!m.wait_h) return [{ t: 'slow', c: 'down' }]
+  const q: Run[] = m.ahead ? [{ t: `, ${m.ahead.toLocaleString()} ahead`, c: 'down' }] : []
+  if (m.sold == null) return [{ t: '-', c: 'c' }, ...q]
+  if (!m.wait_h) return [{ t: 'slow', c: 'down' }, ...q]
   const h = m.wait_h
   const t = h < 1 ? `~${Math.max(1, Math.round(h * 60))}m` : h < 48 ? `~${Math.round(h)}h` : `~${Math.round(h / 24)}d`
-  return [{ t, c: h > 12 ? 'down' : undefined }]
+  return [{ t, c: h > 12 ? 'down' : undefined }, ...q]
 }
 
 function Runs({ cell }: { cell: Cell }) {
@@ -76,7 +78,7 @@ function Block({ head, rows, notes }: { head: string[]; rows: Cell[][]; notes?: 
   )
 }
 
-type Market = { id: number; name: string; wait_h: number | null; deposit_risk: number | null; floor: number | null; median: number | null; qty: number | null; listings: number | null; floor_then: number | null; sold: number | null; vendor: number | null }
+type Market = { id: number; name: string; wait_h: number | null; ahead: number; deposit_risk: number | null; floor: number | null; median: number | null; qty: number | null; listings: number | null; floor_then: number | null; sold: number | null; vendor: number | null }
 type Farm = { cost: number; profit: number; mats: { id: number; name: string; qty: number; src: 'farm' | 'ah' | 'vendor' }[] }
 type Craft = { recipe: string; spell: number | null; makes: number; cost: number; revenue: number; profit: number; mats: { id: number; name: string; qty: number; vendor?: boolean }[]; out: Market; farm?: Farm }
 
@@ -387,8 +389,10 @@ export function App() {
           <p>
             everything here is one house. prices assume you buy mats off the ah, except the
             farm-it-yourself tables, and sell by undercutting the cheapest listing, after the 5% cut. listing costs a 1s
-            deposit you only get back if it sells, so profit also subtracts the chance a slow seller
-            expires on you. wait is roughly how long until the next sale if yours is the cheapest.
+            deposit you only get back if it sells, so profit also subtracts the deposits you'd expect
+            to lose relisting a slow seller until it goes (up to two weeks of it). wait is roughly how
+            long until yours sells. gear and other non-stacking items can't be listed under 1s, so
+            once the cheapest one is at 1s you can't undercut, and you wait behind everyone already there.
           </p>
         </section>
 

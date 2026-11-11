@@ -509,20 +509,44 @@ def market_data(args, db):
                                  [s for s, _ in snaps]))
     tracked_h = {i: (snaps[-1][1] - dump_time[sid]) / 3600 for i, sid in first_seen.items()}
 
+    # gear, rods etc cant be listed under 1s (th ah errors), stackables go down 2 1c. at th minimum u cant
+    # undercut, so u queue behind every unit already listed there
+    last = snaps[-1][0]
+    single = {i for (i,) in db.execute("select item_id from price where snapshot_id = ? and commodity = 0", (last,))}
+    at_floor = dict(db.execute(
+        "select a.item_id, sum(a.quantity) from auction a join price p on p.snapshot_id = a.snapshot_id "
+        "and p.item_id = a.item_id where a.snapshot_id = ? and a.unit_price = p.min_unit group by a.item_id", (last,)))
+
+    def sell_odds(rate, ahead):
+        """chance at least ahead+1 units sell b4 a listing expires, sales being poisson at rate/h"""
+        mu = rate * args.auction_hours
+        if not mu:
+            return 0.0
+        return max(0.0, 1 - sum(math.exp(k * math.log(mu) - mu - math.lgamma(k + 1)) for k in range(ahead + 1)))
+
     def market(i):
         n, t, s = now.get(i), then.get(i), sold.get(i)
         hours = tracked_h.get(i, 0)
         units = (s[0] if s else 0) if hours >= 1 else None
-        # sales per hour; as th cheapest listing urs is next in line, so a sale is ~1/rate away. th deposit
-        # only comes back on a sale, so whats at risk is th chance of none before th auction runs out
         rate = units / hours if units is not None else None
+        pinned = n is not None and n[1] <= (100 if i in single else 1)
+        ahead = at_floor.get(i, n[2] if n else 0) if pinned else 0
+        # th deposit only comes back on a sale, so every listing tht expires first loses one. thats geometric
+        # in th odds of selling per listing; past 2 weeks of relisting u'd give up nd vendor it
+        if rate is None:
+            deposits = None
+        else:
+            p = sell_odds(rate, ahead)
+            deposits = round(args.deposit * min((1 - p) / p if p else math.inf, args.max_relists))
         return {
             "id": i, "name": (items.get(i) or (None,))[0] or f"item {i}",
             "floor": n and n[1], "median": n and n[0], "qty": n and n[2], "listings": n and n[3],
             "floor_then": t and t[1],
             "sold": units,
-            "wait_h": (1 / rate if rate else None) if rate is not None else None,
-            "deposit_risk": round(args.deposit * math.exp(-rate * args.auction_hours)) if rate is not None else None,
+            # sales per hour; as th cheapest listing urs sells after everything queued ahead of it
+            "wait_h": (ahead + 1) / rate if rate else None,
+            "ahead": ahead,
+            "deposit_risk": deposits,
             "vendor": (items.get(i) or (None, None))[1],
         }
 
@@ -783,6 +807,7 @@ def main():
     ex.add_argument("--hours", type=int, default=24, help="trend nd sales window")
     ex.add_argument("--deposit", type=int, default=100, help="copper per auction, lost if it expires or gets cancelled")
     ex.add_argument("--auction-hours", type=int, default=24, help="how long a listing runs b4 it expires")
+    ex.add_argument("--max-relists", type=int, default=14, help="expired listings b4 u'd give up on selling it")
     ex.add_argument("--out", required=True, help="data.json path, next 2 th forever-ah-site files")
     al = sub.add_parser("alert")
     al.add_argument("--data", required=True, help="th data.json export just wrote")

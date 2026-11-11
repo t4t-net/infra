@@ -487,20 +487,32 @@ def market_data(args, db):
     bw = book(bw_last[0]) if bw_last else {}
     items = {i: (n, s, b) for i, n, s, b in db.execute("select id, name, sell_price, purchase_price from item")}
 
-    # sales: listings tht vanished w time left, at or under th next dump's floor (buyers take th cheapest first,
-    # so a pricier one tht vanished was a cancel or a repost)
+    # sales: listings tht vanished w time left. buyers take th cheapest first, so one tht vanished while a cheaper
+    # listing from th same dump is still up was pulled (cancelled or reposted), not bought. th next dump's floor
+    # isnt good enough 4 this: fresh undercuts land below it nd turned real sales on busy bars into "cancels"
     sold = defaultdict(lambda: [0, 0])
-    for (a, _), (b, _) in zip(snaps, snaps[1:]):
+    pulled = defaultdict(int)
+    recent = defaultdict(int)  # units sold in th last args.dry_dumps dumps
+    for n, ((a, _), (b, _)) in enumerate(zip(snaps, snaps[1:])):
         after = dict(db.execute("select auction_id, quantity from auction where snapshot_id = ?", (b,)))
-        floor = dict(db.execute("select item_id, min(min_unit) from price where snapshot_id = ? group by item_id", (b,)))
-        for aid, iid, price, q, tl in db.execute(
-                "select auction_id, item_id, unit_price, quantity, time_left from auction where snapshot_id = ?", (a,)):
-            if price is None or tl == "SHORT" or (iid in floor and price > floor[iid]):
-                continue
+        rows = db.execute("select auction_id, item_id, unit_price, quantity, time_left from auction where snapshot_id = ?",
+                          (a,)).fetchall()
+        floor = {}
+        for aid, iid, price, _, _ in rows:
+            if aid in after and price is not None and price < floor.get(iid, math.inf):
+                floor[iid] = price
+        for aid, iid, price, q, tl in rows:
             gone = q - after.get(aid, 0)
-            if gone > 0:
-                sold[iid][0] += gone
-                sold[iid][1] += gone * price
+            if price is None or tl == "SHORT" or gone <= 0:
+                continue
+            if price > floor.get(iid, math.inf):
+                pulled[iid] += gone
+                continue
+            sold[iid][0] += gone
+            sold[iid][1] += gone * price
+            if n >= len(snaps) - 1 - args.dry_dumps:
+                recent[iid] += gone
+    recent_h = (snaps[-1][1] - snaps[max(0, len(snaps) - 1 - args.dry_dumps)][1]) / 3600
     # items r tracked from th first dump they have raw listings in; items added 2 th watchlist mid-window
     # (or never listed) get "-" instead of a fake zero. under an hour of tracking measures nothing yet
     dump_time = dict(snaps)
@@ -538,11 +550,23 @@ def market_data(args, db):
         else:
             p = sell_odds(rate, ahead)
             deposits = round(args.deposit * min((1 - p) / p if p else math.inf, args.max_relists))
+        # no real market, just sellers undercutting each other: way more pulled nd reposted than bought, or sales
+        # tht stopped dead (th window's rate says there shud have been a handful by now) while sellers keep
+        # reposting. a quiet few hours on its own is just a quiet few hours
+        war = None
+        if units is not None:
+            churn = pulled.get(i, 0)
+            if churn >= args.war_ratio * max(units, 1):
+                war = "relisting"
+            elif churn > units and hours > recent_h and not recent.get(i) and rate * recent_h >= args.dry_expect:
+                war = "dried up"
         return {
             "id": i, "name": (items.get(i) or (None,))[0] or f"item {i}",
             "floor": n and n[1], "median": n and n[0], "qty": n and n[2], "listings": n and n[3],
             "floor_then": t and t[1],
             "sold": units,
+            "pulled": pulled.get(i, 0) if units is not None else None,
+            "war": war,
             "sold_at": round(s[1] / s[0]) if units else None,
             # sales per hour; as th cheapest listing urs sells after everything queued ahead of it
             "wait_h": (ahead + 1) / rate if rate else None,
@@ -635,6 +659,8 @@ def market_data(args, db):
                              for (i, src), q in sorted(f[1].items(), key=lambda kv: kv[0][1] != "farm")],
                 }
             rows.append(row)
+        wars = len([r for r in rows if r["out"]["war"]])
+        rows = [r for r in rows if not r["out"]["war"]]
         rows.sort(key=lambda r: -r["profit"])
         farm = sorted([r for r in rows if "farm" in r and r["farm"]["profit"] > 0], key=lambda r: -r["farm"]["profit"])
         crafts[pname] = {
@@ -644,6 +670,7 @@ def market_data(args, db):
             "starters": sorted([r for r in rows if r["profit"] > 0 and r["cost"] <= 2500], key=lambda r: -r["profit"])[:8],
             "farmed": farm[:14],
             "losers": len([r for r in rows if r["profit"] <= 0]),
+            "wars": wars,
         }
 
     gather = {k: [market(i) for i in ids if i in now] for k, ids in GATHERED.items()}
@@ -811,6 +838,9 @@ def main():
     ex.add_argument("--deposit", type=int, default=100, help="copper per auction, lost if it expires or gets cancelled")
     ex.add_argument("--auction-hours", type=int, default=24, help="how long a listing runs b4 it expires")
     ex.add_argument("--max-relists", type=int, default=14, help="expired listings b4 u'd give up on selling it")
+    ex.add_argument("--war-ratio", type=float, default=3, help="hide crafts w this many units pulled per unit sold")
+    ex.add_argument("--dry-dumps", type=int, default=3, help="recent dumps a craft must have sold in...")
+    ex.add_argument("--dry-expect", type=float, default=5, help="...when th window's rate expects this many sales in them")
     ex.add_argument("--out", required=True, help="data.json path, next 2 th forever-ah-site files")
     al = sub.add_parser("alert")
     al.add_argument("--data", required=True, help="th data.json export just wrote")

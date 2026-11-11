@@ -144,7 +144,11 @@ const TAKES: Record<string, string> = {
 const QA: { q: string; a: string }[] = [
   {
     q: 'how do you know what actually sold?',
-    a: `every listing has an id and a time-left bucket. if an id disappears between two hourly dumps while it still had hours left, and it was priced at or under the next dump's cheapest listing, somebody bought it. anything pricier that vanished was a cancel or a repost, since buyers take the cheapest first. it still overcounts a little.`,
+    a: `every listing has an id and a time-left bucket. if an id disappears between two hourly dumps while it still had hours left, and no cheaper listing from that same dump is still up, somebody bought it. if a cheaper one is still sitting there, the vanished one was pulled (cancelled or reposted), since buyers take the cheapest first. a cancel right at the floor still sneaks in as a sale.`,
+  },
+  {
+    q: 'why is a craft i know about missing?',
+    a: `crafts whose market is just sellers undercutting each other get hidden: three or more units pulled and reposted for every one bought, or no sales at all in the last three dumps when the day's pace says there should have been a handful. the profit math on those is fiction, nobody's buying at the floor.`,
   },
   {
     q: 'how fresh is this?',
@@ -275,7 +279,7 @@ function Quests() {
 
 function ViewBody({ view }: { view: View }) {
   if (view === 'quests') return <Quests />
-  const crafts = D.crafts as Record<string, { count: number; priced: number; losers: number; top: Craft[]; starters: Craft[]; farmed?: Craft[] }>
+  const crafts = D.crafts as Record<string, { count: number; priced: number; losers: number; wars?: number; top: Craft[]; starters: Craft[]; farmed?: Craft[] }>
   const gather = D.gather as Record<string, Market[]>
 
   if (view === 'meta') {
@@ -347,7 +351,7 @@ raid-launch:  stones, flasks, thorium         `}<span className="c"># raids open
           </p>
           <FarmCrafts rows={c.farmed} />
         </>}
-        <p className="note">{c.count} recipes, {c.priced} with a real market, {c.losers} of those sell for less than their mats.</p>
+        <p className="note">{c.count} recipes, {c.priced} with a real market, {c.losers} of those sell for less than their mats.{c.wars ? ` ${c.wars} more hidden for being relisting wars.` : ''}</p>
       </>}
     </Section>
   )

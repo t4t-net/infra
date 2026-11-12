@@ -13,9 +13,9 @@
    "count": 507,
    "farmed": [
     {
-     "cost": 25896,
+     "cost": 25201,
      "farm": {
-      "cost": 7196,
+      "cost": 7568,
       "mats": [
        {
         "id": 3858,
@@ -42,7 +42,7 @@
         "src": "ah"
        }
       ],
-      "profit": 33179
+      "profit": 32807
      },
      "makes": 1.0,
      "mats": [
@@ -87,13 +87,13 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 14479,
+     "profit": 15174,
      "recipe": "Blue Glittering Axe",
      "revenue": 40375,
      "spell": 9995
     },
     {
-     "cost": 6805,
+     "cost": 6459,
      "farm": {
       "cost": 0,
       "mats": [
@@ -156,13 +156,13 @@
       "wait_h": 2.0005555555555556,
       "war": null
      },
-     "profit": 12194,
+     "profit": 12540,
      "recipe": "Inlaid Mithril Cylinder",
      "revenue": 18999,
      "spell": 11454
     },
     {
-     "cost": 16426,
+     "cost": 16365,
      "farm": {
       "cost": 8000,
       "mats": [
@@ -254,15 +254,15 @@
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": 7702,
+     "profit": 7763,
      "recipe": "Moonsteel Broadsword",
      "revenue": 24937,
      "spell": 3496
     },
     {
-     "cost": 15818,
+     "cost": 14639,
      "farm": {
-      "cost": 2330,
+      "cost": 1918,
       "mats": [
        {
         "id": 3858,
@@ -289,7 +289,7 @@
         "src": "ah"
        }
       ],
-      "profit": 14984
+      "profit": 15396
      },
      "makes": 1.0,
      "mats": [
@@ -334,15 +334,15 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 1496,
+     "profit": 2675,
      "recipe": "Mithril Warhammer",
      "revenue": 53770,
      "spell": 1252357
     },
     {
-     "cost": 21648,
+     "cost": 19860,
      "farm": {
-      "cost": 7200,
+      "cost": 6630,
       "mats": [
        {
         "id": 1206,
@@ -375,7 +375,7 @@
         "src": "ah"
        }
       ],
-      "profit": 11927
+      "profit": 12497
      },
      "makes": 1.0,
      "mats": [
@@ -425,13 +425,13 @@
       "wait_h": 6.0008333333333335,
       "war": null
      },
-     "profit": -2521,
+     "profit": -733,
      "recipe": "Green Iron Hauberk",
      "revenue": 19190,
      "spell": 3508
     },
     {
-     "cost": 14800,
+     "cost": 13968,
      "farm": {
       "cost": 0,
       "mats": [
@@ -472,13 +472,13 @@
       "wait_h": 9.001388888888888,
       "war": null
      },
-     "profit": -5141,
+     "profit": -4309,
      "recipe": "Heavy Mithril Breastplate",
      "revenue": 9975,
      "spell": 9959
     },
     {
-     "cost": 3438,
+     "cost": 3368,
      "farm": {
       "cost": 0,
       "mats": [
@@ -541,13 +541,13 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 6062,
+     "profit": 6132,
      "recipe": "Sterling Silver Gauntlet",
      "revenue": 9500,
      "spell": 1252234
     },
     {
-     "cost": 11428,
+     "cost": 11378,
      "farm": {
       "cost": 4000,
       "mats": [
@@ -616,13 +616,13 @@
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": 2057,
+     "profit": 2107,
      "recipe": "Golden Scale Coif",
      "revenue": 13775,
      "spell": 3503
     },
     {
-     "cost": 12140,
+     "cost": 11232,
      "farm": {
       "cost": 0,
       "mats": [
@@ -685,13 +685,13 @@
       "wait_h": null,
       "war": null
      },
-     "profit": -3790,
+     "profit": -2882,
      "recipe": "Mithril Shield Spike",
      "revenue": 10450,
      "spell": 9939
     },
     {
-     "cost": 11100,
+     "cost": 10476,
      "farm": {
       "cost": 0,
       "mats": [
@@ -732,15 +732,15 @@
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": -3306,
+     "profit": -2682,
      "recipe": "Mithril Plate Pants",
      "revenue": 8550,
      "spell": 9931
     },
     {
-     "cost": 10296,
+     "cost": 9278,
      "farm": {
-      "cost": 2160,
+      "cost": 1913,
       "mats": [
        {
         "id": 1206,
@@ -779,7 +779,7 @@
         "src": "ah"
        }
       ],
-      "profit": 6713
+      "profit": 6960
      },
      "makes": 1.0,
      "mats": [
@@ -829,13 +829,13 @@
       "wait_h": 6.0008333333333335,
       "war": null
      },
-     "profit": -1423,
+     "profit": -405,
      "recipe": "Shining Silver Breastplate",
      "revenue": 8906,
      "spell": 2675
     },
     {
-     "cost": 10498,
+     "cost": 9965,
      "farm": {
       "cost": 0,
       "mats": [
@@ -887,91 +887,15 @@
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": -4354,
+     "profit": -3821,
      "recipe": "Heavy Mithril Pants",
      "revenue": 6650,
      "spell": 9933
     },
     {
-     "cost": 2048,
+     "cost": 19004,
      "farm": {
-      "cost": 400,
-      "mats": [
-       {
-        "id": 2319,
-        "name": "Medium Leather",
-        "qty": 1,
-        "src": "farm"
-       },
-       {
-        "id": 2770,
-        "name": "Copper Ore",
-        "qty": 4,
-        "src": "farm"
-       },
-       {
-        "id": 2771,
-        "name": "Tin Ore",
-        "qty": 4,
-        "src": "farm"
-       },
-       {
-        "id": 2880,
-        "name": "Weak Flux",
-        "qty": 4,
-        "src": "vendor"
-       }
-      ],
-      "profit": 6060
-     },
-     "makes": 1.0,
-     "mats": [
-      {
-       "id": 2319,
-       "name": "Medium Leather",
-       "qty": 1
-      },
-      {
-       "id": 2841,
-       "name": "Bronze Bar",
-       "qty": 8
-      },
-      {
-       "id": 2880,
-       "name": "Weak Flux",
-       "qty": 4,
-       "vendor": true
-      }
-     ],
-     "out": {
-      "ahead": 0,
-      "deposit_known": true,
-      "deposit_risk": 0,
-      "duration_h": 24,
-      "floor": 6800,
-      "floor_then": 7000,
-      "id": 250603,
-      "listing_deposit": 292,
-      "listings": 30,
-      "median": 6800,
-      "name": "Bronze Dory",
-      "pulled": 0,
-      "qty": 30,
-      "sold": 3,
-      "sold_at": 6933,
-      "vendor": 488,
-      "wait_h": 3.6672222222222226,
-      "war": null
-     },
-     "profit": 4412,
-     "recipe": "Bronze Dory",
-     "revenue": 6460,
-     "spell": 1252352
-    },
-    {
-     "cost": 19720,
-     "farm": {
-      "cost": 8000,
+      "cost": 7430,
       "mats": [
        {
         "id": 2838,
@@ -1004,7 +928,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 5548
+      "profit": 6118
      },
      "makes": 1.0,
      "mats": [
@@ -1049,17 +973,13 @@
       "wait_h": 7.00138888888889,
       "war": null
      },
-     "profit": -6172,
+     "profit": -5456,
      "recipe": "Golden Scale Cuirass",
      "revenue": 13680,
      "spell": 3511
-    }
-   ],
-   "losers": 91,
-   "priced": 117,
-   "starters": [
+    },
     {
-     "cost": 2048,
+     "cost": 1880,
      "farm": {
       "cost": 400,
       "mats": [
@@ -1129,13 +1049,93 @@
       "wait_h": 3.6672222222222226,
       "war": null
      },
-     "profit": 4412,
+     "profit": 4580,
+     "recipe": "Bronze Dory",
+     "revenue": 6460,
+     "spell": 1252352
+    }
+   ],
+   "losers": 86,
+   "priced": 117,
+   "starters": [
+    {
+     "cost": 1880,
+     "farm": {
+      "cost": 400,
+      "mats": [
+       {
+        "id": 2319,
+        "name": "Medium Leather",
+        "qty": 1,
+        "src": "farm"
+       },
+       {
+        "id": 2770,
+        "name": "Copper Ore",
+        "qty": 4,
+        "src": "farm"
+       },
+       {
+        "id": 2771,
+        "name": "Tin Ore",
+        "qty": 4,
+        "src": "farm"
+       },
+       {
+        "id": 2880,
+        "name": "Weak Flux",
+        "qty": 4,
+        "src": "vendor"
+       }
+      ],
+      "profit": 6060
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 2319,
+       "name": "Medium Leather",
+       "qty": 1
+      },
+      {
+       "id": 2841,
+       "name": "Bronze Bar",
+       "qty": 8
+      },
+      {
+       "id": 2880,
+       "name": "Weak Flux",
+       "qty": 4,
+       "vendor": true
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "deposit_known": true,
+      "deposit_risk": 0,
+      "duration_h": 24,
+      "floor": 6800,
+      "floor_then": 7000,
+      "id": 250603,
+      "listing_deposit": 292,
+      "listings": 30,
+      "median": 6800,
+      "name": "Bronze Dory",
+      "pulled": 0,
+      "qty": 30,
+      "sold": 3,
+      "sold_at": 6933,
+      "vendor": 488,
+      "wait_h": 3.6672222222222226,
+      "war": null
+     },
+     "profit": 4580,
      "recipe": "Bronze Dory",
      "revenue": 6460,
      "spell": 1252352
     },
     {
-     "cost": 595,
+     "cost": 490,
      "farm": {
       "cost": 0,
       "mats": [
@@ -1176,13 +1176,13 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 4060,
+     "profit": 4165,
      "recipe": "Azure Skyforged Gauntlets",
      "revenue": 4655,
      "spell": 1301447
     },
     {
-     "cost": 595,
+     "cost": 490,
      "farm": {
       "cost": 0,
       "mats": [
@@ -1223,13 +1223,13 @@
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": 3189,
+     "profit": 3294,
      "recipe": "Cloudy Skyforged Gauntlets",
      "revenue": 3800,
      "spell": 1301423
     },
     {
-     "cost": 425,
+     "cost": 350,
      "farm": {
       "cost": 0,
       "mats": [
@@ -1270,13 +1270,13 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 3185,
+     "profit": 3260,
      "recipe": "Cloudy Skyforged Wristguards",
      "revenue": 3610,
      "spell": 1301422
     },
     {
-     "cost": 425,
+     "cost": 350,
      "farm": {
       "cost": 0,
       "mats": [
@@ -1317,13 +1317,13 @@
       "wait_h": 4.000555555555556,
       "war": null
      },
-     "profit": 2741,
+     "profit": 2816,
      "recipe": "Azure Skyforged Wristguards",
      "revenue": 3166,
      "spell": 1301446
     },
     {
-     "cost": 510,
+     "cost": 420,
      "farm": {
       "cost": 0,
       "mats": [
@@ -1364,13 +1364,13 @@
       "wait_h": 6.0008333333333335,
       "war": null
      },
-     "profit": 2243,
+     "profit": 2333,
      "recipe": "Azure Skyforged Chain",
      "revenue": 2755,
      "spell": 1301448
     },
     {
-     "cost": 595,
+     "cost": 490,
      "farm": {
       "cost": 0,
       "mats": [
@@ -1411,13 +1411,13 @@
       "wait_h": 6.001111111111111,
       "war": null
      },
-     "profit": 1398,
+     "profit": 1503,
      "recipe": "Azure Skyforged Greaves",
      "revenue": 1995,
      "spell": 1301450
     },
     {
-     "cost": 1844,
+     "cost": 1665,
      "farm": {
       "cost": 400,
       "mats": [
@@ -1509,7 +1509,7 @@
       "wait_h": 2.000277777777778,
       "war": null
      },
-     "profit": 531,
+     "profit": 710,
      "recipe": "Big Bronze Knife",
      "revenue": 2375,
      "spell": 3491
@@ -1517,9 +1517,9 @@
    ],
    "top": [
     {
-     "cost": 25896,
+     "cost": 25201,
      "farm": {
-      "cost": 7196,
+      "cost": 7568,
       "mats": [
        {
         "id": 3858,
@@ -1546,7 +1546,7 @@
         "src": "ah"
        }
       ],
-      "profit": 33179
+      "profit": 32807
      },
      "makes": 1.0,
      "mats": [
@@ -1591,13 +1591,13 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 14479,
+     "profit": 15174,
      "recipe": "Blue Glittering Axe",
      "revenue": 40375,
      "spell": 9995
     },
     {
-     "cost": 6805,
+     "cost": 6459,
      "farm": {
       "cost": 0,
       "mats": [
@@ -1660,13 +1660,13 @@
       "wait_h": 2.0005555555555556,
       "war": null
      },
-     "profit": 12194,
+     "profit": 12540,
      "recipe": "Inlaid Mithril Cylinder",
      "revenue": 18999,
      "spell": 11454
     },
     {
-     "cost": 16426,
+     "cost": 16365,
      "farm": {
       "cost": 8000,
       "mats": [
@@ -1758,13 +1758,13 @@
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": 7702,
+     "profit": 7763,
      "recipe": "Moonsteel Broadsword",
      "revenue": 24937,
      "spell": 3496
     },
     {
-     "cost": 3438,
+     "cost": 3368,
      "farm": {
       "cost": 0,
       "mats": [
@@ -1827,13 +1827,13 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 6062,
+     "profit": 6132,
      "recipe": "Sterling Silver Gauntlet",
      "revenue": 9500,
      "spell": 1252234
     },
     {
-     "cost": 2048,
+     "cost": 1880,
      "farm": {
       "cost": 400,
       "mats": [
@@ -1903,13 +1903,13 @@
       "wait_h": 3.6672222222222226,
       "war": null
      },
-     "profit": 4412,
+     "profit": 4580,
      "recipe": "Bronze Dory",
      "revenue": 6460,
      "spell": 1252352
     },
     {
-     "cost": 595,
+     "cost": 490,
      "farm": {
       "cost": 0,
       "mats": [
@@ -1950,13 +1950,13 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 4060,
+     "profit": 4165,
      "recipe": "Azure Skyforged Gauntlets",
      "revenue": 4655,
      "spell": 1301447
     },
     {
-     "cost": 595,
+     "cost": 490,
      "farm": {
       "cost": 0,
       "mats": [
@@ -1997,13 +1997,13 @@
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": 3189,
+     "profit": 3294,
      "recipe": "Cloudy Skyforged Gauntlets",
      "revenue": 3800,
      "spell": 1301423
     },
     {
-     "cost": 425,
+     "cost": 350,
      "farm": {
       "cost": 0,
       "mats": [
@@ -2044,13 +2044,13 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 3185,
+     "profit": 3260,
      "recipe": "Cloudy Skyforged Wristguards",
      "revenue": 3610,
      "spell": 1301422
     },
     {
-     "cost": 425,
+     "cost": 350,
      "farm": {
       "cost": 0,
       "mats": [
@@ -2091,13 +2091,93 @@
       "wait_h": 4.000555555555556,
       "war": null
      },
-     "profit": 2741,
+     "profit": 2816,
      "recipe": "Azure Skyforged Wristguards",
      "revenue": 3166,
      "spell": 1301446
     },
     {
-     "cost": 510,
+     "cost": 14639,
+     "farm": {
+      "cost": 1918,
+      "mats": [
+       {
+        "id": 3858,
+        "name": "Mithril Ore",
+        "qty": 12,
+        "src": "farm"
+       },
+       {
+        "id": 4234,
+        "name": "Heavy Leather",
+        "qty": 4,
+        "src": "farm"
+       },
+       {
+        "id": 7912,
+        "name": "Solid Stone",
+        "qty": 4,
+        "src": "farm"
+       },
+       {
+        "id": 3864,
+        "name": "Citrine",
+        "qty": 2,
+        "src": "ah"
+       }
+      ],
+      "profit": 15396
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 3860,
+       "name": "Mithril Bar",
+       "qty": 12
+      },
+      {
+       "id": 3864,
+       "name": "Citrine",
+       "qty": 2
+      },
+      {
+       "id": 4234,
+       "name": "Heavy Leather",
+       "qty": 4
+      },
+      {
+       "id": 7966,
+       "name": "Solid Grinding Stone",
+       "qty": 1
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "deposit_known": true,
+      "deposit_risk": 36456,
+      "duration_h": 2,
+      "floor": 56600,
+      "floor_then": 31000,
+      "id": 250608,
+      "listing_deposit": 217,
+      "listings": 7,
+      "median": 56600,
+      "name": "Mithril Warhammer",
+      "pulled": 0,
+      "qty": 7,
+      "sold": 0,
+      "sold_at": null,
+      "vendor": 4356,
+      "wait_h": null,
+      "war": null
+     },
+     "profit": 2675,
+     "recipe": "Mithril Warhammer",
+     "revenue": 53770,
+     "spell": 1252357
+    },
+    {
+     "cost": 420,
      "farm": {
       "cost": 0,
       "mats": [
@@ -2138,13 +2218,111 @@
       "wait_h": 6.0008333333333335,
       "war": null
      },
-     "profit": 2243,
+     "profit": 2333,
      "recipe": "Azure Skyforged Chain",
      "revenue": 2755,
      "spell": 1301448
     },
     {
-     "cost": 11428,
+     "cost": 5646,
+     "farm": {
+      "cost": 2956,
+      "mats": [
+       {
+        "id": 2319,
+        "name": "Medium Leather",
+        "qty": 2,
+        "src": "farm"
+       },
+       {
+        "id": 2770,
+        "name": "Copper Ore",
+        "qty": 5,
+        "src": "farm"
+       },
+       {
+        "id": 2771,
+        "name": "Tin Ore",
+        "qty": 5,
+        "src": "farm"
+       },
+       {
+        "id": 2836,
+        "name": "Coarse Stone",
+        "qty": 4,
+        "src": "farm"
+       },
+       {
+        "id": 3466,
+        "name": "Strong Flux",
+        "qty": 1,
+        "src": "vendor"
+       },
+       {
+        "id": 5500,
+        "name": "Iridescent Pearl",
+        "qty": 1,
+        "src": "ah"
+       }
+      ],
+      "profit": 4852
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 2319,
+       "name": "Medium Leather",
+       "qty": 2
+      },
+      {
+       "id": 2841,
+       "name": "Bronze Bar",
+       "qty": 10
+      },
+      {
+       "id": 3466,
+       "name": "Strong Flux",
+       "qty": 1,
+       "vendor": true
+      },
+      {
+       "id": 3478,
+       "name": "Coarse Grinding Stone",
+       "qty": 2
+      },
+      {
+       "id": 5500,
+       "name": "Iridescent Pearl",
+       "qty": 1
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "deposit_known": true,
+      "deposit_risk": 29,
+      "duration_h": 24,
+      "floor": 8300,
+      "floor_then": 8300,
+      "id": 5541,
+      "listing_deposit": 2215,
+      "listings": 15,
+      "median": 8400,
+      "name": "Iridescent Hammer",
+      "pulled": 0,
+      "qty": 15,
+      "sold": 2,
+      "sold_at": 8250,
+      "vendor": 3693,
+      "wait_h": 5.5008333333333335,
+      "war": null
+     },
+     "profit": 2162,
+     "recipe": "Iridescent Hammer",
+     "revenue": 7837,
+     "spell": 6518
+    },
+    {
+     "cost": 11378,
      "farm": {
       "cost": 4000,
       "mats": [
@@ -2213,191 +2391,13 @@
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": 2057,
+     "profit": 2107,
      "recipe": "Golden Scale Coif",
      "revenue": 13775,
      "spell": 3503
     },
     {
-     "cost": 6002,
-     "farm": {
-      "cost": 3080,
-      "mats": [
-       {
-        "id": 2319,
-        "name": "Medium Leather",
-        "qty": 2,
-        "src": "farm"
-       },
-       {
-        "id": 2770,
-        "name": "Copper Ore",
-        "qty": 5,
-        "src": "farm"
-       },
-       {
-        "id": 2771,
-        "name": "Tin Ore",
-        "qty": 5,
-        "src": "farm"
-       },
-       {
-        "id": 2836,
-        "name": "Coarse Stone",
-        "qty": 4,
-        "src": "farm"
-       },
-       {
-        "id": 3466,
-        "name": "Strong Flux",
-        "qty": 1,
-        "src": "vendor"
-       },
-       {
-        "id": 5500,
-        "name": "Iridescent Pearl",
-        "qty": 1,
-        "src": "ah"
-       }
-      ],
-      "profit": 4728
-     },
-     "makes": 1.0,
-     "mats": [
-      {
-       "id": 2319,
-       "name": "Medium Leather",
-       "qty": 2
-      },
-      {
-       "id": 2841,
-       "name": "Bronze Bar",
-       "qty": 10
-      },
-      {
-       "id": 3466,
-       "name": "Strong Flux",
-       "qty": 1,
-       "vendor": true
-      },
-      {
-       "id": 3478,
-       "name": "Coarse Grinding Stone",
-       "qty": 2
-      },
-      {
-       "id": 5500,
-       "name": "Iridescent Pearl",
-       "qty": 1
-      }
-     ],
-     "out": {
-      "ahead": 0,
-      "deposit_known": true,
-      "deposit_risk": 29,
-      "duration_h": 24,
-      "floor": 8300,
-      "floor_then": 8300,
-      "id": 5541,
-      "listing_deposit": 2215,
-      "listings": 15,
-      "median": 8400,
-      "name": "Iridescent Hammer",
-      "pulled": 0,
-      "qty": 15,
-      "sold": 2,
-      "sold_at": 8250,
-      "vendor": 3693,
-      "wait_h": 5.5008333333333335,
-      "war": null
-     },
-     "profit": 1806,
-     "recipe": "Iridescent Hammer",
-     "revenue": 7837,
-     "spell": 6518
-    },
-    {
-     "cost": 15818,
-     "farm": {
-      "cost": 2330,
-      "mats": [
-       {
-        "id": 3858,
-        "name": "Mithril Ore",
-        "qty": 12,
-        "src": "farm"
-       },
-       {
-        "id": 4234,
-        "name": "Heavy Leather",
-        "qty": 4,
-        "src": "farm"
-       },
-       {
-        "id": 7912,
-        "name": "Solid Stone",
-        "qty": 4,
-        "src": "farm"
-       },
-       {
-        "id": 3864,
-        "name": "Citrine",
-        "qty": 2,
-        "src": "ah"
-       }
-      ],
-      "profit": 14984
-     },
-     "makes": 1.0,
-     "mats": [
-      {
-       "id": 3860,
-       "name": "Mithril Bar",
-       "qty": 12
-      },
-      {
-       "id": 3864,
-       "name": "Citrine",
-       "qty": 2
-      },
-      {
-       "id": 4234,
-       "name": "Heavy Leather",
-       "qty": 4
-      },
-      {
-       "id": 7966,
-       "name": "Solid Grinding Stone",
-       "qty": 1
-      }
-     ],
-     "out": {
-      "ahead": 0,
-      "deposit_known": true,
-      "deposit_risk": 36456,
-      "duration_h": 2,
-      "floor": 56600,
-      "floor_then": 31000,
-      "id": 250608,
-      "listing_deposit": 217,
-      "listings": 7,
-      "median": 56600,
-      "name": "Mithril Warhammer",
-      "pulled": 0,
-      "qty": 7,
-      "sold": 0,
-      "sold_at": null,
-      "vendor": 4356,
-      "wait_h": null,
-      "war": null
-     },
-     "profit": 1496,
-     "recipe": "Mithril Warhammer",
-     "revenue": 53770,
-     "spell": 1252357
-    },
-    {
-     "cost": 595,
+     "cost": 490,
      "farm": {
       "cost": 0,
       "mats": [
@@ -2438,7 +2438,7 @@
       "wait_h": 6.001111111111111,
       "war": null
      },
-     "profit": 1398,
+     "profit": 1503,
      "recipe": "Azure Skyforged Greaves",
      "revenue": 1995,
      "spell": 1301450
@@ -2468,7 +2468,7 @@
    "count": 275,
    "farmed": [
     {
-     "cost": 41479,
+     "cost": 38499,
      "farm": {
       "cost": 0,
       "mats": [
@@ -2548,15 +2548,15 @@
       "wait_h": 7.00138888888889,
       "war": null
      },
-     "profit": 147800,
+     "profit": 150780,
      "recipe": "Salt Shaker",
      "revenue": 189430,
      "spell": 19567
     },
     {
-     "cost": 20134,
+     "cost": 19853,
      "farm": {
-      "cost": 15174,
+      "cost": 15093,
       "mats": [
        {
         "id": 4304,
@@ -2589,7 +2589,7 @@
         "src": "ah"
        }
       ],
-      "profit": 51326
+      "profit": 51407
      },
      "makes": 1.0,
      "mats": [
@@ -2639,15 +2639,15 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 46366,
+     "profit": 46647,
      "recipe": "Green Lens",
      "revenue": 66500,
      "spell": 12622
     },
     {
-     "cost": 18380,
+     "cost": 17656,
      "farm": {
-      "cost": 5530,
+      "cost": 5118,
       "mats": [
        {
         "id": 3858,
@@ -2680,7 +2680,7 @@
         "src": "ah"
        }
       ],
-      "profit": 48715
+      "profit": 49127
      },
      "makes": 1.0,
      "mats": [
@@ -2730,15 +2730,15 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 35865,
+     "profit": 36589,
      "recipe": "Mithril Heavy-bore Rifle",
      "revenue": 54245,
      "spell": 12614
     },
     {
-     "cost": 11408,
+     "cost": 11238,
      "farm": {
-      "cost": 5998,
+      "cost": 5988,
       "mats": [
        {
         "id": 7911,
@@ -2759,7 +2759,7 @@
         "src": "ah"
        }
       ],
-      "profit": 40999
+      "profit": 41009
      },
      "makes": 1.0,
      "mats": [
@@ -2799,15 +2799,15 @@
       "wait_h": 6.0008333333333335,
       "war": null
      },
-     "profit": 35589,
+     "profit": 35759,
      "recipe": "Sniper Scope",
      "revenue": 47025,
      "spell": 12620
     },
     {
-     "cost": 11430,
+     "cost": 10640,
      "farm": {
-      "cost": 3080,
+      "cost": 2498,
       "mats": [
        {
         "id": 3858,
@@ -2840,7 +2840,7 @@
         "src": "ah"
        }
       ],
-      "profit": 37170
+      "profit": 37752
      },
      "makes": 1.0,
      "mats": [
@@ -2890,15 +2890,15 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 28820,
+     "profit": 29610,
      "recipe": "Gnomish Shrink Ray",
      "revenue": 46550,
      "spell": 12899
     },
     {
-     "cost": 11838,
+     "cost": 11126,
      "farm": {
-      "cost": 9070,
+      "cost": 8666,
       "mats": [
        {
         "id": 4234,
@@ -2943,7 +2943,7 @@
         "src": "ah"
        }
       ],
-      "profit": 33965
+      "profit": 34369
      },
      "makes": 1.0,
      "mats": [
@@ -2988,13 +2988,128 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 31197,
+     "profit": 31909,
      "recipe": "Fire Goggles",
      "revenue": 43035,
      "spell": 12594
     },
     {
-     "cost": 6077,
+     "cost": 5066,
+     "farm": {
+      "cost": 900,
+      "mats": [
+       {
+        "id": 1210,
+        "name": "Shadowgem",
+        "qty": 2,
+        "src": "farm"
+       },
+       {
+        "id": 2772,
+        "name": "Iron Ore",
+        "qty": 6,
+        "src": "farm"
+       },
+       {
+        "id": 4306,
+        "name": "Silk Cloth",
+        "qty": 2,
+        "src": "farm"
+       },
+       {
+        "id": 2592,
+        "name": "Wool Cloth",
+        "qty": 2,
+        "src": "farm"
+       },
+       {
+        "id": 2770,
+        "name": "Copper Ore",
+        "qty": 2,
+        "src": "farm"
+       },
+       {
+        "id": 2771,
+        "name": "Tin Ore",
+        "qty": 2,
+        "src": "farm"
+       },
+       {
+        "id": 814,
+        "name": "Flask of Oil",
+        "qty": 2,
+        "src": "vendor"
+       },
+       {
+        "id": 7191,
+        "name": "Fused Wiring",
+        "qty": 1,
+        "src": "ah"
+       }
+      ],
+      "profit": 16199
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 814,
+       "name": "Flask of Oil",
+       "qty": 2,
+       "vendor": true
+      },
+      {
+       "id": 1210,
+       "name": "Shadowgem",
+       "qty": 2
+      },
+      {
+       "id": 3575,
+       "name": "Iron Bar",
+       "qty": 6
+      },
+      {
+       "id": 4306,
+       "name": "Silk Cloth",
+       "qty": 2
+      },
+      {
+       "id": 4375,
+       "name": "Whirring Bronze Gizmo",
+       "qty": 2
+      },
+      {
+       "id": 7191,
+       "name": "Fused Wiring",
+       "qty": 1
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "deposit_known": true,
+      "deposit_risk": 1,
+      "duration_h": 24,
+      "floor": 18000,
+      "floor_then": 19000,
+      "id": 7148,
+      "listing_deposit": 100,
+      "listings": 15,
+      "median": 18000,
+      "name": "Goblin Jumper Cables",
+      "pulled": 0,
+      "qty": 15,
+      "sold": 2,
+      "sold_at": 18000,
+      "vendor": 21,
+      "wait_h": 5.0008333333333335,
+      "war": null
+     },
+     "profit": 12033,
+     "recipe": "Goblin Jumper Cables",
+     "revenue": 17100,
+     "spell": 9273
+    },
+    {
+     "cost": 5960,
      "farm": {
       "cost": 0,
       "mats": [
@@ -3086,128 +3201,13 @@
       "wait_h": 3.500694444444445,
       "war": null
      },
-     "profit": 6358,
+     "profit": 6475,
      "recipe": "Compact Harvest Reaper Kit",
      "revenue": 12438,
      "spell": 3963
     },
     {
-     "cost": 9762,
-     "farm": {
-      "cost": 5200,
-      "mats": [
-       {
-        "id": 1210,
-        "name": "Shadowgem",
-        "qty": 2,
-        "src": "farm"
-       },
-       {
-        "id": 2772,
-        "name": "Iron Ore",
-        "qty": 6,
-        "src": "farm"
-       },
-       {
-        "id": 4306,
-        "name": "Silk Cloth",
-        "qty": 2,
-        "src": "farm"
-       },
-       {
-        "id": 2592,
-        "name": "Wool Cloth",
-        "qty": 2,
-        "src": "farm"
-       },
-       {
-        "id": 2770,
-        "name": "Copper Ore",
-        "qty": 2,
-        "src": "farm"
-       },
-       {
-        "id": 2771,
-        "name": "Tin Ore",
-        "qty": 2,
-        "src": "farm"
-       },
-       {
-        "id": 814,
-        "name": "Flask of Oil",
-        "qty": 2,
-        "src": "vendor"
-       },
-       {
-        "id": 7191,
-        "name": "Fused Wiring",
-        "qty": 1,
-        "src": "ah"
-       }
-      ],
-      "profit": 11899
-     },
-     "makes": 1.0,
-     "mats": [
-      {
-       "id": 814,
-       "name": "Flask of Oil",
-       "qty": 2,
-       "vendor": true
-      },
-      {
-       "id": 1210,
-       "name": "Shadowgem",
-       "qty": 2
-      },
-      {
-       "id": 3575,
-       "name": "Iron Bar",
-       "qty": 6
-      },
-      {
-       "id": 4306,
-       "name": "Silk Cloth",
-       "qty": 2
-      },
-      {
-       "id": 4375,
-       "name": "Whirring Bronze Gizmo",
-       "qty": 2
-      },
-      {
-       "id": 7191,
-       "name": "Fused Wiring",
-       "qty": 1
-      }
-     ],
-     "out": {
-      "ahead": 0,
-      "deposit_known": true,
-      "deposit_risk": 1,
-      "duration_h": 24,
-      "floor": 18000,
-      "floor_then": 19000,
-      "id": 7148,
-      "listing_deposit": 100,
-      "listings": 15,
-      "median": 18000,
-      "name": "Goblin Jumper Cables",
-      "pulled": 0,
-      "qty": 15,
-      "sold": 2,
-      "sold_at": 18000,
-      "vendor": 21,
-      "wait_h": 5.0008333333333335,
-      "war": null
-     },
-     "profit": 7337,
-     "recipe": "Goblin Jumper Cables",
-     "revenue": 17100,
-     "spell": 9273
-    },
-    {
-     "cost": 3916,
+     "cost": 3821,
      "farm": {
       "cost": 0,
       "mats": [
@@ -3299,13 +3299,13 @@
       "wait_h": 5.0008333333333335,
       "war": null
      },
-     "profit": 4736,
+     "profit": 4831,
      "recipe": "Advanced Target Dummy",
      "revenue": 8664,
      "spell": 3965
     },
     {
-     "cost": 6125,
+     "cost": 5865,
      "farm": {
       "cost": 400,
       "mats": [
@@ -3391,15 +3391,15 @@
       "wait_h": 9.001388888888888,
       "war": null
      },
-     "profit": 2050,
+     "profit": 2310,
      "recipe": "Portable Bronze Mortar",
      "revenue": 8265,
      "spell": 3960
     },
     {
-     "cost": 3782,
+     "cost": 3358,
      "farm": {
-      "cost": 2330,
+      "cost": 1918,
       "mats": [
        {
         "id": 4234,
@@ -3414,7 +3414,7 @@
         "src": "ah"
        }
       ],
-      "profit": 6970
+      "profit": 7382
      },
      "makes": 1.0,
      "mats": [
@@ -3449,13 +3449,13 @@
       "wait_h": 5.0008333333333335,
       "war": null
      },
-     "profit": 5518,
+     "profit": 5942,
      "recipe": "Bright-Eye Goggles",
      "revenue": 9310,
      "spell": 12587
     },
     {
-     "cost": 2871,
+     "cost": 2423,
      "farm": {
       "cost": 100,
       "mats": [
@@ -3541,13 +3541,13 @@
       "wait_h": 2.2003333333333335,
       "war": null
      },
-     "profit": 4064,
+     "profit": 4512,
      "recipe": "Minor Recombobulator",
      "revenue": 6935,
      "spell": 3952
     },
     {
-     "cost": 2170,
+     "cost": 1935,
      "farm": {
       "cost": 200,
       "mats": [
@@ -3639,13 +3639,13 @@
       "wait_h": 2.000277777777778,
       "war": null
      },
-     "profit": 3530,
+     "profit": 3765,
      "recipe": "Gnomish Universal Remote",
      "revenue": 5700,
      "spell": 9269
     },
     {
-     "cost": 2080,
+     "cost": 1909,
      "farm": {
       "cost": 0,
       "mats": [
@@ -3708,17 +3708,109 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 2945,
+     "profit": 3116,
      "recipe": "Mechanical Repair Kit",
      "revenue": 7125,
      "spell": 15255
     }
    ],
-   "losers": 35,
+   "losers": 31,
    "priced": 75,
    "starters": [
     {
-     "cost": 2170,
+     "cost": 2423,
+     "farm": {
+      "cost": 100,
+      "mats": [
+       {
+        "id": 1206,
+        "name": "Moss Agate",
+        "qty": 1,
+        "src": "farm"
+       },
+       {
+        "id": 2319,
+        "name": "Medium Leather",
+        "qty": 2,
+        "src": "farm"
+       },
+       {
+        "id": 2770,
+        "name": "Copper Ore",
+        "qty": 3,
+        "src": "farm"
+       },
+       {
+        "id": 2771,
+        "name": "Tin Ore",
+        "qty": 3,
+        "src": "farm"
+       },
+       {
+        "id": 2592,
+        "name": "Wool Cloth",
+        "qty": 2,
+        "src": "farm"
+       },
+       {
+        "id": 2880,
+        "name": "Weak Flux",
+        "qty": 1,
+        "src": "vendor"
+       }
+      ],
+      "profit": 6835
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 1206,
+       "name": "Moss Agate",
+       "qty": 1
+      },
+      {
+       "id": 2319,
+       "name": "Medium Leather",
+       "qty": 2
+      },
+      {
+       "id": 4371,
+       "name": "Bronze Tube",
+       "qty": 1
+      },
+      {
+       "id": 4375,
+       "name": "Whirring Bronze Gizmo",
+       "qty": 2
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "deposit_known": true,
+      "deposit_risk": 0,
+      "duration_h": 24,
+      "floor": 7300,
+      "floor_then": 4500,
+      "id": 4381,
+      "listing_deposit": 360,
+      "listings": 62,
+      "median": 7400,
+      "name": "Minor Recombobulator",
+      "pulled": 0,
+      "qty": 62,
+      "sold": 8,
+      "sold_at": 8750,
+      "vendor": 600,
+      "wait_h": 2.2003333333333335,
+      "war": null
+     },
+     "profit": 4512,
+     "recipe": "Minor Recombobulator",
+     "revenue": 6935,
+     "spell": 3952
+    },
+    {
+     "cost": 1935,
      "farm": {
       "cost": 200,
       "mats": [
@@ -3810,15 +3902,15 @@
       "wait_h": 2.000277777777778,
       "war": null
      },
-     "profit": 3530,
+     "profit": 3765,
      "recipe": "Gnomish Universal Remote",
      "revenue": 5700,
      "spell": 9269
     },
     {
-     "cost": 1551,
+     "cost": 1533,
      "farm": {
-      "cost": 400,
+      "cost": 365,
       "mats": [
        {
         "id": 2770,
@@ -3851,7 +3943,7 @@
         "src": "ah"
        }
       ],
-      "profit": 4348
+      "profit": 4383
      },
      "makes": 1.0,
      "mats": [
@@ -3896,13 +3988,13 @@
       "wait_h": 6.0008333333333335,
       "war": null
      },
-     "profit": 3197,
+     "profit": 3215,
      "recipe": "EZ-Thro Copper Bomb XL",
      "revenue": 4750,
      "spell": 1266908
     },
     {
-     "cost": 2080,
+     "cost": 1909,
      "farm": {
       "cost": 0,
       "mats": [
@@ -3965,13 +4057,94 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 2945,
+     "profit": 3116,
      "recipe": "Mechanical Repair Kit",
      "revenue": 7125,
      "spell": 15255
     },
     {
-     "cost": 1743,
+     "cost": 2254,
+     "farm": {
+      "cost": 1774,
+      "mats": [
+       {
+        "id": 2770,
+        "name": "Copper Ore",
+        "qty": 1,
+        "src": "farm"
+       },
+       {
+        "id": 2771,
+        "name": "Tin Ore",
+        "qty": 1,
+        "src": "farm"
+       },
+       {
+        "id": 1529,
+        "name": "Jade",
+        "qty": 1,
+        "src": "ah"
+       },
+       {
+        "id": 3864,
+        "name": "Citrine",
+        "qty": 1,
+        "src": "ah"
+       },
+       {
+        "id": 2880,
+        "name": "Weak Flux",
+        "qty": 1,
+        "src": "vendor"
+       }
+      ],
+      "profit": 2878
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 1529,
+       "name": "Jade",
+       "qty": 1
+      },
+      {
+       "id": 3864,
+       "name": "Citrine",
+       "qty": 1
+      },
+      {
+       "id": 4371,
+       "name": "Bronze Tube",
+       "qty": 1
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "deposit_known": true,
+      "deposit_risk": 1,
+      "duration_h": 24,
+      "floor": 4949,
+      "floor_then": 6300,
+      "id": 4407,
+      "listing_deposit": 720,
+      "listings": 15,
+      "median": 4975,
+      "name": "Accurate Scope",
+      "pulled": 0,
+      "qty": 69,
+      "sold": 6,
+      "sold_at": 4898,
+      "vendor": 1200,
+      "wait_h": 3.500694444444445,
+      "war": null
+     },
+     "profit": 2398,
+     "recipe": "Accurate Scope",
+     "revenue": 4653,
+     "spell": 3979
+    },
+    {
+     "cost": 1650,
      "makes": 1.0,
      "mats": [
       {
@@ -4005,10 +4178,68 @@
       "wait_h": 4.000555555555556,
       "war": null
      },
-     "profit": 1095,
+     "profit": 1188,
      "recipe": "Sandpaper",
      "revenue": 2838,
      "spell": 1249634
+    },
+    {
+     "cost": 914,
+     "farm": {
+      "cost": 0,
+      "mats": [
+       {
+        "id": 1210,
+        "name": "Shadowgem",
+        "qty": 2,
+        "src": "farm"
+       },
+       {
+        "id": 2319,
+        "name": "Medium Leather",
+        "qty": 4,
+        "src": "farm"
+       }
+      ],
+      "profit": 1777
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 1210,
+       "name": "Shadowgem",
+       "qty": 2
+      },
+      {
+       "id": 2319,
+       "name": "Medium Leather",
+       "qty": 4
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "deposit_known": true,
+      "deposit_risk": 0,
+      "duration_h": 24,
+      "floor": 1900,
+      "floor_then": 1400,
+      "id": 4373,
+      "listing_deposit": 433,
+      "listings": 137,
+      "median": 2300,
+      "name": "Shadow Goggles",
+      "pulled": 0,
+      "qty": 137,
+      "sold": 7,
+      "sold_at": 1871,
+      "vendor": 722,
+      "wait_h": 3.0004166666666667,
+      "war": null
+     },
+     "profit": 863,
+     "recipe": "Shadow Goggles",
+     "revenue": 1777,
+     "spell": 3940
     },
     {
      "cost": 696,
@@ -4067,208 +4298,11 @@
      "recipe": "Solid Dynamite",
      "revenue": 1451,
      "spell": 12586
-    },
-    {
-     "cost": 1164,
-     "farm": {
-      "cost": 0,
-      "mats": [
-       {
-        "id": 1210,
-        "name": "Shadowgem",
-        "qty": 2,
-        "src": "farm"
-       },
-       {
-        "id": 2319,
-        "name": "Medium Leather",
-        "qty": 4,
-        "src": "farm"
-       }
-      ],
-      "profit": 1777
-     },
-     "makes": 1.0,
-     "mats": [
-      {
-       "id": 1210,
-       "name": "Shadowgem",
-       "qty": 2
-      },
-      {
-       "id": 2319,
-       "name": "Medium Leather",
-       "qty": 4
-      }
-     ],
-     "out": {
-      "ahead": 0,
-      "deposit_known": true,
-      "deposit_risk": 0,
-      "duration_h": 24,
-      "floor": 1900,
-      "floor_then": 1400,
-      "id": 4373,
-      "listing_deposit": 433,
-      "listings": 137,
-      "median": 2300,
-      "name": "Shadow Goggles",
-      "pulled": 0,
-      "qty": 137,
-      "sold": 7,
-      "sold_at": 1871,
-      "vendor": 722,
-      "wait_h": 3.0004166666666667,
-      "war": null
-     },
-     "profit": 613,
-     "recipe": "Shadow Goggles",
-     "revenue": 1777,
-     "spell": 3940
-    },
-    {
-     "cost": 2123,
-     "farm": {
-      "cost": 100,
-      "mats": [
-       {
-        "id": 4234,
-        "name": "Heavy Leather",
-        "qty": 1,
-        "src": "farm"
-       },
-       {
-        "id": 2770,
-        "name": "Copper Ore",
-        "qty": 3,
-        "src": "farm"
-       },
-       {
-        "id": 2771,
-        "name": "Tin Ore",
-        "qty": 3,
-        "src": "farm"
-       },
-       {
-        "id": 2592,
-        "name": "Wool Cloth",
-        "qty": 2,
-        "src": "farm"
-       },
-       {
-        "id": 2880,
-        "name": "Weak Flux",
-        "qty": 1,
-        "src": "vendor"
-       }
-      ],
-      "profit": 2560
-     },
-     "makes": 1.0,
-     "mats": [
-      {
-       "id": 4234,
-       "name": "Heavy Leather",
-       "qty": 1
-      },
-      {
-       "id": 4371,
-       "name": "Bronze Tube",
-       "qty": 1
-      },
-      {
-       "id": 4375,
-       "name": "Whirring Bronze Gizmo",
-       "qty": 2
-      }
-     ],
-     "out": {
-      "ahead": 0,
-      "deposit_known": true,
-      "deposit_risk": null,
-      "duration_h": null,
-      "floor": 2800,
-      "floor_then": 2000,
-      "id": 279949,
-      "listing_deposit": null,
-      "listings": 5,
-      "median": 2800,
-      "name": "Repair Bot",
-      "pulled": null,
-      "qty": 12,
-      "sold": null,
-      "sold_at": null,
-      "vendor": 0,
-      "wait_h": null,
-      "war": null
-     },
-     "profit": 537,
-     "recipe": "Repair Bot",
-     "revenue": 2660,
-     "spell": 1263034
-    },
-    {
-     "cost": 742,
-     "farm": {
-      "cost": 0,
-      "mats": [
-       {
-        "id": 4234,
-        "name": "Heavy Leather",
-        "qty": 1,
-        "src": "farm"
-       },
-       {
-        "id": 2838,
-        "name": "Heavy Stone",
-        "qty": 1,
-        "src": "farm"
-       }
-      ],
-      "profit": 1139
-     },
-     "makes": 3.0,
-     "mats": [
-      {
-       "id": 4234,
-       "name": "Heavy Leather",
-       "qty": 1
-      },
-      {
-       "id": 4377,
-       "name": "Heavy Blasting Powder",
-       "qty": 1
-      }
-     ],
-     "out": {
-      "ahead": 0,
-      "deposit_known": true,
-      "deposit_risk": 1,
-      "duration_h": 24,
-      "floor": 400,
-      "floor_then": 480,
-      "id": 9313,
-      "listing_deposit": 100,
-      "listings": 101,
-      "median": 430,
-      "name": "Green Firework",
-      "pulled": 0,
-      "qty": 1685,
-      "sold": 57,
-      "sold_at": 467,
-      "vendor": 5,
-      "wait_h": 5.5008333333333335,
-      "war": null
-     },
-     "profit": 397,
-     "recipe": "Green Firework",
-     "revenue": 1140,
-     "spell": 23068
     }
    ],
    "top": [
     {
-     "cost": 41479,
+     "cost": 38499,
      "farm": {
       "cost": 0,
       "mats": [
@@ -4348,15 +4382,15 @@
       "wait_h": 7.00138888888889,
       "war": null
      },
-     "profit": 147800,
+     "profit": 150780,
      "recipe": "Salt Shaker",
      "revenue": 189430,
      "spell": 19567
     },
     {
-     "cost": 20134,
+     "cost": 19853,
      "farm": {
-      "cost": 15174,
+      "cost": 15093,
       "mats": [
        {
         "id": 4304,
@@ -4389,7 +4423,7 @@
         "src": "ah"
        }
       ],
-      "profit": 51326
+      "profit": 51407
      },
      "makes": 1.0,
      "mats": [
@@ -4439,15 +4473,15 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 46366,
+     "profit": 46647,
      "recipe": "Green Lens",
      "revenue": 66500,
      "spell": 12622
     },
     {
-     "cost": 18380,
+     "cost": 17656,
      "farm": {
-      "cost": 5530,
+      "cost": 5118,
       "mats": [
        {
         "id": 3858,
@@ -4480,7 +4514,7 @@
         "src": "ah"
        }
       ],
-      "profit": 48715
+      "profit": 49127
      },
      "makes": 1.0,
      "mats": [
@@ -4530,15 +4564,15 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 35865,
+     "profit": 36589,
      "recipe": "Mithril Heavy-bore Rifle",
      "revenue": 54245,
      "spell": 12614
     },
     {
-     "cost": 11408,
+     "cost": 11238,
      "farm": {
-      "cost": 5998,
+      "cost": 5988,
       "mats": [
        {
         "id": 7911,
@@ -4559,7 +4593,7 @@
         "src": "ah"
        }
       ],
-      "profit": 40999
+      "profit": 41009
      },
      "makes": 1.0,
      "mats": [
@@ -4599,15 +4633,15 @@
       "wait_h": 6.0008333333333335,
       "war": null
      },
-     "profit": 35589,
+     "profit": 35759,
      "recipe": "Sniper Scope",
      "revenue": 47025,
      "spell": 12620
     },
     {
-     "cost": 11838,
+     "cost": 11126,
      "farm": {
-      "cost": 9070,
+      "cost": 8666,
       "mats": [
        {
         "id": 4234,
@@ -4652,7 +4686,7 @@
         "src": "ah"
        }
       ],
-      "profit": 33965
+      "profit": 34369
      },
      "makes": 1.0,
      "mats": [
@@ -4697,15 +4731,15 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 31197,
+     "profit": 31909,
      "recipe": "Fire Goggles",
      "revenue": 43035,
      "spell": 12594
     },
     {
-     "cost": 11430,
+     "cost": 10640,
      "farm": {
-      "cost": 3080,
+      "cost": 2498,
       "mats": [
        {
         "id": 3858,
@@ -4738,7 +4772,7 @@
         "src": "ah"
        }
       ],
-      "profit": 37170
+      "profit": 37752
      },
      "makes": 1.0,
      "mats": [
@@ -4788,15 +4822,15 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 28820,
+     "profit": 29610,
      "recipe": "Gnomish Shrink Ray",
      "revenue": 46550,
      "spell": 12899
     },
     {
-     "cost": 9762,
+     "cost": 5066,
      "farm": {
-      "cost": 5200,
+      "cost": 900,
       "mats": [
        {
         "id": 1210,
@@ -4847,7 +4881,7 @@
         "src": "ah"
        }
       ],
-      "profit": 11899
+      "profit": 16199
      },
      "makes": 1.0,
      "mats": [
@@ -4903,13 +4937,13 @@
       "wait_h": 5.0008333333333335,
       "war": null
      },
-     "profit": 7337,
+     "profit": 12033,
      "recipe": "Goblin Jumper Cables",
      "revenue": 17100,
      "spell": 9273
     },
     {
-     "cost": 6077,
+     "cost": 5960,
      "farm": {
       "cost": 0,
       "mats": [
@@ -5001,15 +5035,15 @@
       "wait_h": 3.500694444444445,
       "war": null
      },
-     "profit": 6358,
+     "profit": 6475,
      "recipe": "Compact Harvest Reaper Kit",
      "revenue": 12438,
      "spell": 3963
     },
     {
-     "cost": 3782,
+     "cost": 3358,
      "farm": {
-      "cost": 2330,
+      "cost": 1918,
       "mats": [
        {
         "id": 4234,
@@ -5024,7 +5058,7 @@
         "src": "ah"
        }
       ],
-      "profit": 6970
+      "profit": 7382
      },
      "makes": 1.0,
      "mats": [
@@ -5059,13 +5093,13 @@
       "wait_h": 5.0008333333333335,
       "war": null
      },
-     "profit": 5518,
+     "profit": 5942,
      "recipe": "Bright-Eye Goggles",
      "revenue": 9310,
      "spell": 12587
     },
     {
-     "cost": 3916,
+     "cost": 3821,
      "farm": {
       "cost": 0,
       "mats": [
@@ -5157,13 +5191,13 @@
       "wait_h": 5.0008333333333335,
       "war": null
      },
-     "profit": 4736,
+     "profit": 4831,
      "recipe": "Advanced Target Dummy",
      "revenue": 8664,
      "spell": 3965
     },
     {
-     "cost": 2871,
+     "cost": 2423,
      "farm": {
       "cost": 100,
       "mats": [
@@ -5249,13 +5283,13 @@
       "wait_h": 2.2003333333333335,
       "war": null
      },
-     "profit": 4064,
+     "profit": 4512,
      "recipe": "Minor Recombobulator",
      "revenue": 6935,
      "spell": 3952
     },
     {
-     "cost": 2170,
+     "cost": 1935,
      "farm": {
       "cost": 200,
       "mats": [
@@ -5347,15 +5381,15 @@
       "wait_h": 2.000277777777778,
       "war": null
      },
-     "profit": 3530,
+     "profit": 3765,
      "recipe": "Gnomish Universal Remote",
      "revenue": 5700,
      "spell": 9269
     },
     {
-     "cost": 1551,
+     "cost": 1533,
      "farm": {
-      "cost": 400,
+      "cost": 365,
       "mats": [
        {
         "id": 2770,
@@ -5388,7 +5422,7 @@
         "src": "ah"
        }
       ],
-      "profit": 4348
+      "profit": 4383
      },
      "makes": 1.0,
      "mats": [
@@ -5433,13 +5467,13 @@
       "wait_h": 6.0008333333333335,
       "war": null
      },
-     "profit": 3197,
+     "profit": 3215,
      "recipe": "EZ-Thro Copper Bomb XL",
      "revenue": 4750,
      "spell": 1266908
     },
     {
-     "cost": 2080,
+     "cost": 1909,
      "farm": {
       "cost": 0,
       "mats": [
@@ -5502,7 +5536,7 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 2945,
+     "profit": 3116,
      "recipe": "Mechanical Repair Kit",
      "revenue": 7125,
      "spell": 15255
@@ -5523,7 +5557,7 @@
    "count": 17,
    "farmed": [
     {
-     "cost": 3500,
+     "cost": 2398,
      "farm": {
       "cost": 0,
       "mats": [
@@ -5564,13 +5598,13 @@
       "wait_h": 2.0526388888888887,
       "war": null
      },
-     "profit": 1250,
+     "profit": 2352,
      "recipe": "Smelt Thorium",
      "revenue": 4750,
      "spell": 16153
     },
     {
-     "cost": 1558,
+     "cost": 1515,
      "farm": {
       "cost": 0,
       "mats": [
@@ -5633,7 +5667,7 @@
       "wait_h": null,
       "war": null
      },
-     "profit": -85,
+     "profit": -42,
      "recipe": "Rock Garden",
      "revenue": 2873,
      "spell": 1262975
@@ -5686,7 +5720,7 @@
      "spell": 10098
     },
     {
-     "cost": 818,
+     "cost": 750,
      "farm": {
       "cost": 0,
       "mats": [
@@ -5727,13 +5761,13 @@
       "wait_h": 1.8712499999999999,
       "war": null
      },
-     "profit": 20,
+     "profit": 88,
      "recipe": "Smelt Mithril",
      "revenue": 838,
      "spell": 10097
     },
     {
-     "cost": 811,
+     "cost": 810,
      "farm": {
       "cost": 0,
       "mats": [
@@ -5774,13 +5808,13 @@
       "wait_h": 1.7145238095238093,
       "war": null
      },
-     "profit": -63,
+     "profit": -62,
      "recipe": "Smelt Gold",
      "revenue": 748,
      "spell": 3308
     },
     {
-     "cost": 749,
+     "cost": 900,
      "farm": {
       "cost": 0,
       "mats": [
@@ -5821,13 +5855,13 @@
       "wait_h": 2.000277777777778,
       "war": null
      },
-     "profit": -365,
+     "profit": -516,
      "recipe": "Smelt Silver",
      "revenue": 384,
      "spell": 2658
     },
     {
-     "cost": 875,
+     "cost": 850,
      "farm": {
       "cost": 500,
       "mats": [
@@ -5880,13 +5914,13 @@
       "wait_h": 4.000555555555556,
       "war": null
      },
-     "profit": -37,
+     "profit": -12,
      "recipe": "Smelt Steel",
      "revenue": 838,
      "spell": 3569
     },
     {
-     "cost": 346,
+     "cost": 289,
      "farm": {
       "cost": 0,
       "mats": [
@@ -5938,13 +5972,13 @@
       "wait_h": 2.0187500000000003,
       "war": null
      },
-     "profit": -14,
+     "profit": 43,
      "recipe": "Smelt Bronze",
      "revenue": 332,
      "spell": 2659
     },
     {
-     "cost": 326,
+     "cost": 307,
      "farm": {
       "cost": 0,
       "mats": [
@@ -5985,13 +6019,13 @@
       "wait_h": 2.0379166666666664,
       "war": null
      },
-     "profit": 1,
+     "profit": 20,
      "recipe": "Smelt Iron",
      "revenue": 327,
      "spell": 3307
     },
     {
-     "cost": 239,
+     "cost": 195,
      "farm": {
       "cost": 0,
       "mats": [
@@ -6032,13 +6066,13 @@
       "wait_h": 1.7145238095238093,
       "war": null
      },
-     "profit": -35,
+     "profit": 9,
      "recipe": "Smelt Tin",
      "revenue": 204,
      "spell": 3304
     },
     {
-     "cost": 93,
+     "cost": 69,
      "farm": {
       "cost": 0,
       "mats": [
@@ -6079,13 +6113,13 @@
       "wait_h": 1.3458333333333334,
       "war": null
      },
-     "profit": -36,
+     "profit": -12,
      "recipe": "Smelt Copper",
      "revenue": 57,
      "spell": 2657
     },
     {
-     "cost": 98,
+     "cost": 78,
      "farm": {
       "cost": 0,
       "mats": [
@@ -6137,154 +6171,17 @@
       "wait_h": 2.7504166666666667,
       "war": null
      },
-     "profit": -60,
+     "profit": -40,
      "recipe": "Lodestone",
      "revenue": 38,
      "spell": 1230161
     }
    ],
-   "losers": 9,
+   "losers": 7,
    "priced": 13,
    "starters": [
     {
-     "cost": 818,
-     "farm": {
-      "cost": 0,
-      "mats": [
-       {
-        "id": 3858,
-        "name": "Mithril Ore",
-        "qty": 1,
-        "src": "farm"
-       }
-      ],
-      "profit": 838
-     },
-     "makes": 1.0,
-     "mats": [
-      {
-       "id": 3858,
-       "name": "Mithril Ore",
-       "qty": 1
-      }
-     ],
-     "out": {
-      "ahead": 0,
-      "deposit_known": true,
-      "deposit_risk": 0,
-      "duration_h": 24,
-      "floor": 924,
-      "floor_then": 878,
-      "id": 3860,
-      "listing_deposit": 240,
-      "listings": 32,
-      "median": 925,
-      "name": "Mithril Bar",
-      "pulled": 4,
-      "qty": 1011,
-      "sold": 267,
-      "sold_at": 883,
-      "vendor": 400,
-      "wait_h": 1.8712499999999999,
-      "war": null
-     },
-     "profit": 20,
-     "recipe": "Smelt Mithril",
-     "revenue": 838,
-     "spell": 10097
-    },
-    {
-     "cost": 326,
-     "farm": {
-      "cost": 0,
-      "mats": [
-       {
-        "id": 2772,
-        "name": "Iron Ore",
-        "qty": 1,
-        "src": "farm"
-       }
-      ],
-      "profit": 327
-     },
-     "makes": 1.0,
-     "mats": [
-      {
-       "id": 2772,
-       "name": "Iron Ore",
-       "qty": 1
-      }
-     ],
-     "out": {
-      "ahead": 0,
-      "deposit_known": true,
-      "deposit_risk": 0,
-      "duration_h": 24,
-      "floor": 345,
-      "floor_then": 314,
-      "id": 3575,
-      "listing_deposit": 120,
-      "listings": 104,
-      "median": 375,
-      "name": "Iron Bar",
-      "pulled": 9,
-      "qty": 3030,
-      "sold": 413,
-      "sold_at": 354,
-      "vendor": 200,
-      "wait_h": 2.0379166666666664,
-      "war": null
-     },
-     "profit": 1,
-     "recipe": "Smelt Iron",
-     "revenue": 327,
-     "spell": 3307
-    }
-   ],
-   "top": [
-    {
-     "cost": 16130,
-     "makes": 1.0,
-     "mats": [
-      {
-       "id": 3857,
-       "name": "Coal",
-       "qty": 1,
-       "vendor": true
-      },
-      {
-       "id": 249426,
-       "name": "Pitchblende",
-       "qty": 2
-      }
-     ],
-     "out": {
-      "ahead": 0,
-      "deposit_known": true,
-      "deposit_risk": 282,
-      "duration_h": 24,
-      "floor": 170000,
-      "floor_then": 189998,
-      "id": 249726,
-      "listing_deposit": 1800,
-      "listings": 5,
-      "median": 172500,
-      "name": "Azerothium Bar",
-      "pulled": 0,
-      "qty": 34,
-      "sold": 6,
-      "sold_at": 189998,
-      "vendor": 3000,
-      "wait_h": 12.001666666666667,
-      "war": null
-     },
-     "profit": 145088,
-     "recipe": "Smelt Azerothium",
-     "revenue": 161500,
-     "spell": 1249637
-    },
-    {
-     "cost": 3500,
+     "cost": 2398,
      "farm": {
       "cost": 0,
       "mats": [
@@ -6325,13 +6222,13 @@
       "wait_h": 2.0526388888888887,
       "war": null
      },
-     "profit": 1250,
+     "profit": 2352,
      "recipe": "Smelt Thorium",
      "revenue": 4750,
      "spell": 16153
     },
     {
-     "cost": 818,
+     "cost": 750,
      "farm": {
       "cost": 0,
       "mats": [
@@ -6372,13 +6269,71 @@
       "wait_h": 1.8712499999999999,
       "war": null
      },
-     "profit": 20,
+     "profit": 88,
      "recipe": "Smelt Mithril",
      "revenue": 838,
      "spell": 10097
     },
     {
-     "cost": 326,
+     "cost": 289,
+     "farm": {
+      "cost": 0,
+      "mats": [
+       {
+        "id": 2770,
+        "name": "Copper Ore",
+        "qty": 1,
+        "src": "farm"
+       },
+       {
+        "id": 2771,
+        "name": "Tin Ore",
+        "qty": 1,
+        "src": "farm"
+       }
+      ],
+      "profit": 332
+     },
+     "makes": 2.0,
+     "mats": [
+      {
+       "id": 2840,
+       "name": "Copper Bar",
+       "qty": 1
+      },
+      {
+       "id": 3576,
+       "name": "Tin Bar",
+       "qty": 1
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "deposit_known": true,
+      "deposit_risk": 0,
+      "duration_h": 24,
+      "floor": 175,
+      "floor_then": 179,
+      "id": 2841,
+      "listing_deposit": 100,
+      "listings": 220,
+      "median": 189,
+      "name": "Bronze Bar",
+      "pulled": 1001,
+      "qty": 11007,
+      "sold": 1517,
+      "sold_at": 178,
+      "vendor": 50,
+      "wait_h": 2.0187500000000003,
+      "war": null
+     },
+     "profit": 43,
+     "recipe": "Smelt Bronze",
+     "revenue": 332,
+     "spell": 2659
+    },
+    {
+     "cost": 307,
      "farm": {
       "cost": 0,
       "mats": [
@@ -6419,10 +6374,346 @@
       "wait_h": 2.0379166666666664,
       "war": null
      },
-     "profit": 1,
+     "profit": 20,
      "recipe": "Smelt Iron",
      "revenue": 327,
      "spell": 3307
+    },
+    {
+     "cost": 195,
+     "farm": {
+      "cost": 0,
+      "mats": [
+       {
+        "id": 2771,
+        "name": "Tin Ore",
+        "qty": 1,
+        "src": "farm"
+       }
+      ],
+      "profit": 204
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 2771,
+       "name": "Tin Ore",
+       "qty": 1
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "deposit_known": true,
+      "deposit_risk": 0,
+      "duration_h": 24,
+      "floor": 215,
+      "floor_then": 208,
+      "id": 3576,
+      "listing_deposit": 100,
+      "listings": 221,
+      "median": 261,
+      "name": "Tin Bar",
+      "pulled": 178,
+      "qty": 3412,
+      "sold": 251,
+      "sold_at": 230,
+      "vendor": 35,
+      "wait_h": 1.7145238095238093,
+      "war": null
+     },
+     "profit": 9,
+     "recipe": "Smelt Tin",
+     "revenue": 204,
+     "spell": 3304
+    }
+   ],
+   "top": [
+    {
+     "cost": 16815,
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 3857,
+       "name": "Coal",
+       "qty": 1,
+       "vendor": true
+      },
+      {
+       "id": 249426,
+       "name": "Pitchblende",
+       "qty": 2
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "deposit_known": true,
+      "deposit_risk": 282,
+      "duration_h": 24,
+      "floor": 170000,
+      "floor_then": 189998,
+      "id": 249726,
+      "listing_deposit": 1800,
+      "listings": 5,
+      "median": 172500,
+      "name": "Azerothium Bar",
+      "pulled": 0,
+      "qty": 34,
+      "sold": 6,
+      "sold_at": 189998,
+      "vendor": 3000,
+      "wait_h": 12.001666666666667,
+      "war": null
+     },
+     "profit": 144403,
+     "recipe": "Smelt Azerothium",
+     "revenue": 161500,
+     "spell": 1249637
+    },
+    {
+     "cost": 2398,
+     "farm": {
+      "cost": 0,
+      "mats": [
+       {
+        "id": 10620,
+        "name": "Thorium Ore",
+        "qty": 1,
+        "src": "farm"
+       }
+      ],
+      "profit": 4750
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 10620,
+       "name": "Thorium Ore",
+       "qty": 1
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "deposit_known": true,
+      "deposit_risk": 0,
+      "duration_h": 24,
+      "floor": 5000,
+      "floor_then": 6500,
+      "id": 12359,
+      "listing_deposit": 360,
+      "listings": 44,
+      "median": 5000,
+      "name": "Thorium Bar",
+      "pulled": 92,
+      "qty": 917,
+      "sold": 61,
+      "sold_at": 6054,
+      "vendor": 600,
+      "wait_h": 2.0526388888888887,
+      "war": null
+     },
+     "profit": 2352,
+     "recipe": "Smelt Thorium",
+     "revenue": 4750,
+     "spell": 16153
+    },
+    {
+     "cost": 750,
+     "farm": {
+      "cost": 0,
+      "mats": [
+       {
+        "id": 3858,
+        "name": "Mithril Ore",
+        "qty": 1,
+        "src": "farm"
+       }
+      ],
+      "profit": 838
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 3858,
+       "name": "Mithril Ore",
+       "qty": 1
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "deposit_known": true,
+      "deposit_risk": 0,
+      "duration_h": 24,
+      "floor": 924,
+      "floor_then": 878,
+      "id": 3860,
+      "listing_deposit": 240,
+      "listings": 32,
+      "median": 925,
+      "name": "Mithril Bar",
+      "pulled": 4,
+      "qty": 1011,
+      "sold": 267,
+      "sold_at": 883,
+      "vendor": 400,
+      "wait_h": 1.8712499999999999,
+      "war": null
+     },
+     "profit": 88,
+     "recipe": "Smelt Mithril",
+     "revenue": 838,
+     "spell": 10097
+    },
+    {
+     "cost": 289,
+     "farm": {
+      "cost": 0,
+      "mats": [
+       {
+        "id": 2770,
+        "name": "Copper Ore",
+        "qty": 1,
+        "src": "farm"
+       },
+       {
+        "id": 2771,
+        "name": "Tin Ore",
+        "qty": 1,
+        "src": "farm"
+       }
+      ],
+      "profit": 332
+     },
+     "makes": 2.0,
+     "mats": [
+      {
+       "id": 2840,
+       "name": "Copper Bar",
+       "qty": 1
+      },
+      {
+       "id": 3576,
+       "name": "Tin Bar",
+       "qty": 1
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "deposit_known": true,
+      "deposit_risk": 0,
+      "duration_h": 24,
+      "floor": 175,
+      "floor_then": 179,
+      "id": 2841,
+      "listing_deposit": 100,
+      "listings": 220,
+      "median": 189,
+      "name": "Bronze Bar",
+      "pulled": 1001,
+      "qty": 11007,
+      "sold": 1517,
+      "sold_at": 178,
+      "vendor": 50,
+      "wait_h": 2.0187500000000003,
+      "war": null
+     },
+     "profit": 43,
+     "recipe": "Smelt Bronze",
+     "revenue": 332,
+     "spell": 2659
+    },
+    {
+     "cost": 307,
+     "farm": {
+      "cost": 0,
+      "mats": [
+       {
+        "id": 2772,
+        "name": "Iron Ore",
+        "qty": 1,
+        "src": "farm"
+       }
+      ],
+      "profit": 327
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 2772,
+       "name": "Iron Ore",
+       "qty": 1
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "deposit_known": true,
+      "deposit_risk": 0,
+      "duration_h": 24,
+      "floor": 345,
+      "floor_then": 314,
+      "id": 3575,
+      "listing_deposit": 120,
+      "listings": 104,
+      "median": 375,
+      "name": "Iron Bar",
+      "pulled": 9,
+      "qty": 3030,
+      "sold": 413,
+      "sold_at": 354,
+      "vendor": 200,
+      "wait_h": 2.0379166666666664,
+      "war": null
+     },
+     "profit": 20,
+     "recipe": "Smelt Iron",
+     "revenue": 327,
+     "spell": 3307
+    },
+    {
+     "cost": 195,
+     "farm": {
+      "cost": 0,
+      "mats": [
+       {
+        "id": 2771,
+        "name": "Tin Ore",
+        "qty": 1,
+        "src": "farm"
+       }
+      ],
+      "profit": 204
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 2771,
+       "name": "Tin Ore",
+       "qty": 1
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "deposit_known": true,
+      "deposit_risk": 0,
+      "duration_h": 24,
+      "floor": 215,
+      "floor_then": 208,
+      "id": 3576,
+      "listing_deposit": 100,
+      "listings": 221,
+      "median": 261,
+      "name": "Tin Bar",
+      "pulled": 178,
+      "qty": 3412,
+      "sold": 251,
+      "sold_at": 230,
+      "vendor": 35,
+      "wait_h": 1.7145238095238093,
+      "war": null
+     },
+     "profit": 9,
+     "recipe": "Smelt Tin",
+     "revenue": 204,
+     "spell": 3304
     }
    ],
    "wars": 0
@@ -8108,7 +8399,6 @@
   "2775": "uncommon",
   "2776": "uncommon",
   "279948": "common",
-  "279949": "common",
   "279960": "common",
   "2835": "common",
   "2836": "common",
@@ -8169,6 +8459,7 @@
   "4400": "common",
   "4403": "common",
   "4404": "common",
+  "4407": "common",
   "4461": "common",
   "4625": "common",
   "5500": "uncommon",
@@ -8210,8 +8501,7 @@
   "8845": "common",
   "8846": "common",
   "9060": "common",
-  "9061": "common",
-  "9313": "common"
+  "9061": "common"
  },
  "vendor": [
   {

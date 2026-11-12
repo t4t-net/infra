@@ -55,6 +55,19 @@ def analyze(args, db):
         print(f"{name[:35]:<36}{g(cost):>10}{g(revenue):>11}{g(profit):>10}{n:>5}")
 
 
+def walk_book(listings, q, fallback_unit):
+    """copper 4 q units bought cheapest first, not q x th median: on th 2026-11-11 copper bar book th median
+    (85c) overstated a single 16-bar craft by 42%. past th book's end th rest goes at fallback_unit"""
+    cost, left = 0, q
+    for l in sorted((l for l in listings if l.unit_price is not None), key=lambda l: l.unit_price):
+        take = min(left, l.quantity)
+        cost += take * l.unit_price
+        left -= take
+        if left <= 0:
+            break
+    return cost + left * fallback_unit
+
+
 def covered_seconds(spans):
     """length of th union of (from, to) stretches"""
     total, end = 0, None
@@ -185,6 +198,15 @@ def market_data(args, db):
             "vendor": (items.get(i) or (None, None))[1],
         }
 
+    # th freshest book 4 each item w raw listings: th last api dump's, or a watch poll if one came after it
+    books = {i: s[-1] for i, s in obs.items()}
+    for i, s in watch.items():
+        if i not in books or s[-1].t > books[i].t:
+            books[i] = s[-1]
+
+    def buy_cost(i, q):
+        return walk_book(books[i].listings if i in books else (), q, now[i][0])
+
     # farming it urself: gathered mats r free, vendor mats cost wat th vendor charges, nd intermediates (bars,
     # bolts, leather) r made from their own mats if this profession or mining smelting can. anything else
     # (dust, drops, other professions' parts) still gets bought at median
@@ -197,8 +219,8 @@ def market_data(args, db):
     for rid, i, q in db.execute("select recipe_id, item_id, quantity from reagent"):
         reagents[rid].append((i, q))
 
-    def farmed(i, prof, busy=frozenset()):
-        """(copper, {(item, source): qty}) 4 one of item i, or None if theres no way 2 get it"""
+    def farmed(i, prof, busy=frozenset(), q=1):
+        """(copper, {(item, source): qty}) per one of item i when getting q of them, or None if theres no way"""
         nm, _, buy = items.get(i, (None, None, None))
         if nm in VENDOR_MATS and buy:
             return buy, {(i, "vendor"): 1}
@@ -207,7 +229,7 @@ def market_data(args, db):
             # leather etc drop as-is, only bars get made (else heavy leather turns into 17k ruined scraps lol)
             if pid not in ((186,) if i in gathered else (prof, 186)) or rid in busy:
                 continue
-            got = farm_recipe(rid, prof, busy | {rid})
+            got = farm_recipe(rid, prof, busy | {rid}, q / per)
             if got and (best is None or got[0] / per < best[0]):
                 best = (got[0] / per, {k: q / per for k, q in got[1].items()})
         if best and any(src == "farm" for _, src in best[1]):
@@ -216,13 +238,14 @@ def market_data(args, db):
         if i in gathered:
             return 0, {(i, "farm"): 1}
         if i in now:
-            return now[i][0], {(i, "ah"): 1}
+            return buy_cost(i, q) / q, {(i, "ah"): 1}
         return best
 
-    def farm_recipe(rid, prof, busy=frozenset()):
+    def farm_recipe(rid, prof, busy=frozenset(), times=1):
+        """(copper, {(item, source): qty}) per craft when crafting it `times` times"""
         cost, need = 0, defaultdict(float)
         for i, q in reagents[rid]:
-            got = farmed(i, prof, busy)
+            got = farmed(i, prof, busy, q * times)
             if got is None:
                 return None
             cost += got[0] * q
@@ -246,7 +269,7 @@ def market_data(args, db):
                     cost += buy * q
                     mats.append({"id": i, "name": nm, "qty": q, "vendor": True})
                 elif i in now:
-                    cost += now[i][0] * q
+                    cost += buy_cost(i, q)
                     mats.append({"id": i, "name": nm or f"item {i}", "qty": q})
                 else:
                     ok = False

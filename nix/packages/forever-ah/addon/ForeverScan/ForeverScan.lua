@@ -23,10 +23,16 @@ local WATCH_DEFAULT = { 12359, 3860, 3575, 2841, 2840, 1081, 5784, 774, 814, 430
 local WATCH_DEFAULT_VERSION = 2
 local WATCH_DEFAULT_V1 = 12  -- how many of WATCH_DEFAULT a v1 list already got
 
+-- every timestamp comes from th pc's own clock. forever's now() came back from a relog on
+-- 2026-11-12 reading pacific wall time as if it were utc (exactly 8h behind time()), which made th dump
+-- throttle wait ~6h nd stamped watch polls in th past. th saved keys r still called server_time / t so old
+-- files nd th importer keep working
+local now = time
+
 local db
 local watch = { i = 0 }   -- pending = th search waiting on its results
 local ticker
-local savedThrough        -- server time th saved file covers: everything up 2 this login or /reload
+local savedThrough        -- time th saved file covers: everything up 2 this login or /reload
 local snoozeUntil = 0
 local scan                -- th scan in flight, nil when idle
 local gen = 0             -- bumps on every update so stale settle timers bail
@@ -118,7 +124,12 @@ local function start(force)
     end
     -- forever allows 1 full dump per 15 min, counted from th last one tht delivered. throttled
     -- requests dont reset it, they just come back empty, so skip rather than burn a timeout
-    local wait = db.last_dump and (db.last_dump + DUMP_EVERY_S - GetServerTime())
+    local wait = db.last_dump and (db.last_dump + DUMP_EVERY_S - now())
+    if wait and wait > DUMP_EVERY_S then
+        -- th last dump is in th future, so a clock jumped. th real throttle is unknowable, just try
+        say("last dump is %dm in th future, clock jumped? trying anyway", floor((wait - DUMP_EVERY_S) / 60))
+        wait = nil
+    end
     if wait and wait > 0 and not force then
         say("last dump was %ds ago, next one allowed in %dm%02ds (/fscan force 2 try anyway)",
             DUMP_EVERY_S - wait, floor(wait / 60), wait % 60)
@@ -127,12 +138,13 @@ local function start(force)
     local version, build, _, toc = GetBuildInfo()
     scan = {
         t0 = debugprofilestop(),
-        server_time = GetServerTime(),
+        server_time = now(),
+        server_clock = GetServerTime(),  -- blizz's idea of th time, kept 2 spot it drifting again
         build = ("%s.%s"):format(version, build),
         toc = toc,
         faction = UnitFactionGroup("player"),
         character = UnitName("player"),
-        since_last = db.last_request and (GetServerTime() - db.last_request) or nil,
+        since_last = db.last_request and (now() - db.last_request) or nil,
         events = {},
         throttle = {},
     }
@@ -171,7 +183,7 @@ StaticPopupDialogs.FOREVERSCAN_RELOAD = {
         ReloadUI()
     end,
     OnCancel = function()
-        snoozeUntil = GetServerTime() + REMIND_S
+        snoozeUntil = now() + REMIND_S
     end,
     timeout = 0,
     whileDead = true,
@@ -180,7 +192,7 @@ StaticPopupDialogs.FOREVERSCAN_RELOAD = {
 }
 
 local function remind(anyAge)
-    if InCombatLockdown() or scan or GetServerTime() < snoozeUntil then
+    if InCombatLockdown() or scan or now() < snoozeUntil then
         return
     end
     local oldest
@@ -196,11 +208,11 @@ local function remind(anyAge)
             oldest = math.min(oldest or s.server_time, s.server_time)
         end
     end
-    local age = oldest and GetServerTime() - oldest
+    local age = oldest and now() - oldest
     if not age or (not anyAge and age < REMIND_S) then
         return
     end
-    snoozeUntil = GetServerTime() + REMIND_S
+    snoozeUntil = now() + REMIND_S
     StaticPopup_Show("FOREVERSCAN_RELOAD", age < 120 and "a minute" or ("%d minutes"):format(floor(age / 60)))
 end
 
@@ -210,7 +222,7 @@ local function watchTick()
     if not db.watch_on or #list == 0 or scan or not watchSafe() then
         return
     end
-    if watch.pending and GetServerTime() - watch.pending.server_time < WATCH_WAIT_S then
+    if watch.pending and now() - watch.pending.server_time < WATCH_WAIT_S then
         return
     end
     if not C_AuctionHouse.IsThrottledMessageSystemReady() then
@@ -218,7 +230,7 @@ local function watchTick()
     end
     watch.i = watch.i % #list + 1
     local item = list[watch.i]
-    watch.pending = { item = item, t0 = debugprofilestop(), server_time = GetServerTime() }
+    watch.pending = { item = item, t0 = debugprofilestop(), server_time = now() }
     C_AuctionHouse.SendSearchQuery(C_AuctionHouse.MakeItemKey(item),
         { { sortOrder = Enum.AuctionHouseSortOrder.Price, reverseSort = false } }, false)
 end
@@ -255,7 +267,7 @@ end
 local DEPOSIT_QTYS = { 1, 20 }
 
 local function recordDeposits()
-    local t, done = GetServerTime(), {}
+    local t, done = now(), {}
     db.deposit_durations = { AUCTION_DURATION_ONE, AUCTION_DURATION_TWO, AUCTION_DURATION_THREE }
     local function put(id, kind, calc)
         done[id] = true
@@ -344,7 +356,7 @@ f:SetScript("OnEvent", function(_, event, arg)
         end
         db.watch_polls = db.watch_polls or {}
         db.deposits = db.deposits or {}
-        savedThrough = GetServerTime()
+        savedThrough = now()
         f:RegisterEvent("AUCTION_HOUSE_SHOW")
         f:RegisterEvent("AUCTION_HOUSE_CLOSED")
         f:RegisterEvent("REPLICATE_ITEM_LIST_UPDATE")
@@ -436,7 +448,7 @@ SlashCmdList.FOREVERSCAN = function(msg)
         elseif C_AuctionHouse.GetNumReplicateItems() == 0 then
             say("nothing held, needs a fresh dump")
         else
-            scan = { t0 = debugprofilestop(), server_time = GetServerTime(), character = UnitName("player"),
+            scan = { t0 = debugprofilestop(), server_time = now(), character = UnitName("player"),
                      reread = true, events = {}, throttle = {} }
             finish()
         end
@@ -453,7 +465,7 @@ SlashCmdList.FOREVERSCAN = function(msg)
         local last_poll = db.watch_polls[#db.watch_polls]
         say("watch %s%s, %d polls saved, last %s", db.watch_on and "on" or "off",
             ticker and (watchSafe() and " nd polling" or " but paused on this screen") or "", #db.watch_polls,
-            last_poll and ("%ds ago (%s: %d listings, %d ms)"):format(GetServerTime() - last_poll.t,
+            last_poll and ("%ds ago (%s: %d listings, %d ms)"):format(now() - last_poll.t,
                 itemName(last_poll.item), last_poll.n, last_poll.ms) or "never")
         if scan then
             local last = scan.events[#scan.events]

@@ -123,8 +123,15 @@ def addon_import(args, db):
                 print(f"  sample link {link}")
             check_against_api(db, sid, args.house, s["server_time"])
 
-    new = rows = 0
+    new = rows = jumped = 0
+    latest = 0
     for p in sv.get("watch_polls") or []:
+        # polls r appended in order, so one well behind th newest b4 it came from a clock jump (forever's
+        # GetServerTime() read 8h behind after a relog on 2026-11-12). its stamp is garbage, skip it
+        if p["t"] < latest - 600:
+            jumped += 1
+            continue
+        latest = max(latest, p["t"])
         cur = db.execute(
             "insert or ignore into addon_watch_poll (server_ts, character, house_id, item_id, results, full, ms) "
             "values (?, ?, ?, ?, ?, ?, ?)",
@@ -141,6 +148,8 @@ def addon_import(args, db):
     db.commit()
     if new:
         print(f"watch: {new} new polls, {rows} listings")
+    if jumped:
+        print(f"watch: skipped {jumped} polls stamped b4 th poll ahead of them (clock jumped back)")
 
     db.executemany("insert or replace into addon_deposit_duration values (?, ?)",
                    list(enumerate(sv.get("deposit_durations") or [], 1)))

@@ -42,7 +42,7 @@
         "src": "ah"
        }
       ],
-      "profit": 32712
+      "profit": 32806
      },
      "makes": 1.0,
      "mats": [
@@ -84,7 +84,7 @@
       "name": "Blue Glittering Axe",
       "pulled": null,
       "qty": 21,
-      "realizable": 42400,
+      "realizable": 42499,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
@@ -94,9 +94,9 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 15079,
+     "profit": 15173,
      "recipe": "Blue Glittering Axe",
-     "revenue": 40280,
+     "revenue": 40374,
      "spell": 9995
     },
     {
@@ -310,7 +310,7 @@
         "src": "ah"
        }
       ],
-      "profit": 15301
+      "profit": 15395
      },
      "makes": 1.0,
      "mats": [
@@ -352,7 +352,7 @@
       "name": "Mithril Warhammer",
       "pulled": 0,
       "qty": 7,
-      "realizable": 56500,
+      "realizable": 56599,
       "sold": 0,
       "sold_at": null,
       "sold_maybe": 0,
@@ -362,9 +362,9 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 2580,
+     "profit": 2674,
      "recipe": "Mithril Warhammer",
-     "revenue": 53675,
+     "revenue": 53769,
      "spell": 1252357
     },
     {
@@ -379,7 +379,7 @@
         "src": "farm"
        }
       ],
-      "profit": 9564
+      "profit": 9658
      },
      "makes": 1.0,
      "mats": [
@@ -406,7 +406,7 @@
       "name": "Heavy Mithril Breastplate",
       "pulled": 0,
       "qty": 18,
-      "realizable": 10400,
+      "realizable": 10499,
       "sold": 1,
       "sold_at": 12000,
       "sold_maybe": 0,
@@ -416,9 +416,9 @@
       "wait_h": 9.001388888888888,
       "war": null
      },
-     "profit": -4404,
+     "profit": -4310,
      "recipe": "Heavy Mithril Breastplate",
-     "revenue": 9880,
+     "revenue": 9974,
      "spell": 9959
     },
     {
@@ -445,7 +445,7 @@
         "src": "farm"
        }
       ],
-      "profit": 9405
+      "profit": 9499
      },
      "makes": 1.0,
      "mats": [
@@ -482,7 +482,7 @@
       "name": "Sterling Silver Gauntlet",
       "pulled": null,
       "qty": 12,
-      "realizable": 9900,
+      "realizable": 9999,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
@@ -492,9 +492,9 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 6037,
+     "profit": 6131,
      "recipe": "Sterling Silver Gauntlet",
-     "revenue": 9405,
+     "revenue": 9499,
      "spell": 1252234
     },
     {
@@ -527,7 +527,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 9390
+      "profit": 9484
      },
      "makes": 1.0,
      "mats": [
@@ -564,7 +564,7 @@
       "name": "Golden Scale Coif",
       "pulled": 0,
       "qty": 28,
-      "realizable": 14400,
+      "realizable": 14499,
       "sold": 1,
       "sold_at": 15000,
       "sold_maybe": 0,
@@ -574,9 +574,9 @@
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": 2012,
+     "profit": 2106,
      "recipe": "Golden Scale Coif",
-     "revenue": 13680,
+     "revenue": 13774,
      "spell": 3503
     },
     {
@@ -667,7 +667,7 @@
         "src": "farm"
        }
       ],
-      "profit": 7699
+      "profit": 7793
      },
      "makes": 1.0,
      "mats": [
@@ -694,7 +694,7 @@
       "name": "Mithril Plate Pants",
       "pulled": 2,
       "qty": 30,
-      "realizable": 8900,
+      "realizable": 8999,
       "sold": 1,
       "sold_at": 9000,
       "sold_maybe": 0,
@@ -704,9 +704,9 @@
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": -2777,
+     "profit": -2683,
      "recipe": "Mithril Plate Pants",
-     "revenue": 8455,
+     "revenue": 8549,
      "spell": 9931
     },
     {
@@ -831,7 +831,7 @@
         "src": "farm"
        }
       ],
-      "profit": 6049
+      "profit": 6143
      },
      "makes": 1.0,
      "mats": [
@@ -863,7 +863,7 @@
       "name": "Heavy Mithril Pants",
       "pulled": 0,
       "qty": 10,
-      "realizable": 6900,
+      "realizable": 6999,
       "sold": 1,
       "sold_at": 7000,
       "sold_maybe": 0,
@@ -873,9 +873,9 @@
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": -3916,
+     "profit": -3822,
      "recipe": "Heavy Mithril Pants",
-     "revenue": 6555,
+     "revenue": 6649,
      "spell": 9933
     },
     {
@@ -914,7 +914,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 6023
+      "profit": 6117
      },
      "makes": 1.0,
      "mats": [
@@ -956,7 +956,7 @@
       "name": "Golden Scale Cuirass",
       "pulled": 0,
       "qty": 6,
-      "realizable": 14300,
+      "realizable": 14399,
       "sold": 1,
       "sold_at": 14400,
       "sold_maybe": 0,
@@ -966,9 +966,9 @@
       "wait_h": 7.00138888888889,
       "war": null
      },
-     "profit": -5551,
+     "profit": -5457,
      "recipe": "Golden Scale Cuirass",
-     "revenue": 13585,
+     "revenue": 13679,
      "spell": 3511
     },
     {
@@ -1001,7 +1001,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 5897
+      "profit": 5991
      },
      "makes": 1.0,
      "mats": [
@@ -1039,7 +1039,7 @@
       "name": "Bronze Dory",
       "pulled": 0,
       "qty": 30,
-      "realizable": 6629,
+      "realizable": 6728,
       "sold": 3,
       "sold_at": 6933,
       "sold_maybe": 0,
@@ -1049,9 +1049,9 @@
       "wait_h": 3.6672222222222226,
       "war": null
      },
-     "profit": 4417,
+     "profit": 4511,
      "recipe": "Bronze Dory",
-     "revenue": 6297,
+     "revenue": 6391,
      "spell": 1252352
     },
     {
@@ -1078,7 +1078,7 @@
         "src": "farm"
        }
       ],
-      "profit": 5129
+      "profit": 5223
      },
      "makes": 1.0,
      "mats": [
@@ -1115,7 +1115,7 @@
       "name": "Golden Scale Leggings",
       "pulled": 0,
       "qty": 13,
-      "realizable": 5400,
+      "realizable": 5499,
       "sold": 2,
       "sold_at": 5500,
       "sold_maybe": 0,
@@ -1125,13 +1125,13 @@
       "wait_h": 3.0005555555555556,
       "war": null
      },
-     "profit": -1259,
+     "profit": -1165,
      "recipe": "Golden Scale Leggings",
-     "revenue": 5130,
+     "revenue": 5224,
      "spell": 3507
     }
    ],
-   "losers": 90,
+   "losers": 88,
    "priced": 117,
    "starters": [
     {
@@ -1164,7 +1164,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 5897
+      "profit": 5991
      },
      "makes": 1.0,
      "mats": [
@@ -1202,7 +1202,7 @@
       "name": "Bronze Dory",
       "pulled": 0,
       "qty": 30,
-      "realizable": 6629,
+      "realizable": 6728,
       "sold": 3,
       "sold_at": 6933,
       "sold_maybe": 0,
@@ -1212,9 +1212,9 @@
       "wait_h": 3.6672222222222226,
       "war": null
      },
-     "profit": 4417,
+     "profit": 4511,
      "recipe": "Bronze Dory",
-     "revenue": 6297,
+     "revenue": 6391,
      "spell": 1252352
     },
     {
@@ -1229,7 +1229,7 @@
         "src": "farm"
        }
       ],
-      "profit": 4560
+      "profit": 4654
      },
      "makes": 1.0,
      "mats": [
@@ -1256,7 +1256,7 @@
       "name": "Azure Skyforged Gauntlets",
       "pulled": null,
       "qty": 9,
-      "realizable": 4800,
+      "realizable": 4899,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
@@ -1266,9 +1266,9 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 4070,
+     "profit": 4164,
      "recipe": "Azure Skyforged Gauntlets",
-     "revenue": 4560,
+     "revenue": 4654,
      "spell": 1301447
     },
     {
@@ -1283,7 +1283,7 @@
         "src": "farm"
        }
       ],
-      "profit": 3689
+      "profit": 3783
      },
      "makes": 1.0,
      "mats": [
@@ -1310,7 +1310,7 @@
       "name": "Cloudy Skyforged Gauntlets",
       "pulled": 0,
       "qty": 13,
-      "realizable": 3900,
+      "realizable": 3999,
       "sold": 1,
       "sold_at": 4000,
       "sold_maybe": 0,
@@ -1320,9 +1320,9 @@
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": 3199,
+     "profit": 3293,
      "recipe": "Cloudy Skyforged Gauntlets",
-     "revenue": 3705,
+     "revenue": 3799,
      "spell": 1301423
     },
     {
@@ -1337,7 +1337,7 @@
         "src": "farm"
        }
       ],
-      "profit": 3515
+      "profit": 3609
      },
      "makes": 1.0,
      "mats": [
@@ -1364,7 +1364,7 @@
       "name": "Cloudy Skyforged Wristguards",
       "pulled": null,
       "qty": 8,
-      "realizable": 3700,
+      "realizable": 3799,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
@@ -1374,9 +1374,9 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 3165,
+     "profit": 3259,
      "recipe": "Cloudy Skyforged Wristguards",
-     "revenue": 3515,
+     "revenue": 3609,
      "spell": 1301422
     },
     {
@@ -1445,7 +1445,7 @@
         "src": "farm"
        }
       ],
-      "profit": 2658
+      "profit": 2752
      },
      "makes": 1.0,
      "mats": [
@@ -1472,7 +1472,7 @@
       "name": "Azure Skyforged Chain",
       "pulled": 0,
       "qty": 11,
-      "realizable": 2800,
+      "realizable": 2899,
       "sold": 2,
       "sold_at": 2900,
       "sold_maybe": 0,
@@ -1482,9 +1482,9 @@
       "wait_h": 6.0008333333333335,
       "war": null
      },
-     "profit": 2238,
+     "profit": 2332,
      "recipe": "Azure Skyforged Chain",
-     "revenue": 2660,
+     "revenue": 2754,
      "spell": 1301448
     },
     {
@@ -1499,7 +1499,7 @@
         "src": "farm"
        }
       ],
-      "profit": 1898
+      "profit": 1992
      },
      "makes": 1.0,
      "mats": [
@@ -1526,7 +1526,7 @@
       "name": "Azure Skyforged Greaves",
       "pulled": 0,
       "qty": 6,
-      "realizable": 2000,
+      "realizable": 2099,
       "sold": 1,
       "sold_at": 2100,
       "sold_maybe": 0,
@@ -1536,9 +1536,9 @@
       "wait_h": 6.001111111111111,
       "war": null
      },
-     "profit": 1408,
+     "profit": 1502,
      "recipe": "Azure Skyforged Greaves",
-     "revenue": 1900,
+     "revenue": 1994,
      "spell": 1301450
     },
     {
@@ -1583,7 +1583,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 1880
+      "profit": 1974
      },
      "makes": 1.0,
      "mats": [
@@ -1631,7 +1631,7 @@
       "name": "Big Bronze Knife",
       "pulled": 1,
       "qty": 97,
-      "realizable": 2400,
+      "realizable": 2499,
       "sold": 10,
       "sold_at": 2900,
       "sold_maybe": 0,
@@ -1641,9 +1641,9 @@
       "wait_h": 2.000277777777778,
       "war": null
      },
-     "profit": 615,
+     "profit": 709,
      "recipe": "Big Bronze Knife",
-     "revenue": 2280,
+     "revenue": 2374,
      "spell": 3491
     }
    ],
@@ -1678,7 +1678,7 @@
         "src": "ah"
        }
       ],
-      "profit": 32712
+      "profit": 32806
      },
      "makes": 1.0,
      "mats": [
@@ -1720,7 +1720,7 @@
       "name": "Blue Glittering Axe",
       "pulled": null,
       "qty": 21,
-      "realizable": 42400,
+      "realizable": 42499,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
@@ -1730,9 +1730,9 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 15079,
+     "profit": 15173,
      "recipe": "Blue Glittering Axe",
-     "revenue": 40280,
+     "revenue": 40374,
      "spell": 9995
     },
     {
@@ -1940,7 +1940,7 @@
         "src": "farm"
        }
       ],
-      "profit": 9405
+      "profit": 9499
      },
      "makes": 1.0,
      "mats": [
@@ -1977,7 +1977,7 @@
       "name": "Sterling Silver Gauntlet",
       "pulled": null,
       "qty": 12,
-      "realizable": 9900,
+      "realizable": 9999,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
@@ -1987,9 +1987,9 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 6037,
+     "profit": 6131,
      "recipe": "Sterling Silver Gauntlet",
-     "revenue": 9405,
+     "revenue": 9499,
      "spell": 1252234
     },
     {
@@ -2022,7 +2022,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 5897
+      "profit": 5991
      },
      "makes": 1.0,
      "mats": [
@@ -2060,7 +2060,7 @@
       "name": "Bronze Dory",
       "pulled": 0,
       "qty": 30,
-      "realizable": 6629,
+      "realizable": 6728,
       "sold": 3,
       "sold_at": 6933,
       "sold_maybe": 0,
@@ -2070,9 +2070,9 @@
       "wait_h": 3.6672222222222226,
       "war": null
      },
-     "profit": 4417,
+     "profit": 4511,
      "recipe": "Bronze Dory",
-     "revenue": 6297,
+     "revenue": 6391,
      "spell": 1252352
     },
     {
@@ -2087,7 +2087,7 @@
         "src": "farm"
        }
       ],
-      "profit": 4560
+      "profit": 4654
      },
      "makes": 1.0,
      "mats": [
@@ -2114,7 +2114,7 @@
       "name": "Azure Skyforged Gauntlets",
       "pulled": null,
       "qty": 9,
-      "realizable": 4800,
+      "realizable": 4899,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
@@ -2124,9 +2124,9 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 4070,
+     "profit": 4164,
      "recipe": "Azure Skyforged Gauntlets",
-     "revenue": 4560,
+     "revenue": 4654,
      "spell": 1301447
     },
     {
@@ -2141,7 +2141,7 @@
         "src": "farm"
        }
       ],
-      "profit": 3689
+      "profit": 3783
      },
      "makes": 1.0,
      "mats": [
@@ -2168,7 +2168,7 @@
       "name": "Cloudy Skyforged Gauntlets",
       "pulled": 0,
       "qty": 13,
-      "realizable": 3900,
+      "realizable": 3999,
       "sold": 1,
       "sold_at": 4000,
       "sold_maybe": 0,
@@ -2178,9 +2178,9 @@
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": 3199,
+     "profit": 3293,
      "recipe": "Cloudy Skyforged Gauntlets",
-     "revenue": 3705,
+     "revenue": 3799,
      "spell": 1301423
     },
     {
@@ -2195,7 +2195,7 @@
         "src": "farm"
        }
       ],
-      "profit": 3515
+      "profit": 3609
      },
      "makes": 1.0,
      "mats": [
@@ -2222,7 +2222,7 @@
       "name": "Cloudy Skyforged Wristguards",
       "pulled": null,
       "qty": 8,
-      "realizable": 3700,
+      "realizable": 3799,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
@@ -2232,10 +2232,97 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 3165,
+     "profit": 3259,
      "recipe": "Cloudy Skyforged Wristguards",
-     "revenue": 3515,
+     "revenue": 3609,
      "spell": 1301422
+    },
+    {
+     "cost": 14639,
+     "farm": {
+      "cost": 1918,
+      "mats": [
+       {
+        "id": 3858,
+        "name": "Mithril Ore",
+        "qty": 12,
+        "src": "farm"
+       },
+       {
+        "id": 4234,
+        "name": "Heavy Leather",
+        "qty": 4,
+        "src": "farm"
+       },
+       {
+        "id": 7912,
+        "name": "Solid Stone",
+        "qty": 4,
+        "src": "farm"
+       },
+       {
+        "id": 3864,
+        "name": "Citrine",
+        "qty": 2,
+        "src": "ah"
+       }
+      ],
+      "profit": 15395
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 3860,
+       "name": "Mithril Bar",
+       "qty": 12
+      },
+      {
+       "id": 3864,
+       "name": "Citrine",
+       "qty": 2
+      },
+      {
+       "id": 4234,
+       "name": "Heavy Leather",
+       "qty": 4
+      },
+      {
+       "id": 7966,
+       "name": "Solid Grinding Stone",
+       "qty": 1
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "as_of": 1794446563,
+      "clearing": null,
+      "deposit_known": true,
+      "deposit_risk": 36456,
+      "duration_h": 2,
+      "floor": 56600,
+      "floor_then": 31000,
+      "id": 250608,
+      "listing_deposit": 217,
+      "listings": 7,
+      "live": false,
+      "median": 56600,
+      "name": "Mithril Warhammer",
+      "pulled": 0,
+      "qty": 7,
+      "realizable": 56599,
+      "sold": 0,
+      "sold_at": null,
+      "sold_maybe": 0,
+      "source": "api",
+      "trend_per_h": null,
+      "vendor": 4356,
+      "wait_h": null,
+      "war": null
+     },
+     "profit": 2674,
+     "recipe": "Mithril Warhammer",
+     "revenue": 53769,
+     "spell": 1252357
     },
     {
      "cost": 350,
@@ -2292,93 +2379,6 @@
      "spell": 1301446
     },
     {
-     "cost": 14639,
-     "farm": {
-      "cost": 1918,
-      "mats": [
-       {
-        "id": 3858,
-        "name": "Mithril Ore",
-        "qty": 12,
-        "src": "farm"
-       },
-       {
-        "id": 4234,
-        "name": "Heavy Leather",
-        "qty": 4,
-        "src": "farm"
-       },
-       {
-        "id": 7912,
-        "name": "Solid Stone",
-        "qty": 4,
-        "src": "farm"
-       },
-       {
-        "id": 3864,
-        "name": "Citrine",
-        "qty": 2,
-        "src": "ah"
-       }
-      ],
-      "profit": 15301
-     },
-     "makes": 1.0,
-     "mats": [
-      {
-       "id": 3860,
-       "name": "Mithril Bar",
-       "qty": 12
-      },
-      {
-       "id": 3864,
-       "name": "Citrine",
-       "qty": 2
-      },
-      {
-       "id": 4234,
-       "name": "Heavy Leather",
-       "qty": 4
-      },
-      {
-       "id": 7966,
-       "name": "Solid Grinding Stone",
-       "qty": 1
-      }
-     ],
-     "out": {
-      "ahead": 0,
-      "as_of": 1794446563,
-      "clearing": null,
-      "deposit_known": true,
-      "deposit_risk": 36456,
-      "duration_h": 2,
-      "floor": 56600,
-      "floor_then": 31000,
-      "id": 250608,
-      "listing_deposit": 217,
-      "listings": 7,
-      "live": false,
-      "median": 56600,
-      "name": "Mithril Warhammer",
-      "pulled": 0,
-      "qty": 7,
-      "realizable": 56500,
-      "sold": 0,
-      "sold_at": null,
-      "sold_maybe": 0,
-      "source": "api",
-      "trend_per_h": null,
-      "vendor": 4356,
-      "wait_h": null,
-      "war": null
-     },
-     "profit": 2580,
-     "recipe": "Mithril Warhammer",
-     "revenue": 53675,
-     "spell": 1252357
-    },
-    {
      "cost": 420,
      "farm": {
       "cost": 0,
@@ -2390,7 +2390,7 @@
         "src": "farm"
        }
       ],
-      "profit": 2658
+      "profit": 2752
      },
      "makes": 1.0,
      "mats": [
@@ -2417,7 +2417,7 @@
       "name": "Azure Skyforged Chain",
       "pulled": 0,
       "qty": 11,
-      "realizable": 2800,
+      "realizable": 2899,
       "sold": 2,
       "sold_at": 2900,
       "sold_maybe": 0,
@@ -2427,9 +2427,9 @@
       "wait_h": 6.0008333333333335,
       "war": null
      },
-     "profit": 2238,
+     "profit": 2332,
      "recipe": "Azure Skyforged Chain",
-     "revenue": 2660,
+     "revenue": 2754,
      "spell": 1301448
     },
     {
@@ -2567,7 +2567,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 9390
+      "profit": 9484
      },
      "makes": 1.0,
      "mats": [
@@ -2604,7 +2604,7 @@
       "name": "Golden Scale Coif",
       "pulled": 0,
       "qty": 28,
-      "realizable": 14400,
+      "realizable": 14499,
       "sold": 1,
       "sold_at": 15000,
       "sold_maybe": 0,
@@ -2614,9 +2614,9 @@
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": 2012,
+     "profit": 2106,
      "recipe": "Golden Scale Coif",
-     "revenue": 13680,
+     "revenue": 13774,
      "spell": 3503
     },
     {
@@ -2631,7 +2631,7 @@
         "src": "farm"
        }
       ],
-      "profit": 1898
+      "profit": 1992
      },
      "makes": 1.0,
      "mats": [
@@ -2658,7 +2658,7 @@
       "name": "Azure Skyforged Greaves",
       "pulled": 0,
       "qty": 6,
-      "realizable": 2000,
+      "realizable": 2099,
       "sold": 1,
       "sold_at": 2100,
       "sold_maybe": 0,
@@ -2668,9 +2668,9 @@
       "wait_h": 6.001111111111111,
       "war": null
      },
-     "profit": 1408,
+     "profit": 1502,
      "recipe": "Azure Skyforged Greaves",
-     "revenue": 1900,
+     "revenue": 1994,
      "spell": 1301450
     }
    ],
@@ -2733,7 +2733,7 @@
         "src": "farm"
        }
       ],
-      "profit": 189184
+      "profit": 189278
      },
      "makes": 1.0,
      "mats": [
@@ -2775,7 +2775,7 @@
       "name": "Salt Shaker",
       "pulled": 0,
       "qty": 38,
-      "realizable": 199300,
+      "realizable": 199399,
       "sold": 1,
       "sold_at": 200000,
       "sold_maybe": 0,
@@ -2785,9 +2785,9 @@
       "wait_h": 7.00138888888889,
       "war": null
      },
-     "profit": 150685,
+     "profit": 150779,
      "recipe": "Salt Shaker",
-     "revenue": 189335,
+     "revenue": 189429,
      "spell": 19567
     },
     {
@@ -2826,7 +2826,7 @@
         "src": "ah"
        }
       ],
-      "profit": 51312
+      "profit": 51406
      },
      "makes": 1.0,
      "mats": [
@@ -2873,7 +2873,7 @@
       "name": "Green Lens",
       "pulled": null,
       "qty": 11,
-      "realizable": 69900,
+      "realizable": 69999,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
@@ -2883,9 +2883,9 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 46552,
+     "profit": 46646,
      "recipe": "Green Lens",
-     "revenue": 66405,
+     "revenue": 66499,
      "spell": 12622
     },
     {
@@ -2924,7 +2924,7 @@
         "src": "ah"
        }
       ],
-      "profit": 49032
+      "profit": 49126
      },
      "makes": 1.0,
      "mats": [
@@ -2971,7 +2971,7 @@
       "name": "Mithril Heavy-bore Rifle",
       "pulled": null,
       "qty": 7,
-      "realizable": 57000,
+      "realizable": 57099,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
@@ -2981,9 +2981,9 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 36494,
+     "profit": 36588,
      "recipe": "Mithril Heavy-bore Rifle",
-     "revenue": 54150,
+     "revenue": 54244,
      "spell": 12614
     },
     {
@@ -3022,7 +3022,7 @@
         "src": "ah"
        }
       ],
-      "profit": 37657
+      "profit": 37751
      },
      "makes": 1.0,
      "mats": [
@@ -3069,7 +3069,7 @@
       "name": "Gnomish Shrink Ray",
       "pulled": 0,
       "qty": 5,
-      "realizable": 48900,
+      "realizable": 48999,
       "sold": 0,
       "sold_at": null,
       "sold_maybe": 0,
@@ -3079,9 +3079,9 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 29515,
+     "profit": 29609,
      "recipe": "Gnomish Shrink Ray",
-     "revenue": 46455,
+     "revenue": 46549,
      "spell": 12899
     },
     {
@@ -3132,7 +3132,7 @@
         "src": "ah"
        }
       ],
-      "profit": 34274
+      "profit": 34368
      },
      "makes": 1.0,
      "mats": [
@@ -3174,7 +3174,7 @@
       "name": "Fire Goggles",
       "pulled": null,
       "qty": 5,
-      "realizable": 45200,
+      "realizable": 45299,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
@@ -3184,9 +3184,9 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 31814,
+     "profit": 31908,
      "recipe": "Fire Goggles",
-     "revenue": 42940,
+     "revenue": 43034,
      "spell": 12594
     },
     {
@@ -3319,7 +3319,7 @@
         "src": "ah"
        }
       ],
-      "profit": 16104
+      "profit": 16198
      },
      "makes": 1.0,
      "mats": [
@@ -3372,7 +3372,7 @@
       "name": "Goblin Jumper Cables",
       "pulled": 0,
       "qty": 15,
-      "realizable": 17900,
+      "realizable": 17999,
       "sold": 2,
       "sold_at": 18000,
       "sold_maybe": 0,
@@ -3382,9 +3382,9 @@
       "wait_h": 5.0008333333333335,
       "war": null
      },
-     "profit": 11938,
+     "profit": 12032,
      "recipe": "Goblin Jumper Cables",
-     "revenue": 17005,
+     "revenue": 17099,
      "spell": 9273
     },
     {
@@ -3639,7 +3639,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 7680
+      "profit": 7774
      },
      "makes": 1.0,
      "mats": [
@@ -3681,7 +3681,7 @@
       "name": "Portable Bronze Mortar",
       "pulled": 0,
       "qty": 8,
-      "realizable": 8600,
+      "realizable": 8699,
       "sold": 1,
       "sold_at": 9000,
       "sold_maybe": 0,
@@ -3691,9 +3691,9 @@
       "wait_h": 9.001388888888888,
       "war": null
      },
-     "profit": 2215,
+     "profit": 2309,
      "recipe": "Portable Bronze Mortar",
-     "revenue": 8170,
+     "revenue": 8264,
      "spell": 3960
     },
     {
@@ -3714,7 +3714,7 @@
         "src": "ah"
        }
       ],
-      "profit": 7287
+      "profit": 7381
      },
      "makes": 1.0,
      "mats": [
@@ -3746,7 +3746,7 @@
       "name": "Bright-Eye Goggles",
       "pulled": 0,
       "qty": 14,
-      "realizable": 9700,
+      "realizable": 9799,
       "sold": 1,
       "sold_at": 24900,
       "sold_maybe": 0,
@@ -3756,9 +3756,9 @@
       "wait_h": 5.0008333333333335,
       "war": null
      },
-     "profit": 5847,
+     "profit": 5941,
      "recipe": "Bright-Eye Goggles",
-     "revenue": 9215,
+     "revenue": 9309,
      "spell": 12587
     },
     {
@@ -3803,7 +3803,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 6395
+      "profit": 6489
      },
      "makes": 1.0,
      "mats": [
@@ -3845,7 +3845,7 @@
       "name": "Minor Recombobulator",
       "pulled": 0,
       "qty": 62,
-      "realizable": 6837,
+      "realizable": 6936,
       "sold": 8,
       "sold_at": 8750,
       "sold_maybe": 0,
@@ -3855,9 +3855,9 @@
       "wait_h": 2.2003333333333335,
       "war": null
      },
-     "profit": 4072,
+     "profit": 4166,
      "recipe": "Minor Recombobulator",
-     "revenue": 6495,
+     "revenue": 6589,
      "spell": 3952
     },
     {
@@ -3902,7 +3902,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 5046
+      "profit": 5140
      },
      "makes": 1.0,
      "mats": [
@@ -3950,7 +3950,7 @@
       "name": "Gnomish Universal Remote",
       "pulled": 3,
       "qty": 63,
-      "realizable": 5523,
+      "realizable": 5622,
       "sold": 6,
       "sold_at": 8683,
       "sold_maybe": 0,
@@ -3960,9 +3960,9 @@
       "wait_h": 2.000277777777778,
       "war": null
      },
-     "profit": 3311,
+     "profit": 3405,
      "recipe": "Gnomish Universal Remote",
-     "revenue": 5246,
+     "revenue": 5340,
      "spell": 9269
     },
     {
@@ -4042,7 +4042,7 @@
      "spell": 15255
     }
    ],
-   "losers": 38,
+   "losers": 37,
    "priced": 75,
    "starters": [
     {
@@ -4087,7 +4087,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 6395
+      "profit": 6489
      },
      "makes": 1.0,
      "mats": [
@@ -4129,7 +4129,7 @@
       "name": "Minor Recombobulator",
       "pulled": 0,
       "qty": 62,
-      "realizable": 6837,
+      "realizable": 6936,
       "sold": 8,
       "sold_at": 8750,
       "sold_maybe": 0,
@@ -4139,9 +4139,9 @@
       "wait_h": 2.2003333333333335,
       "war": null
      },
-     "profit": 4072,
+     "profit": 4166,
      "recipe": "Minor Recombobulator",
-     "revenue": 6495,
+     "revenue": 6589,
      "spell": 3952
     },
     {
@@ -4186,7 +4186,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 5046
+      "profit": 5140
      },
      "makes": 1.0,
      "mats": [
@@ -4234,7 +4234,7 @@
       "name": "Gnomish Universal Remote",
       "pulled": 3,
       "qty": 63,
-      "realizable": 5523,
+      "realizable": 5622,
       "sold": 6,
       "sold_at": 8683,
       "sold_maybe": 0,
@@ -4244,9 +4244,9 @@
       "wait_h": 2.000277777777778,
       "war": null
      },
-     "profit": 3311,
+     "profit": 3405,
      "recipe": "Gnomish Universal Remote",
-     "revenue": 5246,
+     "revenue": 5340,
      "spell": 9269
     },
     {
@@ -4721,7 +4721,7 @@
         "src": "farm"
        }
       ],
-      "profit": 189184
+      "profit": 189278
      },
      "makes": 1.0,
      "mats": [
@@ -4763,7 +4763,7 @@
       "name": "Salt Shaker",
       "pulled": 0,
       "qty": 38,
-      "realizable": 199300,
+      "realizable": 199399,
       "sold": 1,
       "sold_at": 200000,
       "sold_maybe": 0,
@@ -4773,9 +4773,9 @@
       "wait_h": 7.00138888888889,
       "war": null
      },
-     "profit": 150685,
+     "profit": 150779,
      "recipe": "Salt Shaker",
-     "revenue": 189335,
+     "revenue": 189429,
      "spell": 19567
     },
     {
@@ -4814,7 +4814,7 @@
         "src": "ah"
        }
       ],
-      "profit": 51312
+      "profit": 51406
      },
      "makes": 1.0,
      "mats": [
@@ -4861,7 +4861,7 @@
       "name": "Green Lens",
       "pulled": null,
       "qty": 11,
-      "realizable": 69900,
+      "realizable": 69999,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
@@ -4871,9 +4871,9 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 46552,
+     "profit": 46646,
      "recipe": "Green Lens",
-     "revenue": 66405,
+     "revenue": 66499,
      "spell": 12622
     },
     {
@@ -4912,7 +4912,7 @@
         "src": "ah"
        }
       ],
-      "profit": 49032
+      "profit": 49126
      },
      "makes": 1.0,
      "mats": [
@@ -4959,7 +4959,7 @@
       "name": "Mithril Heavy-bore Rifle",
       "pulled": null,
       "qty": 7,
-      "realizable": 57000,
+      "realizable": 57099,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
@@ -4969,9 +4969,9 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 36494,
+     "profit": 36588,
      "recipe": "Mithril Heavy-bore Rifle",
-     "revenue": 54150,
+     "revenue": 54244,
      "spell": 12614
     },
     {
@@ -5022,7 +5022,7 @@
         "src": "ah"
        }
       ],
-      "profit": 34274
+      "profit": 34368
      },
      "makes": 1.0,
      "mats": [
@@ -5064,7 +5064,7 @@
       "name": "Fire Goggles",
       "pulled": null,
       "qty": 5,
-      "realizable": 45200,
+      "realizable": 45299,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
@@ -5074,9 +5074,9 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 31814,
+     "profit": 31908,
      "recipe": "Fire Goggles",
-     "revenue": 42940,
+     "revenue": 43034,
      "spell": 12594
     },
     {
@@ -5115,7 +5115,7 @@
         "src": "ah"
        }
       ],
-      "profit": 37657
+      "profit": 37751
      },
      "makes": 1.0,
      "mats": [
@@ -5162,7 +5162,7 @@
       "name": "Gnomish Shrink Ray",
       "pulled": 0,
       "qty": 5,
-      "realizable": 48900,
+      "realizable": 48999,
       "sold": 0,
       "sold_at": null,
       "sold_maybe": 0,
@@ -5172,9 +5172,9 @@
       "wait_h": null,
       "war": null
      },
-     "profit": 29515,
+     "profit": 29609,
      "recipe": "Gnomish Shrink Ray",
-     "revenue": 46455,
+     "revenue": 46549,
      "spell": 12899
     },
     {
@@ -5307,7 +5307,7 @@
         "src": "ah"
        }
       ],
-      "profit": 16104
+      "profit": 16198
      },
      "makes": 1.0,
      "mats": [
@@ -5360,7 +5360,7 @@
       "name": "Goblin Jumper Cables",
       "pulled": 0,
       "qty": 15,
-      "realizable": 17900,
+      "realizable": 17999,
       "sold": 2,
       "sold_at": 18000,
       "sold_maybe": 0,
@@ -5370,9 +5370,9 @@
       "wait_h": 5.0008333333333335,
       "war": null
      },
-     "profit": 11938,
+     "profit": 12032,
      "recipe": "Goblin Jumper Cables",
-     "revenue": 17005,
+     "revenue": 17099,
      "spell": 9273
     },
     {
@@ -5393,7 +5393,7 @@
         "src": "ah"
        }
       ],
-      "profit": 7287
+      "profit": 7381
      },
      "makes": 1.0,
      "mats": [
@@ -5425,7 +5425,7 @@
       "name": "Bright-Eye Goggles",
       "pulled": 0,
       "qty": 14,
-      "realizable": 9700,
+      "realizable": 9799,
       "sold": 1,
       "sold_at": 24900,
       "sold_maybe": 0,
@@ -5435,9 +5435,9 @@
       "wait_h": 5.0008333333333335,
       "war": null
      },
-     "profit": 5847,
+     "profit": 5941,
      "recipe": "Bright-Eye Goggles",
-     "revenue": 9215,
+     "revenue": 9309,
      "spell": 12587
     },
     {
@@ -5692,7 +5692,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 6395
+      "profit": 6489
      },
      "makes": 1.0,
      "mats": [
@@ -5734,7 +5734,7 @@
       "name": "Minor Recombobulator",
       "pulled": 0,
       "qty": 62,
-      "realizable": 6837,
+      "realizable": 6936,
       "sold": 8,
       "sold_at": 8750,
       "sold_maybe": 0,
@@ -5744,9 +5744,9 @@
       "wait_h": 2.2003333333333335,
       "war": null
      },
-     "profit": 4072,
+     "profit": 4166,
      "recipe": "Minor Recombobulator",
-     "revenue": 6495,
+     "revenue": 6589,
      "spell": 3952
     },
     {
@@ -5791,7 +5791,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 5046
+      "profit": 5140
      },
      "makes": 1.0,
      "mats": [
@@ -5839,7 +5839,7 @@
       "name": "Gnomish Universal Remote",
       "pulled": 3,
       "qty": 63,
-      "realizable": 5523,
+      "realizable": 5622,
       "sold": 6,
       "sold_at": 8683,
       "sold_maybe": 0,
@@ -5849,9 +5849,9 @@
       "wait_h": 2.000277777777778,
       "war": null
      },
-     "profit": 3311,
+     "profit": 3405,
      "recipe": "Gnomish Universal Remote",
-     "revenue": 5246,
+     "revenue": 5340,
      "spell": 9269
     },
     {

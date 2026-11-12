@@ -31,9 +31,9 @@ def spreads(args, db, snaps, now, bw, items, book):
              for i, (buy, profit) in open_spreads(now, bw).items()]
     flips.sort(key=lambda f: -f["profit"])
 
-    # listed under wat a vendor pays: buy nd vendor it. gear only lists in whole silvers, so undercutting a wall
-    # at 4s lands on 3s even when it vendors 4 3s07c. th scan only knows th floor; raw listings (watched items)
-    # say how many r actually under
+    # listed under wat a vendor pays: buy nd vendor it. gear used 2 list in whole silvers (undercutting a 4s
+    # wall landed on 3s even when it vendored 4 3s07c), copper-precise since 2026-11-12. th scan only knows
+    # th floor; raw listings (watched items) say how many r actually under
     under = defaultdict(int)
     for i, p, q in db.execute("select item_id, unit_price, quantity from auction where snapshot_id = ?", (last,)):
         sell = (items.get(i) or (None, None))[1]

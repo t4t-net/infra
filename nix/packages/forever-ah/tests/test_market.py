@@ -56,6 +56,10 @@ class Prices(unittest.TestCase):
     def test_gear_cant_go_under_1s(self):
         self.assertEqual(market.realizable(100, 100, None, -50, 5), 100)
 
+    def test_gear_undercuts_by_a_copper(self):
+        # heavy copper maul wall at 12s05c: 12s04c now, not 11s like b4 th 2026-11-12 change
+        self.assertEqual(market.realizable(1205, 100, None, None, None), 1204)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -83,18 +83,18 @@ def trend_per_h(sales):
     return sum(q * (x - mx) * (y - my) for x, y, q in pts) / sum(q * (x - mx) ** 2 for x, _, q in pts)
 
 
-def realizable(floor, step, clearing, trend, wait_h):
-    """wat listing one now shud actually fetch: one step (1c commodities, 1s gear) under th floor, never above
-    wat sales actually cleared at, nd if th price is falling, wat its fallen 2 by th time urs sells. a rising
-    trend is NOT projected: promising tomorrow's higher price is th overconfident kind of wrong. never under
-    th AH's minimum, which is th step"""
-    prices = [p for p in (floor - step if floor is not None else None, clearing) if p is not None]
+def realizable(floor, minimum, clearing, trend, wait_h):
+    """wat listing one now shud actually fetch: 1c under th floor (gear went copper-precise 2026-11-12, it used 2
+    step in whole silvers), never above wat sales actually cleared at, nd if th price is falling, wat its fallen
+    2 by th time urs sells. a rising trend is NOT projected: promising tomorrow's higher price is th overconfident
+    kind of wrong. never under th AH's minimum (1c commodities, still 1s gear)"""
+    prices = [p for p in (floor - 1 if floor is not None else None, clearing) if p is not None]
     if not prices:
         return None
     price = min(prices)
     if trend is not None and trend < 0 and wait_h:
         price += trend * wait_h
-    return max(step, round(price))
+    return max(minimum, round(price))
 
 
 def walk_book(listings, q, fallback_unit):
@@ -229,7 +229,7 @@ def market_data(args, db):
                 options.append((round(d * min((1 - p) / p if p else math.inf, args.give_up_days * 24 / h)), h, d))
             deposits, duration, listing_deposit = min(options)
         wait_h = need / rate if rate else None
-        step = 100 if i in single else 1
+        minimum = 100 if i in single else 1
         clearing = clearing_price(sure.get(i, ())) if units is not None else None
         trend = trend_per_h(sure.get(i, ())) if units is not None else None
         # no real market, just sellers undercutting each other: way more pulled nd reposted than bought, or sales
@@ -255,7 +255,7 @@ def market_data(args, db):
             "clearing": clearing,
             "trend_per_h": trend,
             # wat listing one now shud actually fetch, see realizable()
-            "realizable": realizable(n and n[1], step, clearing, trend, wait_h),
+            "realizable": realizable(n and n[1], minimum, clearing, trend, wait_h),
             # as th cheapest listing urs sells in th spree tht clears everything queued ahead of it
             "wait_h": wait_h,
             "ahead": ahead,

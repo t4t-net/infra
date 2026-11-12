@@ -122,7 +122,7 @@ pure functions over (observations, fills, params). each quantity defined exactly
   as copper/h. this is wat th launch-week crash needs: thorium went 3g → 25s in 48h, nd a "price" tht
   ignores tht tells u 2 craft into a falling knife. nothing fancier (decay curves etc) until a straight
   line visibly fails on real data
-- **realizable price** 4 a stack of k listed now: undercut th floor by one step (1c commodities, 1s gear),
+- **realizable price** 4 a stack of k listed now: undercut th floor by 1c (gear stepped in whole silvers until 2026-11-12; min still 1s),
   but never above clearing price, nd projected along th trend 2 th expected sale time
 - **queue + time 2 sell**: units ahead at ur price (from th depth curve, not just th 1s floor case) plus
   ur stack, over units-per-spree → sprees needed → poisson on λ. same math as now, generalized past th

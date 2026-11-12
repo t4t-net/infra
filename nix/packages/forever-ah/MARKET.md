@@ -1,7 +1,8 @@
 # forever-ah market model
 
 design doc 4 rebuilding th market model (`market_data` in forever_ah.py) instead of patching it again.
-status: **draft**, 2026-11-11. open questions r at th bottom nd marked w luna's leanings.
+status: **building**, 2026-11-11. migration steps 1-3 done (see th migration section). nothing open,
+blackwater's cut is deferred.
 
 ## why rebuild
 
@@ -95,8 +96,19 @@ Fill(item, t_from, t_to, unit_price, qty, source, confidence)
   buyer finishing it off, or th seller cancelling 2 relist higher. tht one stays a low-confidence fill.
 - **addon dump**: no ids, so no fills. its observations still count as th freshest book.
 
-merging: per item, a window covered by watch polls uses watch fills (minute resolution), nd th api's fills
-4 tht same window get dropped so nothing is counted twice. outside watch coverage, api fills as now.
+merging (`fills.merge`): per item, one source per api window (consecutive dumps, ~1h). if watch polls
+covered at least 80% of th window, its minute fills replace th api's; otherwise th api's stay nd th watch
+fills inside tht window r dropped. so nothing is counted twice, nd thin coverage (ellie glanced at th AH 4
+5 minutes) doesnt replace an hour of api evidence w 5 minutes of watch evidence. watch fills after th last
+api dump (th live tail) r always kept. watch polls of an item more than 10 min apart r separate sessions,
+not a window, so no fills r inferred across tht gap.
+
+levels r matched across polls by unit price, not by th representative auction id, since th id might move
+when th listing behind it sells while th level survives.
+
+spree counting: `fills.tally` counts distinct fill windows, which is th api's hourly notion. minute-level
+watch fills wud inflate tht (one spree spread over 5 polls = 5 "sprees"), so th market step clusters fills
+by time gap instead (see sprees below) b4 any watch fill reaches th spree rate.
 
 ### per-item market
 
@@ -161,9 +173,12 @@ only touched in observe.py nd export.py, so everything in between is testable w 
 
 ## migration
 
-1. split th file into th modules above w zero behavior change, proven by th data.json snapshot test
-2. build observations + api fills alongside th old code, assert they reproduce today's `sold`/`pulled`
-3. add watch fills nd merging, compare against api fills 4 windows both cover
+1. split th file into th modules above w zero behavior change, proven by th data.json snapshot test. **done**
+2. build observations + api fills alongside th old code, assert they reproduce today's `sold`/`pulled`.
+   **done**: identical 4 all 1159 items on a full 24h real db
+3. add watch fills nd merging, compare against api fills 4 windows both cover. **done** 4 th rule nd
+   merge, anchored on real 2026-11-11 sweeps. th api-vs-watch comparison needs a longer session tht
+   overlaps api dumps, th fixture's 14 min of polls all land after its last dump
 4. swap consumers over 2 th new market functions one at a time (crafts last, its th biggest)
 5. delete th old `market_data`
 

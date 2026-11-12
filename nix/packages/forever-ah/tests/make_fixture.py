@@ -83,6 +83,9 @@ def main():
                    "left join item_hotfix h on h.id = k.id where k.id not in (select id from item)")
         db.execute("update item set name = coalesce((select h.name from item_hotfix h where h.id = item.id), "
                    "'item ' || id) where name is null")
+        # every watch poll: theyre tiny, nd th real sweeps in them anchor th watch fill tests
+        db.execute("insert into addon_watch_poll select * from src.addon_watch_poll")
+        db.execute("insert into addon_watch select * from src.addon_watch")
         db.commit()
         db.execute("detach src")
         db.execute("vacuum")

@@ -34,7 +34,7 @@ th site answers four questions. everything in th model shud exist 2 answer one o
 
 | source | cadence | sees | blind 2 |
 |---|---|---|---|
-| battle.net api | hourly (blizz publishes ~:13, we pull :20), lags up 2 ~1h | every listing w auction id, time-left band, every item, every house | anything inside th hour |
+| battle.net api | hourly (blizz stamps each dump ~:22:43, we pull :30), so always 7-67 min old | every listing w auction id, time-left band, every item, every house | anything inside th hour |
 | addon full dump (`ReplicateItems`) | 1 per 15 min, only while ellie is at th AH | every listing, bonus ids (random suffixes), exact book right now | auction ids, owners. only house 111 |
 | addon watch (commodity search) | ~every 60-90s per watched item, only while at th AH nd browsing | whole order book as **price levels**: qty, seller count, exact seconds left | individual auctions (levels r merged), non-commodities, anything not watched |
 | DBCache.bin | whenever ellie logs in nd we recopy | hotfixed vendor prices | nothing about th AH |

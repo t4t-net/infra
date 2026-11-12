@@ -124,11 +124,13 @@ in
       "quests"
     ];
 
-    # blizz publishes th us forever dumps at ~:13 every hour (seen 2026-11-09), so grab them fresh
+    # blizz's us forever dumps carry Last-Modified ~:22:43 every hour (17:22:43, 18:22:43, 19:22:43 on
+    # 2026-11-11; it was ~:13 on 11-09). at :20 we fetched 3 min early nd always got th PREVIOUS hour's dump, so
+    # th site ran an hour stale: a rerun at 21:02 got 20:22:44 where th 20:20 run got 19:22:43. :30 leaves margin
     systemd.timers.forever-ah-scrape = {
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        OnCalendar = "*-*-* *:20:00";
+        OnCalendar = "*-*-* *:30:00";
         RandomizedDelaySec = "2m";
         Persistent = true;
       };
@@ -148,7 +150,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = sandbox // {
         # th site comes from th store, data.json from th hourly export. naming th site's store path here
-        # means a new build restarts this unit on switch, so code changes go live without waiting 4 :20
+        # means a new build restarts this unit on switch, so code changes go live without waiting 4 :30
         ExecStartPre = pkgs.writeShellScript "forever-gold-site" ''
           set -euo pipefail
           mkdir -p ${www}

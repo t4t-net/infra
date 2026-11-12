@@ -111,7 +111,7 @@ def market_data(args, db):
               for f in fills.merge(list(fills.api_fills(obs.get(i, []))), list(fills.watch_fills(watch.get(i, []))),
                                    fills.watch_spans(watch.get(i, [])), dump_times))
     recent_since = snaps[max(0, len(snaps) - args.dry_dumps)][1]
-    sold, pulled, recent, events = fills.tally(merged, recent_since)
+    sold, pulled, recent, events, maybe = fills.tally(merged, recent_since)
     recent_h = (snaps[-1][1] - snaps[max(0, len(snaps) - 1 - args.dry_dumps)][1]) / 3600
     # items r tracked from th first dump they have raw listings in; items added 2 th watchlist mid-window
     # (or never listed) get "-" instead of a fake zero. under an hour of tracking measures nothing yet
@@ -183,6 +183,8 @@ def market_data(args, db):
             "floor": n and n[1], "median": n and n[0], "qty": n and n[2], "listings": n and n[3],
             "floor_then": t and t[1],
             "sold": units,
+            # low-confidence watch sales on top of `sold`, so th site can say "61 (+14?)" instead of guessing
+            "sold_maybe": maybe.get(i, 0) if units is not None else None,
             "pulled": pulled.get(i, 0) if units is not None else None,
             "war": war,
             "sold_at": round(s[1] / s[0]) if units else None,

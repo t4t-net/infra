@@ -80,7 +80,7 @@ class Rule(unittest.TestCase):
     def test_tally_counts_sprees_per_window(self):
         # hourly dumps, like th real api
         f = run(api(0, (50, 5, 1, "LONG"), (51, 5, 2, "LONG")), api(3600, (51, 5, 2, "LONG")), api(7200), api(10800))
-        sold, pulled, recent, sprees = fills.tally(f, recent_since=7200)
+        sold, pulled, recent, sprees, _ = fills.tally(f, recent_since=7200)
         self.assertEqual((sold[1], sprees[1], recent[1], pulled[1]), ([10, 505], 2, 5, 0))
 
 

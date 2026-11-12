@@ -83,6 +83,7 @@
       "qty": 21,
       "sold": null,
       "sold_at": null,
+      "sold_maybe": null,
       "vendor": 14659,
       "wait_h": null,
       "war": null
@@ -152,6 +153,7 @@
       "qty": 69,
       "sold": 4,
       "sold_at": 19999,
+      "sold_maybe": 0,
       "vendor": 1000,
       "wait_h": 2.0005555555555556,
       "war": null
@@ -250,6 +252,7 @@
       "qty": 29,
       "sold": 2,
       "sold_at": 26250,
+      "sold_maybe": 0,
       "vendor": 8615,
       "wait_h": 12.001666666666667,
       "war": null
@@ -330,6 +333,7 @@
       "qty": 7,
       "sold": 0,
       "sold_at": null,
+      "sold_maybe": 0,
       "vendor": 4356,
       "wait_h": null,
       "war": null
@@ -421,6 +425,7 @@
       "qty": 38,
       "sold": 3,
       "sold_at": 36300,
+      "sold_maybe": 0,
       "vendor": 5658,
       "wait_h": 6.0008333333333335,
       "war": null
@@ -468,6 +473,7 @@
       "qty": 18,
       "sold": 1,
       "sold_at": 12000,
+      "sold_maybe": 0,
       "vendor": 7045,
       "wait_h": 9.001388888888888,
       "war": null
@@ -537,6 +543,7 @@
       "qty": 12,
       "sold": null,
       "sold_at": null,
+      "sold_maybe": null,
       "vendor": 957,
       "wait_h": null,
       "war": null
@@ -612,6 +619,7 @@
       "qty": 28,
       "sold": 1,
       "sold_at": 15000,
+      "sold_maybe": 0,
       "vendor": 3084,
       "wait_h": 12.001666666666667,
       "war": null
@@ -681,6 +689,7 @@
       "qty": 31,
       "sold": 0,
       "sold_at": null,
+      "sold_maybe": 0,
       "vendor": 250,
       "wait_h": null,
       "war": null
@@ -728,6 +737,7 @@
       "qty": 30,
       "sold": 1,
       "sold_at": 9000,
+      "sold_maybe": 0,
       "vendor": 8053,
       "wait_h": 12.001666666666667,
       "war": null
@@ -825,6 +835,7 @@
       "qty": 38,
       "sold": 4,
       "sold_at": 9375,
+      "sold_maybe": 0,
       "vendor": 2935,
       "wait_h": 6.0008333333333335,
       "war": null
@@ -883,6 +894,7 @@
       "qty": 10,
       "sold": 1,
       "sold_at": 7000,
+      "sold_maybe": 0,
       "vendor": 5387,
       "wait_h": 12.001666666666667,
       "war": null
@@ -969,6 +981,7 @@
       "qty": 6,
       "sold": 1,
       "sold_at": 14400,
+      "sold_maybe": 0,
       "vendor": 6558,
       "wait_h": 7.00138888888889,
       "war": null
@@ -1045,6 +1058,7 @@
       "qty": 30,
       "sold": 3,
       "sold_at": 6933,
+      "sold_maybe": 0,
       "vendor": 488,
       "wait_h": 3.6672222222222226,
       "war": null
@@ -1125,6 +1139,7 @@
       "qty": 30,
       "sold": 3,
       "sold_at": 6933,
+      "sold_maybe": 0,
       "vendor": 488,
       "wait_h": 3.6672222222222226,
       "war": null
@@ -1172,6 +1187,7 @@
       "qty": 9,
       "sold": null,
       "sold_at": null,
+      "sold_maybe": null,
       "vendor": 0,
       "wait_h": null,
       "war": null
@@ -1219,6 +1235,7 @@
       "qty": 13,
       "sold": 1,
       "sold_at": 4000,
+      "sold_maybe": 0,
       "vendor": 0,
       "wait_h": 12.001666666666667,
       "war": null
@@ -1266,6 +1283,7 @@
       "qty": 8,
       "sold": null,
       "sold_at": null,
+      "sold_maybe": null,
       "vendor": 0,
       "wait_h": null,
       "war": null
@@ -1313,6 +1331,7 @@
       "qty": 8,
       "sold": 3,
       "sold_at": 3333,
+      "sold_maybe": 0,
       "vendor": 0,
       "wait_h": 4.000555555555556,
       "war": null
@@ -1360,6 +1379,7 @@
       "qty": 11,
       "sold": 2,
       "sold_at": 2900,
+      "sold_maybe": 0,
       "vendor": 0,
       "wait_h": 6.0008333333333335,
       "war": null
@@ -1407,6 +1427,7 @@
       "qty": 6,
       "sold": 1,
       "sold_at": 2100,
+      "sold_maybe": 0,
       "vendor": 0,
       "wait_h": 6.001111111111111,
       "war": null
@@ -1505,6 +1526,7 @@
       "qty": 97,
       "sold": 10,
       "sold_at": 2900,
+      "sold_maybe": 0,
       "vendor": 915,
       "wait_h": 2.000277777777778,
       "war": null
@@ -1587,6 +1609,7 @@
       "qty": 21,
       "sold": null,
       "sold_at": null,
+      "sold_maybe": null,
       "vendor": 14659,
       "wait_h": null,
       "war": null
@@ -1656,6 +1679,7 @@
       "qty": 69,
       "sold": 4,
       "sold_at": 19999,
+      "sold_maybe": 0,
       "vendor": 1000,
       "wait_h": 2.0005555555555556,
       "war": null
@@ -1754,6 +1778,7 @@
       "qty": 29,
       "sold": 2,
       "sold_at": 26250,
+      "sold_maybe": 0,
       "vendor": 8615,
       "wait_h": 12.001666666666667,
       "war": null
@@ -1823,6 +1848,7 @@
       "qty": 12,
       "sold": null,
       "sold_at": null,
+      "sold_maybe": null,
       "vendor": 957,
       "wait_h": null,
       "war": null
@@ -1899,6 +1925,7 @@
       "qty": 30,
       "sold": 3,
       "sold_at": 6933,
+      "sold_maybe": 0,
       "vendor": 488,
       "wait_h": 3.6672222222222226,
       "war": null
@@ -1946,6 +1973,7 @@
       "qty": 9,
       "sold": null,
       "sold_at": null,
+      "sold_maybe": null,
       "vendor": 0,
       "wait_h": null,
       "war": null
@@ -1993,6 +2021,7 @@
       "qty": 13,
       "sold": 1,
       "sold_at": 4000,
+      "sold_maybe": 0,
       "vendor": 0,
       "wait_h": 12.001666666666667,
       "war": null
@@ -2040,6 +2069,7 @@
       "qty": 8,
       "sold": null,
       "sold_at": null,
+      "sold_maybe": null,
       "vendor": 0,
       "wait_h": null,
       "war": null
@@ -2087,6 +2117,7 @@
       "qty": 8,
       "sold": 3,
       "sold_at": 3333,
+      "sold_maybe": 0,
       "vendor": 0,
       "wait_h": 4.000555555555556,
       "war": null
@@ -2167,6 +2198,7 @@
       "qty": 7,
       "sold": 0,
       "sold_at": null,
+      "sold_maybe": 0,
       "vendor": 4356,
       "wait_h": null,
       "war": null
@@ -2214,6 +2246,7 @@
       "qty": 11,
       "sold": 2,
       "sold_at": 2900,
+      "sold_maybe": 0,
       "vendor": 0,
       "wait_h": 6.0008333333333335,
       "war": null
@@ -2312,6 +2345,7 @@
       "qty": 15,
       "sold": 2,
       "sold_at": 8250,
+      "sold_maybe": 0,
       "vendor": 3693,
       "wait_h": 5.5008333333333335,
       "war": null
@@ -2387,6 +2421,7 @@
       "qty": 28,
       "sold": 1,
       "sold_at": 15000,
+      "sold_maybe": 0,
       "vendor": 3084,
       "wait_h": 12.001666666666667,
       "war": null
@@ -2434,6 +2469,7 @@
       "qty": 6,
       "sold": 1,
       "sold_at": 2100,
+      "sold_maybe": 0,
       "vendor": 0,
       "wait_h": 6.001111111111111,
       "war": null
@@ -2544,6 +2580,7 @@
       "qty": 38,
       "sold": 1,
       "sold_at": 200000,
+      "sold_maybe": 0,
       "vendor": 7500,
       "wait_h": 7.00138888888889,
       "war": null
@@ -2635,6 +2672,7 @@
       "qty": 11,
       "sold": null,
       "sold_at": null,
+      "sold_maybe": null,
       "vendor": 7770,
       "wait_h": null,
       "war": null
@@ -2726,6 +2764,7 @@
       "qty": 7,
       "sold": null,
       "sold_at": null,
+      "sold_maybe": null,
       "vendor": 11369,
       "wait_h": null,
       "war": null
@@ -2795,6 +2834,7 @@
       "qty": 37,
       "sold": 5,
       "sold_at": 62000,
+      "sold_maybe": 0,
       "vendor": 2500,
       "wait_h": 6.0008333333333335,
       "war": null
@@ -2886,6 +2926,7 @@
       "qty": 5,
       "sold": 0,
       "sold_at": null,
+      "sold_maybe": 0,
       "vendor": 750,
       "wait_h": null,
       "war": null
@@ -2984,6 +3025,7 @@
       "qty": 5,
       "sold": null,
       "sold_at": null,
+      "sold_maybe": null,
       "vendor": 3478,
       "wait_h": null,
       "war": null
@@ -3099,6 +3141,7 @@
       "qty": 15,
       "sold": 2,
       "sold_at": 18000,
+      "sold_maybe": 0,
       "vendor": 21,
       "wait_h": 5.0008333333333335,
       "war": null
@@ -3197,6 +3240,7 @@
       "qty": 47,
       "sold": 7,
       "sold_at": 16811,
+      "sold_maybe": 0,
       "vendor": 4000,
       "wait_h": 3.500694444444445,
       "war": null
@@ -3295,6 +3339,7 @@
       "qty": 70,
       "sold": 3,
       "sold_at": 9917,
+      "sold_maybe": 0,
       "vendor": 2500,
       "wait_h": 5.0008333333333335,
       "war": null
@@ -3387,6 +3432,7 @@
       "qty": 8,
       "sold": 1,
       "sold_at": 9000,
+      "sold_maybe": 0,
       "vendor": 2000,
       "wait_h": 9.001388888888888,
       "war": null
@@ -3445,6 +3491,7 @@
       "qty": 14,
       "sold": 1,
       "sold_at": 24900,
+      "sold_maybe": 0,
       "vendor": 2105,
       "wait_h": 5.0008333333333335,
       "war": null
@@ -3537,6 +3584,7 @@
       "qty": 62,
       "sold": 8,
       "sold_at": 8750,
+      "sold_maybe": 0,
       "vendor": 600,
       "wait_h": 2.2003333333333335,
       "war": null
@@ -3635,6 +3683,7 @@
       "qty": 63,
       "sold": 6,
       "sold_at": 8683,
+      "sold_maybe": 0,
       "vendor": 500,
       "wait_h": 2.000277777777778,
       "war": null
@@ -3704,6 +3753,7 @@
       "qty": 96,
       "sold": 0,
       "sold_at": null,
+      "sold_maybe": 0,
       "vendor": 250,
       "wait_h": null,
       "war": null
@@ -3800,6 +3850,7 @@
       "qty": 62,
       "sold": 8,
       "sold_at": 8750,
+      "sold_maybe": 0,
       "vendor": 600,
       "wait_h": 2.2003333333333335,
       "war": null
@@ -3898,6 +3949,7 @@
       "qty": 63,
       "sold": 6,
       "sold_at": 8683,
+      "sold_maybe": 0,
       "vendor": 500,
       "wait_h": 2.000277777777778,
       "war": null
@@ -3984,6 +4036,7 @@
       "qty": 58,
       "sold": 4,
       "sold_at": 7000,
+      "sold_maybe": 0,
       "vendor": 175,
       "wait_h": 6.0008333333333335,
       "war": null
@@ -4053,6 +4106,7 @@
       "qty": 96,
       "sold": 0,
       "sold_at": null,
+      "sold_maybe": 0,
       "vendor": 250,
       "wait_h": null,
       "war": null
@@ -4134,6 +4188,7 @@
       "qty": 69,
       "sold": 6,
       "sold_at": 4898,
+      "sold_maybe": 0,
       "vendor": 1200,
       "wait_h": 3.500694444444445,
       "war": null
@@ -4174,6 +4229,7 @@
       "qty": 160,
       "sold": 17,
       "sold_at": 2992,
+      "sold_maybe": 0,
       "vendor": 250,
       "wait_h": 4.000555555555556,
       "war": null
@@ -4232,6 +4288,7 @@
       "qty": 137,
       "sold": 7,
       "sold_at": 1871,
+      "sold_maybe": 0,
       "vendor": 722,
       "wait_h": 3.0004166666666667,
       "war": null
@@ -4290,6 +4347,7 @@
       "qty": 327,
       "sold": null,
       "sold_at": null,
+      "sold_maybe": null,
       "vendor": 350,
       "wait_h": null,
       "war": null
@@ -4378,6 +4436,7 @@
       "qty": 38,
       "sold": 1,
       "sold_at": 200000,
+      "sold_maybe": 0,
       "vendor": 7500,
       "wait_h": 7.00138888888889,
       "war": null
@@ -4469,6 +4528,7 @@
       "qty": 11,
       "sold": null,
       "sold_at": null,
+      "sold_maybe": null,
       "vendor": 7770,
       "wait_h": null,
       "war": null
@@ -4560,6 +4620,7 @@
       "qty": 7,
       "sold": null,
       "sold_at": null,
+      "sold_maybe": null,
       "vendor": 11369,
       "wait_h": null,
       "war": null
@@ -4629,6 +4690,7 @@
       "qty": 37,
       "sold": 5,
       "sold_at": 62000,
+      "sold_maybe": 0,
       "vendor": 2500,
       "wait_h": 6.0008333333333335,
       "war": null
@@ -4727,6 +4789,7 @@
       "qty": 5,
       "sold": null,
       "sold_at": null,
+      "sold_maybe": null,
       "vendor": 3478,
       "wait_h": null,
       "war": null
@@ -4818,6 +4881,7 @@
       "qty": 5,
       "sold": 0,
       "sold_at": null,
+      "sold_maybe": 0,
       "vendor": 750,
       "wait_h": null,
       "war": null
@@ -4933,6 +4997,7 @@
       "qty": 15,
       "sold": 2,
       "sold_at": 18000,
+      "sold_maybe": 0,
       "vendor": 21,
       "wait_h": 5.0008333333333335,
       "war": null
@@ -5031,6 +5096,7 @@
       "qty": 47,
       "sold": 7,
       "sold_at": 16811,
+      "sold_maybe": 0,
       "vendor": 4000,
       "wait_h": 3.500694444444445,
       "war": null
@@ -5089,6 +5155,7 @@
       "qty": 14,
       "sold": 1,
       "sold_at": 24900,
+      "sold_maybe": 0,
       "vendor": 2105,
       "wait_h": 5.0008333333333335,
       "war": null
@@ -5187,6 +5254,7 @@
       "qty": 70,
       "sold": 3,
       "sold_at": 9917,
+      "sold_maybe": 0,
       "vendor": 2500,
       "wait_h": 5.0008333333333335,
       "war": null
@@ -5279,6 +5347,7 @@
       "qty": 62,
       "sold": 8,
       "sold_at": 8750,
+      "sold_maybe": 0,
       "vendor": 600,
       "wait_h": 2.2003333333333335,
       "war": null
@@ -5377,6 +5446,7 @@
       "qty": 63,
       "sold": 6,
       "sold_at": 8683,
+      "sold_maybe": 0,
       "vendor": 500,
       "wait_h": 2.000277777777778,
       "war": null
@@ -5463,6 +5533,7 @@
       "qty": 58,
       "sold": 4,
       "sold_at": 7000,
+      "sold_maybe": 0,
       "vendor": 175,
       "wait_h": 6.0008333333333335,
       "war": null
@@ -5532,6 +5603,7 @@
       "qty": 96,
       "sold": 0,
       "sold_at": null,
+      "sold_maybe": 0,
       "vendor": 250,
       "wait_h": null,
       "war": null
@@ -5594,6 +5666,7 @@
       "qty": 917,
       "sold": 61,
       "sold_at": 6054,
+      "sold_maybe": 0,
       "vendor": 600,
       "wait_h": 2.0526388888888887,
       "war": null
@@ -5663,6 +5736,7 @@
       "qty": 26,
       "sold": 0,
       "sold_at": null,
+      "sold_maybe": 0,
       "vendor": 0,
       "wait_h": null,
       "war": null
@@ -5710,6 +5784,7 @@
       "qty": 214,
       "sold": 26,
       "sold_at": 1373,
+      "sold_maybe": 0,
       "vendor": 1250,
       "wait_h": 2.000277777777778,
       "war": null
@@ -5757,6 +5832,7 @@
       "qty": 1011,
       "sold": 267,
       "sold_at": 883,
+      "sold_maybe": 0,
       "vendor": 400,
       "wait_h": 1.8712499999999999,
       "war": null
@@ -5804,6 +5880,7 @@
       "qty": 437,
       "sold": 86,
       "sold_at": 788,
+      "sold_maybe": 0,
       "vendor": 600,
       "wait_h": 1.7145238095238093,
       "war": null
@@ -5851,6 +5928,7 @@
       "qty": 1770,
       "sold": 127,
       "sold_at": 417,
+      "sold_maybe": 0,
       "vendor": 100,
       "wait_h": 2.000277777777778,
       "war": null
@@ -5910,6 +5988,7 @@
       "qty": 1007,
       "sold": 195,
       "sold_at": 911,
+      "sold_maybe": 0,
       "vendor": 60,
       "wait_h": 4.000555555555556,
       "war": null
@@ -5966,8 +6045,9 @@
       "name": "Bronze Bar",
       "pulled": 1001,
       "qty": 11007,
-      "sold": 1517,
-      "sold_at": 178,
+      "sold": 1080,
+      "sold_at": 179,
+      "sold_maybe": 437,
       "vendor": 50,
       "wait_h": 2.0187500000000003,
       "war": null
@@ -6013,8 +6093,9 @@
       "name": "Iron Bar",
       "pulled": 9,
       "qty": 3030,
-      "sold": 413,
-      "sold_at": 354,
+      "sold": 306,
+      "sold_at": 352,
+      "sold_maybe": 107,
       "vendor": 200,
       "wait_h": 2.0379166666666664,
       "war": null
@@ -6062,6 +6143,7 @@
       "qty": 3412,
       "sold": 251,
       "sold_at": 230,
+      "sold_maybe": 0,
       "vendor": 35,
       "wait_h": 1.7145238095238093,
       "war": null
@@ -6107,8 +6189,9 @@
       "name": "Copper Bar",
       "pulled": 848,
       "qty": 9082,
-      "sold": 1225,
+      "sold": 1191,
       "sold_at": 82,
+      "sold_maybe": 34,
       "vendor": 10,
       "wait_h": 1.3458333333333334,
       "war": null
@@ -6167,6 +6250,7 @@
       "qty": 295,
       "sold": 38,
       "sold_at": 44,
+      "sold_maybe": 0,
       "vendor": 0,
       "wait_h": 2.7504166666666667,
       "war": null
@@ -6218,6 +6302,7 @@
       "qty": 917,
       "sold": 61,
       "sold_at": 6054,
+      "sold_maybe": 0,
       "vendor": 600,
       "wait_h": 2.0526388888888887,
       "war": null
@@ -6265,6 +6350,7 @@
       "qty": 1011,
       "sold": 267,
       "sold_at": 883,
+      "sold_maybe": 0,
       "vendor": 400,
       "wait_h": 1.8712499999999999,
       "war": null
@@ -6321,8 +6407,9 @@
       "name": "Bronze Bar",
       "pulled": 1001,
       "qty": 11007,
-      "sold": 1517,
-      "sold_at": 178,
+      "sold": 1080,
+      "sold_at": 179,
+      "sold_maybe": 437,
       "vendor": 50,
       "wait_h": 2.0187500000000003,
       "war": null
@@ -6368,8 +6455,9 @@
       "name": "Iron Bar",
       "pulled": 9,
       "qty": 3030,
-      "sold": 413,
-      "sold_at": 354,
+      "sold": 306,
+      "sold_at": 352,
+      "sold_maybe": 107,
       "vendor": 200,
       "wait_h": 2.0379166666666664,
       "war": null
@@ -6417,6 +6505,7 @@
       "qty": 3412,
       "sold": 251,
       "sold_at": 230,
+      "sold_maybe": 0,
       "vendor": 35,
       "wait_h": 1.7145238095238093,
       "war": null
@@ -6460,6 +6549,7 @@
       "qty": 34,
       "sold": 6,
       "sold_at": 189998,
+      "sold_maybe": 0,
       "vendor": 3000,
       "wait_h": 12.001666666666667,
       "war": null
@@ -6507,6 +6597,7 @@
       "qty": 917,
       "sold": 61,
       "sold_at": 6054,
+      "sold_maybe": 0,
       "vendor": 600,
       "wait_h": 2.0526388888888887,
       "war": null
@@ -6554,6 +6645,7 @@
       "qty": 1011,
       "sold": 267,
       "sold_at": 883,
+      "sold_maybe": 0,
       "vendor": 400,
       "wait_h": 1.8712499999999999,
       "war": null
@@ -6610,8 +6702,9 @@
       "name": "Bronze Bar",
       "pulled": 1001,
       "qty": 11007,
-      "sold": 1517,
-      "sold_at": 178,
+      "sold": 1080,
+      "sold_at": 179,
+      "sold_maybe": 437,
       "vendor": 50,
       "wait_h": 2.0187500000000003,
       "war": null
@@ -6657,8 +6750,9 @@
       "name": "Iron Bar",
       "pulled": 9,
       "qty": 3030,
-      "sold": 413,
-      "sold_at": 354,
+      "sold": 306,
+      "sold_at": 352,
+      "sold_maybe": 107,
       "vendor": 200,
       "wait_h": 2.0379166666666664,
       "war": null
@@ -6706,6 +6800,7 @@
       "qty": 3412,
       "sold": 251,
       "sold_at": 230,
+      "sold_maybe": 0,
       "vendor": 35,
       "wait_h": 1.7145238095238093,
       "war": null
@@ -6779,10 +6874,11 @@
     "name": "Linen Cloth",
     "pulled": 574,
     "qty": 33574,
-    "sold": 1373,
-    "sold_at": 28,
+    "sold": 870,
+    "sold_at": 29,
+    "sold_maybe": 503,
     "vendor": 13,
-    "wait_h": 1.0072916666666667,
+    "wait_h": 1.0988636363636364,
     "war": null
    },
    {
@@ -6799,8 +6895,9 @@
     "name": "Wool Cloth",
     "pulled": 1319,
     "qty": 6572,
-    "sold": 2743,
+    "sold": 2469,
     "sold_at": 106,
+    "sold_maybe": 274,
     "vendor": 33,
     "wait_h": 1.0072916666666667,
     "war": null
@@ -6819,10 +6916,11 @@
     "name": "Silk Cloth",
     "pulled": 46,
     "qty": 5207,
-    "sold": 1690,
-    "sold_at": 196,
+    "sold": 981,
+    "sold_at": 199,
+    "sold_maybe": 709,
     "vendor": 150,
-    "wait_h": 1.0072916666666667,
+    "wait_h": 1.0988636363636364,
     "war": null
    },
    {
@@ -6841,6 +6939,7 @@
     "qty": 12857,
     "sold": 313,
     "sold_at": 600,
+    "sold_maybe": 0,
     "vendor": 250,
     "wait_h": 1.5002083333333334,
     "war": null
@@ -6861,6 +6960,7 @@
     "qty": 2704,
     "sold": 169,
     "sold_at": 1498,
+    "sold_maybe": 0,
     "vendor": 400,
     "wait_h": 4.000555555555556,
     "war": null
@@ -6881,6 +6981,7 @@
     "qty": 244,
     "sold": 4,
     "sold_at": 5500,
+    "sold_maybe": 0,
     "vendor": 2000,
     "wait_h": 12.001666666666667,
     "war": "relisting"
@@ -6903,6 +7004,7 @@
     "qty": 6128,
     "sold": 348,
     "sold_at": 38,
+    "sold_maybe": 0,
     "vendor": 10,
     "wait_h": 1.2001666666666666,
     "war": null
@@ -6923,6 +7025,7 @@
     "qty": 5122,
     "sold": 896,
     "sold_at": 18,
+    "sold_maybe": 0,
     "vendor": 10,
     "wait_h": 1.091060606060606,
     "war": null
@@ -6943,6 +7046,7 @@
     "qty": 2299,
     "sold": 166,
     "sold_at": 30,
+    "sold_maybe": 0,
     "vendor": 20,
     "wait_h": 1.5002083333333334,
     "war": null
@@ -6963,6 +7067,7 @@
     "qty": 1393,
     "sold": 167,
     "sold_at": 35,
+    "sold_maybe": 0,
     "vendor": 20,
     "wait_h": 1.5002083333333334,
     "war": null
@@ -6983,6 +7088,7 @@
     "qty": 1491,
     "sold": 201,
     "sold_at": 92,
+    "sold_maybe": 0,
     "vendor": 25,
     "wait_h": 1.7145238095238093,
     "war": null
@@ -7003,6 +7109,7 @@
     "qty": 2841,
     "sold": 221,
     "sold_at": 102,
+    "sold_maybe": 0,
     "vendor": 25,
     "wait_h": 1.7145238095238093,
     "war": null
@@ -7023,6 +7130,7 @@
     "qty": 1168,
     "sold": 336,
     "sold_at": 266,
+    "sold_maybe": 0,
     "vendor": 15,
     "wait_h": 1.2001666666666666,
     "war": null
@@ -7043,6 +7151,7 @@
     "qty": 1946,
     "sold": 159,
     "sold_at": 154,
+    "sold_maybe": 0,
     "vendor": 50,
     "wait_h": 2.000277777777778,
     "war": null
@@ -7063,6 +7172,7 @@
     "qty": 3149,
     "sold": 172,
     "sold_at": 199,
+    "sold_maybe": 0,
     "vendor": 25,
     "wait_h": 3.0004166666666667,
     "war": null
@@ -7083,6 +7193,7 @@
     "qty": 2017,
     "sold": 296,
     "sold_at": 94,
+    "sold_maybe": 0,
     "vendor": 30,
     "wait_h": 1.5002083333333334,
     "war": null
@@ -7103,6 +7214,7 @@
     "qty": 1248,
     "sold": 189,
     "sold_at": 131,
+    "sold_maybe": 0,
     "vendor": 75,
     "wait_h": 1.5002083333333334,
     "war": null
@@ -7123,6 +7235,7 @@
     "qty": 2600,
     "sold": 101,
     "sold_at": 223,
+    "sold_maybe": 0,
     "vendor": 125,
     "wait_h": 2.000277777777778,
     "war": null
@@ -7143,6 +7256,7 @@
     "qty": 965,
     "sold": 84,
     "sold_at": 399,
+    "sold_maybe": 0,
     "vendor": 150,
     "wait_h": 2.400333333333333,
     "war": null
@@ -7163,6 +7277,7 @@
     "qty": 2912,
     "sold": 42,
     "sold_at": 223,
+    "sold_maybe": 0,
     "vendor": 175,
     "wait_h": 3.0004166666666667,
     "war": null
@@ -7183,6 +7298,7 @@
     "qty": 590,
     "sold": 109,
     "sold_at": 921,
+    "sold_maybe": 0,
     "vendor": 100,
     "wait_h": 2.400333333333333,
     "war": null
@@ -7203,6 +7319,7 @@
     "qty": 512,
     "sold": 32,
     "sold_at": 1007,
+    "sold_maybe": 0,
     "vendor": 250,
     "wait_h": 6.0008333333333335,
     "war": null
@@ -7223,6 +7340,7 @@
     "qty": 1761,
     "sold": 4,
     "sold_at": 1124,
+    "sold_maybe": 0,
     "vendor": 300,
     "wait_h": 4.000555555555556,
     "war": "relisting"
@@ -7243,6 +7361,7 @@
     "qty": 83,
     "sold": 8,
     "sold_at": 1999,
+    "sold_maybe": 0,
     "vendor": 95,
     "wait_h": 6.001111111111111,
     "war": null
@@ -7263,6 +7382,7 @@
     "qty": 928,
     "sold": 69,
     "sold_at": 1450,
+    "sold_maybe": 0,
     "vendor": 60,
     "wait_h": 4.000555555555556,
     "war": null
@@ -7283,6 +7403,7 @@
     "qty": 418,
     "sold": 163,
     "sold_at": 653,
+    "sold_maybe": 0,
     "vendor": 375,
     "wait_h": 2.000277777777778,
     "war": null
@@ -7303,6 +7424,7 @@
     "qty": 67,
     "sold": 2,
     "sold_at": 2152,
+    "sold_maybe": 0,
     "vendor": 375,
     "wait_h": 12.001666666666667,
     "war": null
@@ -7323,6 +7445,7 @@
     "qty": 67,
     "sold": 39,
     "sold_at": 1740,
+    "sold_maybe": 0,
     "vendor": 250,
     "wait_h": 4.000555555555556,
     "war": null
@@ -7343,6 +7466,7 @@
     "qty": 361,
     "sold": 29,
     "sold_at": 805,
+    "sold_maybe": 0,
     "vendor": 100,
     "wait_h": 3.0004166666666667,
     "war": null
@@ -7363,6 +7487,7 @@
     "qty": 796,
     "sold": 7,
     "sold_at": 7177,
+    "sold_maybe": 0,
     "vendor": 100,
     "wait_h": 3.0004166666666667,
     "war": null
@@ -7383,6 +7508,7 @@
     "qty": 483,
     "sold": 5,
     "sold_at": 3477,
+    "sold_maybe": 0,
     "vendor": 150,
     "wait_h": 12.001666666666667,
     "war": null
@@ -7403,6 +7529,7 @@
     "qty": 262,
     "sold": 0,
     "sold_at": null,
+    "sold_maybe": 0,
     "vendor": 250,
     "wait_h": null,
     "war": null
@@ -7423,6 +7550,7 @@
     "qty": 102,
     "sold": 10,
     "sold_at": 15000,
+    "sold_maybe": 0,
     "vendor": 250,
     "wait_h": 6.0008333333333335,
     "war": null
@@ -7443,6 +7571,7 @@
     "qty": 59,
     "sold": 5,
     "sold_at": 187339,
+    "sold_maybe": 0,
     "vendor": 1000,
     "wait_h": 5.0008333333333335,
     "war": null
@@ -7465,6 +7594,7 @@
     "qty": 23160,
     "sold": 982,
     "sold_at": 77,
+    "sold_maybe": 0,
     "vendor": 5,
     "wait_h": 1.3335185185185185,
     "war": "relisting"
@@ -7483,8 +7613,9 @@
     "name": "Copper Bar",
     "pulled": 848,
     "qty": 9082,
-    "sold": 1225,
+    "sold": 1191,
     "sold_at": 82,
+    "sold_maybe": 34,
     "vendor": 10,
     "wait_h": 1.3458333333333334,
     "war": null
@@ -7505,6 +7636,7 @@
     "qty": 10376,
     "sold": 1265,
     "sold_at": 10,
+    "sold_maybe": 0,
     "vendor": 2,
     "wait_h": 1.000138888888889,
     "war": null
@@ -7523,10 +7655,11 @@
     "name": "Malachite",
     "pulled": 33,
     "qty": 2255,
-    "sold": 250,
-    "sold_at": 18,
+    "sold": 154,
+    "sold_at": 20,
+    "sold_maybe": 96,
     "vendor": 15,
-    "wait_h": 1.7244047619047618,
+    "wait_h": 2.0118055555555556,
     "war": null
    },
    {
@@ -7545,6 +7678,7 @@
     "qty": 582,
     "sold": 80,
     "sold_at": 143,
+    "sold_maybe": 0,
     "vendor": 100,
     "wait_h": 1.7145238095238093,
     "war": null
@@ -7565,6 +7699,7 @@
     "qty": 719,
     "sold": 24,
     "sold_at": 301,
+    "sold_maybe": 0,
     "vendor": 250,
     "wait_h": 1.5002083333333334,
     "war": null
@@ -7585,6 +7720,7 @@
     "qty": 1527,
     "sold": 554,
     "sold_at": 226,
+    "sold_maybe": 0,
     "vendor": 25,
     "wait_h": 1.2001666666666666,
     "war": null
@@ -7605,6 +7741,7 @@
     "qty": 3412,
     "sold": 251,
     "sold_at": 230,
+    "sold_maybe": 0,
     "vendor": 35,
     "wait_h": 1.7145238095238093,
     "war": null
@@ -7625,6 +7762,7 @@
     "qty": 3927,
     "sold": 386,
     "sold_at": 118,
+    "sold_maybe": 0,
     "vendor": 15,
     "wait_h": 1.5002083333333334,
     "war": null
@@ -7645,6 +7783,7 @@
     "qty": 517,
     "sold": 37,
     "sold_at": 636,
+    "sold_maybe": 0,
     "vendor": 400,
     "wait_h": 1.2001666666666666,
     "war": null
@@ -7665,6 +7804,7 @@
     "qty": 265,
     "sold": 13,
     "sold_at": 623,
+    "sold_maybe": 0,
     "vendor": 600,
     "wait_h": 2.000277777777778,
     "war": null
@@ -7685,6 +7825,7 @@
     "qty": 720,
     "sold": 107,
     "sold_at": 650,
+    "sold_maybe": 0,
     "vendor": 75,
     "wait_h": 1.5002083333333334,
     "war": null
@@ -7705,6 +7846,7 @@
     "qty": 1770,
     "sold": 127,
     "sold_at": 417,
+    "sold_maybe": 0,
     "vendor": 100,
     "wait_h": 2.000277777777778,
     "war": null
@@ -7725,6 +7867,7 @@
     "qty": 5740,
     "sold": 435,
     "sold_at": 311,
+    "sold_maybe": 0,
     "vendor": 150,
     "wait_h": 1.5002083333333334,
     "war": null
@@ -7743,8 +7886,9 @@
     "name": "Iron Bar",
     "pulled": 9,
     "qty": 3030,
-    "sold": 413,
-    "sold_at": 354,
+    "sold": 306,
+    "sold_at": 352,
+    "sold_maybe": 107,
     "vendor": 200,
     "wait_h": 2.0379166666666664,
     "war": null
@@ -7765,6 +7909,7 @@
     "qty": 1007,
     "sold": 195,
     "sold_at": 911,
+    "sold_maybe": 0,
     "vendor": 60,
     "wait_h": 4.000555555555556,
     "war": null
@@ -7785,6 +7930,7 @@
     "qty": 3749,
     "sold": 599,
     "sold_at": 403,
+    "sold_maybe": 0,
     "vendor": 60,
     "wait_h": 1.091060606060606,
     "war": null
@@ -7805,6 +7951,7 @@
     "qty": 635,
     "sold": 73,
     "sold_at": 785,
+    "sold_maybe": 0,
     "vendor": 500,
     "wait_h": 2.000277777777778,
     "war": null
@@ -7825,6 +7972,7 @@
     "qty": 437,
     "sold": 86,
     "sold_at": 788,
+    "sold_maybe": 0,
     "vendor": 600,
     "wait_h": 1.7145238095238093,
     "war": null
@@ -7845,6 +7993,7 @@
     "qty": 2174,
     "sold": 252,
     "sold_at": 799,
+    "sold_maybe": 0,
     "vendor": 250,
     "wait_h": 2.400333333333333,
     "war": null
@@ -7865,6 +8014,7 @@
     "qty": 1011,
     "sold": 267,
     "sold_at": 883,
+    "sold_maybe": 0,
     "vendor": 400,
     "wait_h": 1.8712499999999999,
     "war": null
@@ -7885,6 +8035,7 @@
     "qty": 3723,
     "sold": 489,
     "sold_at": 223,
+    "sold_maybe": 0,
     "vendor": 100,
     "wait_h": 1.7145238095238093,
     "war": null
@@ -7905,6 +8056,7 @@
     "qty": 428,
     "sold": 52,
     "sold_at": 1026,
+    "sold_maybe": 0,
     "vendor": 500,
     "wait_h": 2.400333333333333,
     "war": null
@@ -7925,6 +8077,7 @@
     "qty": 214,
     "sold": 26,
     "sold_at": 1373,
+    "sold_maybe": 0,
     "vendor": 1250,
     "wait_h": 2.000277777777778,
     "war": null
@@ -7945,6 +8098,7 @@
     "qty": 2301,
     "sold": 141,
     "sold_at": 5639,
+    "sold_maybe": 0,
     "vendor": 250,
     "wait_h": 6.0008333333333335,
     "war": null
@@ -7965,6 +8119,7 @@
     "qty": 917,
     "sold": 61,
     "sold_at": 6054,
+    "sold_maybe": 0,
     "vendor": 600,
     "wait_h": 2.0526388888888887,
     "war": null
@@ -7985,6 +8140,7 @@
     "qty": 2717,
     "sold": 0,
     "sold_at": null,
+    "sold_maybe": 0,
     "vendor": 250,
     "wait_h": null,
     "war": "relisting"
@@ -8005,6 +8161,7 @@
     "qty": 656,
     "sold": 7,
     "sold_at": 2597,
+    "sold_maybe": 0,
     "vendor": 500,
     "wait_h": 12.001666666666667,
     "war": null
@@ -8027,6 +8184,7 @@
     "qty": 4518,
     "sold": 567,
     "sold_at": 10,
+    "sold_maybe": 0,
     "vendor": 7,
     "wait_h": 1.7145238095238093,
     "war": null
@@ -8047,6 +8205,7 @@
     "qty": 18178,
     "sold": 1014,
     "sold_at": 30,
+    "sold_maybe": 0,
     "vendor": 15,
     "wait_h": 1.2001666666666666,
     "war": null
@@ -8067,6 +8226,7 @@
     "qty": 1280,
     "sold": 128,
     "sold_at": 190,
+    "sold_maybe": 0,
     "vendor": 50,
     "wait_h": 1.5002083333333334,
     "war": null
@@ -8087,6 +8247,7 @@
     "qty": 9576,
     "sold": 1381,
     "sold_at": 107,
+    "sold_maybe": 0,
     "vendor": 50,
     "wait_h": 1.2001666666666666,
     "war": null
@@ -8107,6 +8268,7 @@
     "qty": 1351,
     "sold": 129,
     "sold_at": 235,
+    "sold_maybe": 0,
     "vendor": 125,
     "wait_h": 1.091060606060606,
     "war": null
@@ -8127,6 +8289,7 @@
     "qty": 3685,
     "sold": 480,
     "sold_at": 226,
+    "sold_maybe": 0,
     "vendor": 150,
     "wait_h": 1.5002083333333334,
     "war": null
@@ -8147,6 +8310,7 @@
     "qty": 576,
     "sold": 49,
     "sold_at": 1103,
+    "sold_maybe": 0,
     "vendor": 200,
     "wait_h": 1.3335185185185185,
     "war": null
@@ -8167,6 +8331,7 @@
     "qty": 3899,
     "sold": 323,
     "sold_at": 593,
+    "sold_maybe": 0,
     "vendor": 300,
     "wait_h": 1.091060606060606,
     "war": null
@@ -8187,6 +8352,7 @@
     "qty": 809,
     "sold": 2,
     "sold_at": 649,
+    "sold_maybe": 0,
     "vendor": 500,
     "wait_h": 5.5008333333333335,
     "war": "relisting"
@@ -8207,6 +8373,7 @@
     "qty": 1586,
     "sold": 102,
     "sold_at": 738,
+    "sold_maybe": 0,
     "vendor": 500,
     "wait_h": 2.000277777777778,
     "war": null
@@ -8227,6 +8394,7 @@
     "qty": 137,
     "sold": 12,
     "sold_at": 2402,
+    "sold_maybe": 0,
     "vendor": 500,
     "wait_h": 6.0008333333333335,
     "war": null
@@ -8247,6 +8415,7 @@
     "qty": 717,
     "sold": 51,
     "sold_at": 296,
+    "sold_maybe": 0,
     "vendor": 208,
     "wait_h": 2.000277777777778,
     "war": null
@@ -8267,6 +8436,7 @@
     "qty": 1253,
     "sold": 287,
     "sold_at": 75,
+    "sold_maybe": 0,
     "vendor": 75,
     "wait_h": 1.3458333333333334,
     "war": null
@@ -8287,6 +8457,7 @@
     "qty": 2913,
     "sold": 165,
     "sold_at": 25,
+    "sold_maybe": 0,
     "vendor": 25,
     "wait_h": 2.000277777777778,
     "war": null
@@ -8307,6 +8478,7 @@
     "qty": 362,
     "sold": 19,
     "sold_at": 1964,
+    "sold_maybe": 0,
     "vendor": 250,
     "wait_h": 2.7504166666666667,
     "war": null
@@ -8327,6 +8499,7 @@
     "qty": 157,
     "sold": 9,
     "sold_at": 810,
+    "sold_maybe": 0,
     "vendor": 500,
     "wait_h": 12.001666666666667,
     "war": null

@@ -137,10 +137,15 @@ def sprees(times, gap=SPREE_GAP):
 
 def tally(fills, recent_since):
     """per item: sold [units, copper], pulled units, units sold in windows ending at or after recent_since,
-    nd how many buying sprees th sales came in. expiries count as neither"""
+    how many buying sprees th sales came in, nd maybe-sold units. expiries count as nothing.
+
+    low-confidence sales (a cancel wud have looked th same) only go in maybe, never in sold, sprees or recent:
+    an overconfident number misleads whoever acts on it (th old heavy dynamite timing did), so th sure part is
+    th headline nd th rest is shown as a range"""
     sold = defaultdict(lambda: [0, 0])
     pulled = defaultdict(int)
     recent = defaultdict(int)
+    maybe = defaultdict(int)
     sale_times = defaultdict(set)
     for f in fills:
         if f.kind == "pull":
@@ -148,9 +153,12 @@ def tally(fills, recent_since):
             continue
         if f.kind != "sale":
             continue
+        if f.confidence != "high":
+            maybe[f.item_id] += f.quantity
+            continue
         sold[f.item_id][0] += f.quantity
         sold[f.item_id][1] += f.quantity * f.unit_price
         sale_times[f.item_id].add(f.t_to)
         if f.t_to >= recent_since:
             recent[f.item_id] += f.quantity
-    return sold, pulled, recent, defaultdict(int, {i: sprees(ts) for i, ts in sale_times.items()})
+    return sold, pulled, recent, defaultdict(int, {i: sprees(ts) for i, ts in sale_times.items()}), maybe

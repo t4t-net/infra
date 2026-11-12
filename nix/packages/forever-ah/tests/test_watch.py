@@ -135,8 +135,13 @@ class Merge(unittest.TestCase):
         self.assertEqual(market.covered_seconds([]), 0)
 
     def test_tally_ignores_expiries(self):
-        sold, pulled, _, _ = fills.tally([fill("watch", 0, 60, 5), fill("watch", 0, 60, 9, "expire")], 0)
+        sold, pulled, *_ = fills.tally([fill("watch", 0, 60, 5), fill("watch", 0, 60, 9, "expire")], 0)
         self.assertEqual((sold[1], pulled[1]), ([5, 50], 0))
+
+    def test_low_confidence_sales_r_only_maybe(self):
+        low = Fill(1, 0, 60, 10, 14, "watch", "sale", "low")
+        sold, _, recent, sprees, maybe = fills.tally([fill("watch", 0, 60, 47), low], 0)
+        self.assertEqual((sold[1], maybe[1], recent[1], sprees[1]), ([47, 470], 14, 47, 1))
 
 
 if __name__ == "__main__":

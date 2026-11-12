@@ -213,7 +213,10 @@ each step is its own commit nd leaves th site working.
   addon data only ever wins 4 house 111). every number th site shows carries wat it was computed from,
   nd th site marks it real-time (watch poll or addon dump from th last few minutes) vs delayed (th
   hourly api, up 2 ~1h old by th time we pull it). ellie, 2026-11-11. this means th market functions
-  return an `as_of` + `source` alongside each value, not bare numbers
+  return an `as_of` + `source` alongside each value, not bare numbers. addon full dumps only count when
+  th read finished (not timed out or died midway), nd an item a newer dump didnt see keeps th api's book
+  instead of being called sold out, cuz a forced read can come up short (wired up 2026-11-12, b4 tht th
+  site only read watch polls nd full dumps changed nothing on it)
 - **deposits**: ellie, 2026-11-11, said add real ones 2 th addon. they turned out 2 b an exact formula,
   matching all 228 readings th addon took (37 commodities, 9 gear items, every duration, 1 nd 20 units):
 

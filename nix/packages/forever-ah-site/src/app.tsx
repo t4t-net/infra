@@ -103,7 +103,7 @@ function Block({ head, rows, notes }: { head: string[]; rows: Cell[][]; notes?: 
 }
 
 type Market = { id: number; name: string; wait_h: number | null; ahead: number; deposit_risk: number | null; floor: number | null; median: number | null; qty: number | null; listings: number | null; floor_then: number | null; sold: number | null; sold_at: number | null; vendor: number | null
-  sold_maybe: number | null; as_of: number | null; source: 'api' | 'watch' | null; duration_h: number | null; listing_deposit: number | null; deposit_known: boolean; trend_per_h: number | null }
+  sold_maybe: number | null; as_of: number | null; source: 'api' | 'addon' | 'watch' | null; duration_h: number | null; listing_deposit: number | null; deposit_known: boolean; trend_per_h: number | null }
 type Farm = { cost: number; profit: number; mats: { id: number; name: string; qty: number; src: 'farm' | 'ah' | 'vendor' }[] }
 type Craft = { recipe: string; spell: number | null; makes: number; cost: number; revenue: number; profit: number; mats: { id: number; name: string; qty: number; vendor?: boolean }[]; out: Market; farm?: Farm }
 
@@ -416,10 +416,12 @@ export function App() {
               <dt>game</dt><dd>wow: forever</dd>
               <dt>house</dt><dd>111, normal, alliance</dd>
               <dt>window</dt><dd>{D.dumps} dumps over {D.hours}h</dd>
-              {/* th api dump is hourly; watched items can b fresher, nd th header shudnt undersell or blur tht */}
+              {/* th api dump is hourly; th addon's full dumps nd watched items can b fresher, nd th header shudnt
+                  undersell or blur tht */}
               <dt>api dump</dt><dd>{when(D.dump)} <span className="c">(hourly)</span></dd>
+              {D.addon_dump ? <><dt>addon dump</dt><dd>{when(D.addon_dump)} <span className="c">(whole ah, {D.addon_items} items)</span></dd></> : null}
               {D.watch_as_of ? <><dt>live</dt><dd>{when(D.watch_as_of)} <span className="c">(addon, {D.watch_items} items)</span></dd></> : null}
-              <dt>source</dt><dd>battle.net api{D.watch_as_of ? ' + ForeverScan addon' : ''}</dd>
+              <dt>source</dt><dd>battle.net api{D.addon_dump || D.watch_as_of ? ' + ForeverScan addon' : ''}</dd>
             </dl>
           </div>
         </header>

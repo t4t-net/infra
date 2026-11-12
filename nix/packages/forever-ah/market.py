@@ -148,17 +148,26 @@ def market_data(args, db):
     obs = observe.api_observations(db, snaps)
     watch = {i: [o for o in s if since <= o.t <= now_t] for i, s in observe.watch_observations(db, args.house).items()}
     watch = {i: s for i, s in watch.items() if s}
-    # th freshest book 4 each item w raw listings: th last api dump's, or a watch poll if one came after it
+    # th freshest book 4 each item w raw listings: th last api dump's, th addon's full dump if one came after
+    # it, or a watch poll if one came after both
     books = {i: s[-1] for i, s in obs.items()}
+    seen = {i: (snaps[-1][1], "api") for i in now}
+    # a whole-AH addon dump newer than th last api one takes over every item it saw. items it didnt see keep
+    # th api's book: a forced read can come up short, so "missing" isnt proof it sold out
+    addon = observe.newest_addon_dump(db, args.house, snaps[-1][1], now_t)
+    if addon:
+        for i, b in observe.addon_books(db, addon[0]).items():
+            now[i] = b
+            seen[i] = (addon[1], "addon")
+        books.update(observe.addon_observations(db, *addon))
     for i, s in watch.items():
         if i not in books or s[-1].t > books[i].t:
             books[i] = s[-1]
     # newest wins: a watch poll after th last dump replaces th dump's floor, median nd quantity. listings stay
     # th api's, watch rows r price levels w seller counts, not auctions. every row says where its book came
     # from nd whether thats real-time or th hourly dump
-    seen = {i: (snaps[-1][1], "api") for i in now}
     for i, b in books.items():
-        if b.source == "watch" and b.t > snaps[-1][1] and b.listings:
+        if b.source == "watch" and b.t > seen.get(i, (0,))[0] and b.listings:
             lots = sorted((l.unit_price, l.quantity) for l in b.listings if l.unit_price is not None)
             qty = sum(q for _, q in lots)
             med = next(price for price, acc in zip((p for p, _ in lots), accumulate(q for _, q in lots))
@@ -287,5 +296,8 @@ def market_data(args, db):
         # showing just tht undersells how fresh th watched rows r
         "watch_as_of": max((t for t, src in seen.values() if src == "watch"), default=None),
         "watch_items": sum(1 for _, src in seen.values() if src == "watch"),
+        # th newest full addon dump th rows r priced from, if its newer than th api's
+        "addon_dump": addon[1] if addon else None,
+        "addon_items": sum(1 for _, src in seen.values() if src == "addon"),
         "hours": round((snaps[-1][1] - snaps[0][1]) / 3600), "crafts": crafts, "gather": gather, "flips": flips, "vendor": vendor,
     }

@@ -51,6 +51,32 @@ def api_observations(db, dumps):
     return {i: [Observation(i, t, "api", tuple(by_dump[sid].get(i, ()))) for sid, t in dumps] for i in items}
 
 
+def newest_addon_dump(db, house, after, until):
+    """(scan id, time) of th addon's newest whole full dump in (after, until], or None. timed out nd died-midway
+    reads r skipped: a partial dump is missing items at random, so it cant stand in 4 th whole book"""
+    return db.execute(
+        "select id, server_ts from addon_scan where house_id = ? and server_ts > ? and server_ts <= ? "
+        "and listings is not null and not timed_out and error is null order by server_ts desc limit 1",
+        (house, after, until)).fetchone()
+
+
+def addon_books(db, scan_id):
+    """{item: (median, min, quantity, auctions)} from a full addon dump, shaped like th api's price rows"""
+    return {i: (med, mn, q, n) for i, med, mn, q, n in db.execute(
+        "select item_id, median_unit, min_unit, quantity, auctions from addon_price where scan_id = ? "
+        "order by quantity", (scan_id,))}
+
+
+def addon_observations(db, scan_id, t):
+    """{item: Observation} from a full addon dump's raw rows (watched items nd suffixed gear only). no auction
+    ids, so these r books 2 price against, not something fills can follow across dumps"""
+    rows = defaultdict(list)
+    for iid, price, q, tl in db.execute(
+            "select item_id, unit_price, quantity, time_left from addon_listing where scan_id = ?", (scan_id,)):
+        rows[iid].append(Listing(price, q, time_left=tl))
+    return {i: Observation(i, t, "addon", tuple(ls)) for i, ls in rows.items()}
+
+
 def watch_observations(db, house):
     """{item: [Observation per poll]} from th addon's watchlist. each listing is a whole price level (every
     seller at tht unit price summed), cheapest first"""

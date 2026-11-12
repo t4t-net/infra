@@ -45,6 +45,30 @@ function trend(now?: number | null, then?: number | null): Run[] {
   return [{ t: `${p > 0 ? '+' : ''}${p}%`, c: p < 0 ? 'down' : undefined }]
 }
 
+// sales we're sure of, then th ones a cancel wud have looked th same as. never folded into one number: an
+// overconfident count misleads whoever acts on it
+function sold(m: Market): Cell {
+  if (m.sold == null) return [{ t: '-', c: 'c' }]
+  return [{ t: m.sold.toLocaleString() }, ...(m.sold_maybe ? [{ t: ` (+${m.sold_maybe.toLocaleString()}?)`, c: 'c' }] : [])]
+}
+
+// how old th book behind a row is, worked out when th page is LOOKED at, not when it was exported: "live" is
+// th addon watching it in th last 15 min, anything older is th hourly api (or a stale poll) nd says so
+function seen(m: Market): Run[] {
+  if (m.as_of == null) return [{ t: '-', c: 'c' }]
+  const age = Date.now() / 1000 - m.as_of
+  if (age < 15 * 60) return [{ t: 'live', c: 'gold' }]
+  return [{ t: age < 3600 ? `${Math.round(age / 60)}m` : age < 48 * 3600 ? `${Math.round(age / 3600)}h` : `${Math.round(age / 86400)}d`, c: 'c' }]
+}
+
+// how th deposit math wants it listed, nd which way sold prices r heading
+function plan(m: Market): Run[] {
+  const out: Run[] = []
+  if (m.duration_h) out.push({ t: ` · list ${m.duration_h}h, ` }, ...(m.deposit_known ? money(m.listing_deposit) : [{ t: '~' }, ...money(m.listing_deposit), { t: ' (guess)' }]), { t: ' deposit' })
+  if (m.trend_per_h && Math.abs(m.trend_per_h) >= 1) out.push({ t: ' · sold prices ' }, ...money(m.trend_per_h), { t: '/h', c: m.trend_per_h < 0 ? 'down' : undefined })
+  return out
+}
+
 // how long until urs sells as th cheapest listing; "slow" means none sold while we watched. "ahead" is th
 // queue u join when th floor is at th ah's minimum nd cant be undercut
 function wait(m: Market): Run[] {
@@ -78,7 +102,8 @@ function Block({ head, rows, notes }: { head: string[]; rows: Cell[][]; notes?: 
   )
 }
 
-type Market = { id: number; name: string; wait_h: number | null; ahead: number; deposit_risk: number | null; floor: number | null; median: number | null; qty: number | null; listings: number | null; floor_then: number | null; sold: number | null; sold_at: number | null; vendor: number | null }
+type Market = { id: number; name: string; wait_h: number | null; ahead: number; deposit_risk: number | null; floor: number | null; median: number | null; qty: number | null; listings: number | null; floor_then: number | null; sold: number | null; sold_at: number | null; vendor: number | null
+  sold_maybe: number | null; as_of: number | null; source: 'api' | 'watch' | null; duration_h: number | null; listing_deposit: number | null; deposit_known: boolean; trend_per_h: number | null }
 type Farm = { cost: number; profit: number; mats: { id: number; name: string; qty: number; src: 'farm' | 'ah' | 'vendor' }[] }
 type Craft = { recipe: string; spell: number | null; makes: number; cost: number; revenue: number; profit: number; mats: { id: number; name: string; qty: number; vendor?: boolean }[]; out: Market; farm?: Farm }
 
@@ -86,13 +111,13 @@ function Crafts({ rows }: { rows: Craft[] }) {
   if (!rows.length) return <p className="mute">nothing here clears a profit right now.</p>
   return (
     <Block
-      head={['recipe', 'mats', 'sells', 'profit', 'listed', `${D.hours}h`, 'sold', 'sold at', 'wait']}
+      head={['recipe', 'mats', 'sells', 'profit', 'listed', `${D.hours}h`, 'sold', 'sold at', 'wait', 'seen']}
       rows={rows.map(r => [
         [...recipe(r), ...(r.makes > 1 ? [{ t: ` x${r.makes}`, c: 'c' }] : [])], money(r.cost), money(r.revenue), money(r.profit),
-        String(r.out.listings ?? 0), trend(r.out.floor, r.out.floor_then), r.out.sold == null ? [{ t: '-', c: 'c' }] : String(r.out.sold),
-        money(r.out.sold_at), wait(r.out),
+        String(r.out.listings ?? 0), trend(r.out.floor, r.out.floor_then), sold(r.out),
+        money(r.out.sold_at), wait(r.out), seen(r.out),
       ])}
-      notes={rows.map(r => r.mats.flatMap((m, i) => [{ t: `${i ? ', ' : ''}${m.qty} ` }, ...item(m.id, m.name), ...(m.vendor ? [{ t: ' (vendor)' }] : [])]))}
+      notes={rows.map(r => [...r.mats.flatMap((m, i) => [{ t: `${i ? ', ' : ''}${m.qty} ` }, ...item(m.id, m.name), ...(m.vendor ? [{ t: ' (vendor)' }] : [])]), ...plan(r.out)])}
     />
   )
 }
@@ -102,12 +127,12 @@ function FarmCrafts({ rows }: { rows: Craft[] }) {
   if (!rows.length) return <p className="mute">nothing here clears a profit right now.</p>
   return (
     <Block
-      head={['recipe', 'buy', 'sells', 'profit', 'vs raw', 'listed', 'wait']}
+      head={['recipe', 'buy', 'sells', 'profit', 'vs raw', 'listed', 'wait', 'seen']}
       rows={rows.map(r => [
         [...recipe(r), ...(r.makes > 1 ? [{ t: ` x${r.makes}`, c: 'c' }] : [])], money(r.farm!.cost), money(r.revenue), money(r.farm!.profit),
-        money(r.profit), String(r.out.listings ?? 0), wait(r.out),
+        money(r.profit), String(r.out.listings ?? 0), wait(r.out), seen(r.out),
       ])}
-      notes={rows.map(r => r.farm!.mats.flatMap((m, i) => [{ t: `${i ? ', ' : ''}${m.qty} ` }, ...item(m.id, m.name), ...(m.src !== 'farm' ? [{ t: ` (${m.src})` }] : [])]))}
+      notes={rows.map(r => [...r.farm!.mats.flatMap((m, i) => [{ t: `${i ? ', ' : ''}${m.qty} ` }, ...item(m.id, m.name), ...(m.src !== 'farm' ? [{ t: ` (${m.src})` }] : [])]), ...plan(r.out)])}
     />
   )
 }
@@ -115,10 +140,10 @@ function FarmCrafts({ rows }: { rows: Craft[] }) {
 function Mats({ rows }: { rows: Market[] }) {
   return (
     <Block
-      head={['item', 'cheapest', 'median', `${D.hours}h`, 'on ah', 'sold', 'wait', 'vendor']}
+      head={['item', 'cheapest', 'median', `${D.hours}h`, 'on ah', 'sold', 'wait', 'vendor', 'seen']}
       rows={rows.map(m => [
         item(m.id, m.name), money(m.floor), money(m.median), trend(m.floor, m.floor_then), (m.qty ?? 0).toLocaleString(),
-        m.sold == null ? [{ t: '-', c: 'c' }] : m.sold.toLocaleString(), wait(m), m.vendor ? money(m.vendor) : [{ t: '-', c: 'c' }],
+        sold(m), wait(m), m.vendor ? money(m.vendor) : [{ t: '-', c: 'c' }], seen(m),
       ])}
     />
   )

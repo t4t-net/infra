@@ -55,6 +55,43 @@ def analyze(args, db):
         print(f"{name[:35]:<36}{g(cost):>10}{g(revenue):>11}{g(profit):>10}{n:>5}")
 
 
+def clearing_price(sales):
+    """th quantity-weighted median price sure sales went 4, or None w no sales"""
+    lots = sorted((f.unit_price, f.quantity) for f in sales)
+    total, acc = sum(q for _, q in lots), 0
+    for price, q in lots:
+        acc += q
+        if acc * 2 >= total:
+            return price
+    return None
+
+
+def trend_per_h(sales):
+    """least squares slope of sure-sale prices over time, weighted by quantity, in copper per hour. None
+    until sales landed at two different times"""
+    pts = [(f.t_to / 3600, f.unit_price, f.quantity) for f in sales]
+    w = sum(q for _, _, q in pts)
+    if not w or len({x for x, _, _ in pts}) < 2:
+        return None
+    mx = sum(x * q for x, _, q in pts) / w
+    my = sum(y * q for _, y, q in pts) / w
+    return sum(q * (x - mx) * (y - my) for x, y, q in pts) / sum(q * (x - mx) ** 2 for x, _, q in pts)
+
+
+def realizable(floor, step, clearing, trend, wait_h):
+    """wat listing one now shud actually fetch: one step (1c commodities, 1s gear) under th floor, never above
+    wat sales actually cleared at, nd if th price is falling, wat its fallen 2 by th time urs sells. a rising
+    trend is NOT projected: promising tomorrow's higher price is th overconfident kind of wrong. never under
+    th AH's minimum, which is th step"""
+    prices = [p for p in (floor - step if floor is not None else None, clearing) if p is not None]
+    if not prices:
+        return None
+    price = min(prices)
+    if trend is not None and trend < 0 and wait_h:
+        price += trend * wait_h
+    return max(step, round(price))
+
+
 def walk_book(listings, q, fallback_unit):
     """copper 4 q units bought cheapest first, not q x th median: on th 2026-11-11 copper bar book th median
     (85c) overstated a single 16-bar craft by 42%. past th book's end th rest goes at fallback_unit"""
@@ -107,11 +144,12 @@ def market_data(args, db):
     watch = {i: [o for o in s if since <= o.t <= now_t] for i, s in observe.watch_observations(db, args.house).items()}
     watch = {i: s for i, s in watch.items() if s}
     dump_times = [t for _, t in snaps]
-    merged = (f for i in obs.keys() | watch.keys()
-              for f in fills.merge(list(fills.api_fills(obs.get(i, []))), list(fills.watch_fills(watch.get(i, []))),
-                                   fills.watch_spans(watch.get(i, [])), dump_times))
+    merged = {i: fills.merge(list(fills.api_fills(obs.get(i, []))), list(fills.watch_fills(watch.get(i, []))),
+                             fills.watch_spans(watch.get(i, [])), dump_times)
+              for i in obs.keys() | watch.keys()}
     recent_since = snaps[max(0, len(snaps) - args.dry_dumps)][1]
-    sold, pulled, recent, events, maybe = fills.tally(merged, recent_since)
+    sold, pulled, recent, events, maybe = fills.tally((f for fs in merged.values() for f in fs), recent_since)
+    sure = {i: [f for f in fs if f.kind == "sale" and f.confidence == "high"] for i, fs in merged.items()}
     recent_h = (snaps[-1][1] - snaps[max(0, len(snaps) - 1 - args.dry_dumps)][1]) / 3600
     # items r tracked from th first dump they have raw listings in; items added 2 th watchlist mid-window
     # (or never listed) get "-" instead of a fake zero. under an hour of tracking measures nothing yet
@@ -168,6 +206,10 @@ def market_data(args, db):
                 d = deposit(sell, max(1, round(stack)), percent) if sell is not None else args.deposit
                 options.append((round(d * min((1 - p) / p if p else math.inf, args.give_up_days * 24 / h)), h, d))
             deposits, duration, listing_deposit = min(options)
+        wait_h = need / rate if rate else None
+        step = 100 if i in single else 1
+        clearing = clearing_price(sure.get(i, ())) if units is not None else None
+        trend = trend_per_h(sure.get(i, ())) if units is not None else None
         # no real market, just sellers undercutting each other: way more pulled nd reposted than bought, or sales
         # tht stopped dead (th window's rate says there shud have been a handful by now) while sellers keep
         # reposting. a quiet few hours on its own is just a quiet few hours
@@ -188,8 +230,12 @@ def market_data(args, db):
             "pulled": pulled.get(i, 0) if units is not None else None,
             "war": war,
             "sold_at": round(s[1] / s[0]) if units else None,
+            "clearing": clearing,
+            "trend_per_h": trend,
+            # wat listing one now shud actually fetch, see realizable()
+            "realizable": realizable(n and n[1], step, clearing, trend, wait_h),
             # as th cheapest listing urs sells in th spree tht clears everything queued ahead of it
-            "wait_h": need / rate if rate else None,
+            "wait_h": wait_h,
             "ahead": ahead,
             "deposit_risk": deposits,
             # wat th deposit_risk assumes: list 4 duration_h at listing_deposit each (deposit_known: from th
@@ -281,7 +327,7 @@ def market_data(args, db):
             m = market(out, per)
             # th sales rate was earned at wat things actually sold 4, so never price above tht. a reseller who
             # buys out th floor nd relists at 4x right b4 a dump would otherwise turn a loser into a top craft
-            rev = int(min(o[1], m["sold_at"] or o[1]) * per * 0.95)
+            rev = int(m["realizable"] * per * 0.95)
             profit = rev - cost - (m["deposit_risk"] or 0)
             row = {"recipe": rname, "spell": spell, "makes": per, "cost": cost, "revenue": rev, "profit": profit,
                    "mats": mats, "out": m}

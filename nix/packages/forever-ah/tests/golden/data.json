@@ -42,7 +42,7 @@
         "src": "ah"
        }
       ],
-      "profit": 32807
+      "profit": 32712
      },
      "makes": 1.0,
      "mats": [
@@ -69,6 +69,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": null,
       "duration_h": null,
@@ -81,16 +82,18 @@
       "name": "Blue Glittering Axe",
       "pulled": null,
       "qty": 21,
+      "realizable": 42400,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
+      "trend_per_h": null,
       "vendor": 14659,
       "wait_h": null,
       "war": null
      },
-     "profit": 15174,
+     "profit": 15079,
      "recipe": "Blue Glittering Axe",
-     "revenue": 40375,
+     "revenue": 40280,
      "spell": 9995
     },
     {
@@ -117,7 +120,7 @@
         "src": "farm"
        }
       ],
-      "profit": 18999
+      "profit": 18998
      },
      "makes": 1.0,
      "mats": [
@@ -139,6 +142,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 19999,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -151,16 +155,18 @@
       "name": "Inlaid Mithril Cylinder",
       "pulled": 0,
       "qty": 69,
+      "realizable": 19998,
       "sold": 4,
       "sold_at": 19999,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 1000,
       "wait_h": 2.0005555555555556,
       "war": null
      },
-     "profit": 12540,
+     "profit": 12539,
      "recipe": "Inlaid Mithril Cylinder",
-     "revenue": 18999,
+     "revenue": 18998,
      "spell": 11454
     },
     {
@@ -205,7 +211,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 16128
+      "profit": 15891
      },
      "makes": 1.0,
      "mats": [
@@ -238,6 +244,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 26000,
       "deposit_known": true,
       "deposit_risk": 809,
       "duration_h": 24,
@@ -250,16 +257,18 @@
       "name": "Moonsteel Broadsword",
       "pulled": 0,
       "qty": 29,
+      "realizable": 26000,
       "sold": 2,
       "sold_at": 26250,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 8615,
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": 7763,
+     "profit": 7526,
      "recipe": "Moonsteel Broadsword",
-     "revenue": 24937,
+     "revenue": 24700,
      "spell": 3496
     },
     {
@@ -292,7 +301,7 @@
         "src": "ah"
        }
       ],
-      "profit": 15396
+      "profit": 15301
      },
      "makes": 1.0,
      "mats": [
@@ -319,6 +328,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": 36456,
       "duration_h": 2,
@@ -331,109 +341,19 @@
       "name": "Mithril Warhammer",
       "pulled": 0,
       "qty": 7,
+      "realizable": 56500,
       "sold": 0,
       "sold_at": null,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 4356,
       "wait_h": null,
       "war": null
      },
-     "profit": 2675,
+     "profit": 2580,
      "recipe": "Mithril Warhammer",
-     "revenue": 53770,
+     "revenue": 53675,
      "spell": 1252357
-    },
-    {
-     "cost": 19860,
-     "farm": {
-      "cost": 6630,
-      "mats": [
-       {
-        "id": 1206,
-        "name": "Moss Agate",
-        "qty": 2,
-        "src": "farm"
-       },
-       {
-        "id": 2838,
-        "name": "Heavy Stone",
-        "qty": 12,
-        "src": "farm"
-       },
-       {
-        "id": 2772,
-        "name": "Iron Ore",
-        "qty": 20,
-        "src": "farm"
-       },
-       {
-        "id": 1529,
-        "name": "Jade",
-        "qty": 2,
-        "src": "ah"
-       },
-       {
-        "id": 4255,
-        "name": "Green Leather Armor",
-        "qty": 1,
-        "src": "ah"
-       }
-      ],
-      "profit": 12497
-     },
-     "makes": 1.0,
-     "mats": [
-      {
-       "id": 1206,
-       "name": "Moss Agate",
-       "qty": 2
-      },
-      {
-       "id": 1529,
-       "name": "Jade",
-       "qty": 2
-      },
-      {
-       "id": 3486,
-       "name": "Heavy Grinding Stone",
-       "qty": 4
-      },
-      {
-       "id": 3575,
-       "name": "Iron Bar",
-       "qty": 20
-      },
-      {
-       "id": 4255,
-       "name": "Green Leather Armor",
-       "qty": 1
-      }
-     ],
-     "out": {
-      "ahead": 0,
-      "deposit_known": true,
-      "deposit_risk": 63,
-      "duration_h": 24,
-      "floor": 20200,
-      "floor_then": 50000,
-      "id": 3844,
-      "listing_deposit": 3394,
-      "listings": 38,
-      "median": 26900,
-      "name": "Green Iron Hauberk",
-      "pulled": 4,
-      "qty": 38,
-      "sold": 3,
-      "sold_at": 36300,
-      "sold_maybe": 0,
-      "vendor": 5658,
-      "wait_h": 6.0008333333333335,
-      "war": null
-     },
-     "profit": -733,
-     "recipe": "Green Iron Hauberk",
-     "revenue": 19190,
-     "spell": 3508
     },
     {
      "cost": 13968,
@@ -447,7 +367,7 @@
         "src": "farm"
        }
       ],
-      "profit": 9659
+      "profit": 9564
      },
      "makes": 1.0,
      "mats": [
@@ -459,6 +379,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 12000,
       "deposit_known": true,
       "deposit_risk": 316,
       "duration_h": 24,
@@ -471,16 +392,18 @@
       "name": "Heavy Mithril Breastplate",
       "pulled": 0,
       "qty": 18,
+      "realizable": 10400,
       "sold": 1,
       "sold_at": 12000,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 7045,
       "wait_h": 9.001388888888888,
       "war": null
      },
-     "profit": -4309,
+     "profit": -4404,
      "recipe": "Heavy Mithril Breastplate",
-     "revenue": 9975,
+     "revenue": 9880,
      "spell": 9959
     },
     {
@@ -507,7 +430,7 @@
         "src": "farm"
        }
       ],
-      "profit": 9500
+      "profit": 9405
      },
      "makes": 1.0,
      "mats": [
@@ -529,6 +452,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": null,
       "duration_h": null,
@@ -541,16 +465,18 @@
       "name": "Sterling Silver Gauntlet",
       "pulled": null,
       "qty": 12,
+      "realizable": 9900,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
+      "trend_per_h": null,
       "vendor": 957,
       "wait_h": null,
       "war": null
      },
-     "profit": 6132,
+     "profit": 6037,
      "recipe": "Sterling Silver Gauntlet",
-     "revenue": 9500,
+     "revenue": 9405,
      "spell": 1252234
     },
     {
@@ -583,7 +509,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 9485
+      "profit": 9390
      },
      "makes": 1.0,
      "mats": [
@@ -605,6 +531,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 15000,
       "deposit_known": true,
       "deposit_risk": 290,
       "duration_h": 24,
@@ -617,16 +544,18 @@
       "name": "Golden Scale Coif",
       "pulled": 0,
       "qty": 28,
+      "realizable": 14400,
       "sold": 1,
       "sold_at": 15000,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 3084,
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": 2107,
+     "profit": 2012,
      "recipe": "Golden Scale Coif",
-     "revenue": 13775,
+     "revenue": 13680,
      "spell": 3503
     },
     {
@@ -653,7 +582,7 @@
         "src": "farm"
        }
       ],
-      "profit": 8350
+      "profit": 8349
      },
      "makes": 1.0,
      "mats": [
@@ -675,6 +604,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": 2100,
       "duration_h": 24,
@@ -687,16 +617,18 @@
       "name": "Mithril Shield Spike",
       "pulled": 0,
       "qty": 31,
+      "realizable": 10999,
       "sold": 0,
       "sold_at": null,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 250,
       "wait_h": null,
       "war": null
      },
-     "profit": -2882,
+     "profit": -2883,
      "recipe": "Mithril Shield Spike",
-     "revenue": 10450,
+     "revenue": 10449,
      "spell": 9939
     },
     {
@@ -711,7 +643,7 @@
         "src": "farm"
        }
       ],
-      "profit": 7794
+      "profit": 7699
      },
      "makes": 1.0,
      "mats": [
@@ -723,6 +655,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 9000,
       "deposit_known": true,
       "deposit_risk": 756,
       "duration_h": 24,
@@ -735,16 +668,18 @@
       "name": "Mithril Plate Pants",
       "pulled": 2,
       "qty": 30,
+      "realizable": 8900,
       "sold": 1,
       "sold_at": 9000,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 8053,
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": -2682,
+     "profit": -2777,
      "recipe": "Mithril Plate Pants",
-     "revenue": 8550,
+     "revenue": 8455,
      "spell": 9931
     },
     {
@@ -789,7 +724,7 @@
         "src": "ah"
        }
       ],
-      "profit": 6960
+      "profit": 6718
      },
      "makes": 1.0,
      "mats": [
@@ -821,6 +756,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 9300,
       "deposit_known": true,
       "deposit_risk": 33,
       "duration_h": 24,
@@ -833,16 +769,18 @@
       "name": "Shining Silver Breastplate",
       "pulled": 0,
       "qty": 38,
+      "realizable": 9120,
       "sold": 4,
       "sold_at": 9375,
       "sold_maybe": 0,
+      "trend_per_h": -29.995000833073437,
       "vendor": 2935,
       "wait_h": 6.0008333333333335,
       "war": null
      },
-     "profit": -405,
+     "profit": -647,
      "recipe": "Shining Silver Breastplate",
-     "revenue": 8906,
+     "revenue": 8664,
      "spell": 2675
     },
     {
@@ -863,7 +801,7 @@
         "src": "farm"
        }
       ],
-      "profit": 6144
+      "profit": 6049
      },
      "makes": 1.0,
      "mats": [
@@ -880,6 +818,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 7000,
       "deposit_known": true,
       "deposit_risk": 506,
       "duration_h": 24,
@@ -892,16 +831,18 @@
       "name": "Heavy Mithril Pants",
       "pulled": 0,
       "qty": 10,
+      "realizable": 6900,
       "sold": 1,
       "sold_at": 7000,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 5387,
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": -3821,
+     "profit": -3916,
      "recipe": "Heavy Mithril Pants",
-     "revenue": 6650,
+     "revenue": 6555,
      "spell": 9933
     },
     {
@@ -940,7 +881,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 6118
+      "profit": 6023
      },
      "makes": 1.0,
      "mats": [
@@ -967,6 +908,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 14400,
       "deposit_known": true,
       "deposit_risk": 132,
       "duration_h": 24,
@@ -979,16 +921,18 @@
       "name": "Golden Scale Cuirass",
       "pulled": 0,
       "qty": 6,
+      "realizable": 14300,
       "sold": 1,
       "sold_at": 14400,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 6558,
       "wait_h": 7.00138888888889,
       "war": null
      },
-     "profit": -5456,
+     "profit": -5551,
      "recipe": "Golden Scale Cuirass",
-     "revenue": 13680,
+     "revenue": 13585,
      "spell": 3511
     },
     {
@@ -1021,7 +965,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 6060
+      "profit": 5897
      },
      "makes": 1.0,
      "mats": [
@@ -1044,6 +988,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 7000,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -1056,20 +1001,95 @@
       "name": "Bronze Dory",
       "pulled": 0,
       "qty": 30,
+      "realizable": 6629,
       "sold": 3,
       "sold_at": 6933,
       "sold_maybe": 0,
+      "trend_per_h": -19.228098661446033,
       "vendor": 488,
       "wait_h": 3.6672222222222226,
       "war": null
      },
-     "profit": 4580,
+     "profit": 4417,
      "recipe": "Bronze Dory",
-     "revenue": 6460,
+     "revenue": 6297,
      "spell": 1252352
+    },
+    {
+     "cost": 6388,
+     "farm": {
+      "cost": 0,
+      "mats": [
+       {
+        "id": 2838,
+        "name": "Heavy Stone",
+        "qty": 3,
+        "src": "farm"
+       },
+       {
+        "id": 2772,
+        "name": "Iron Ore",
+        "qty": 10,
+        "src": "farm"
+       },
+       {
+        "id": 2776,
+        "name": "Gold Ore",
+        "qty": 2,
+        "src": "farm"
+       }
+      ],
+      "profit": 5129
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 3486,
+       "name": "Heavy Grinding Stone",
+       "qty": 1
+      },
+      {
+       "id": 3575,
+       "name": "Iron Bar",
+       "qty": 10
+      },
+      {
+       "id": 3577,
+       "name": "Gold Bar",
+       "qty": 2
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "clearing": 5500,
+      "deposit_known": true,
+      "deposit_risk": 1,
+      "duration_h": 24,
+      "floor": 5500,
+      "floor_then": 4200,
+      "id": 3843,
+      "listing_deposit": 2329,
+      "listings": 13,
+      "median": 5500,
+      "name": "Golden Scale Leggings",
+      "pulled": 0,
+      "qty": 13,
+      "realizable": 5400,
+      "sold": 2,
+      "sold_at": 5500,
+      "sold_maybe": 0,
+      "trend_per_h": 0.0,
+      "vendor": 3882,
+      "wait_h": 3.0005555555555556,
+      "war": null
+     },
+     "profit": -1259,
+     "recipe": "Golden Scale Leggings",
+     "revenue": 5130,
+     "spell": 3507
     }
    ],
-   "losers": 86,
+   "losers": 90,
    "priced": 117,
    "starters": [
     {
@@ -1102,7 +1122,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 6060
+      "profit": 5897
      },
      "makes": 1.0,
      "mats": [
@@ -1125,6 +1145,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 7000,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -1137,16 +1158,18 @@
       "name": "Bronze Dory",
       "pulled": 0,
       "qty": 30,
+      "realizable": 6629,
       "sold": 3,
       "sold_at": 6933,
       "sold_maybe": 0,
+      "trend_per_h": -19.228098661446033,
       "vendor": 488,
       "wait_h": 3.6672222222222226,
       "war": null
      },
-     "profit": 4580,
+     "profit": 4417,
      "recipe": "Bronze Dory",
-     "revenue": 6460,
+     "revenue": 6297,
      "spell": 1252352
     },
     {
@@ -1161,7 +1184,7 @@
         "src": "farm"
        }
       ],
-      "profit": 4655
+      "profit": 4560
      },
      "makes": 1.0,
      "mats": [
@@ -1173,6 +1196,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": null,
       "duration_h": null,
@@ -1185,16 +1209,18 @@
       "name": "Azure Skyforged Gauntlets",
       "pulled": null,
       "qty": 9,
+      "realizable": 4800,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
+      "trend_per_h": null,
       "vendor": 0,
       "wait_h": null,
       "war": null
      },
-     "profit": 4165,
+     "profit": 4070,
      "recipe": "Azure Skyforged Gauntlets",
-     "revenue": 4655,
+     "revenue": 4560,
      "spell": 1301447
     },
     {
@@ -1209,7 +1235,7 @@
         "src": "farm"
        }
       ],
-      "profit": 3784
+      "profit": 3689
      },
      "makes": 1.0,
      "mats": [
@@ -1221,6 +1247,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 4000,
       "deposit_known": true,
       "deposit_risk": 16,
       "duration_h": 24,
@@ -1233,16 +1260,18 @@
       "name": "Cloudy Skyforged Gauntlets",
       "pulled": 0,
       "qty": 13,
+      "realizable": 3900,
       "sold": 1,
       "sold_at": 4000,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 0,
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": 3294,
+     "profit": 3199,
      "recipe": "Cloudy Skyforged Gauntlets",
-     "revenue": 3800,
+     "revenue": 3705,
      "spell": 1301423
     },
     {
@@ -1257,7 +1286,7 @@
         "src": "farm"
        }
       ],
-      "profit": 3610
+      "profit": 3515
      },
      "makes": 1.0,
      "mats": [
@@ -1269,6 +1298,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": null,
       "duration_h": null,
@@ -1281,16 +1311,18 @@
       "name": "Cloudy Skyforged Wristguards",
       "pulled": null,
       "qty": 8,
+      "realizable": 3700,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
+      "trend_per_h": null,
       "vendor": 0,
       "wait_h": null,
       "war": null
      },
-     "profit": 3260,
+     "profit": 3165,
      "recipe": "Cloudy Skyforged Wristguards",
-     "revenue": 3610,
+     "revenue": 3515,
      "spell": 1301422
     },
     {
@@ -1305,7 +1337,7 @@
         "src": "farm"
        }
       ],
-      "profit": 3166
+      "profit": 2999
      },
      "makes": 1.0,
      "mats": [
@@ -1317,6 +1349,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 3300,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -1329,16 +1362,18 @@
       "name": "Azure Skyforged Wristguards",
       "pulled": 0,
       "qty": 8,
+      "realizable": 3157,
       "sold": 3,
       "sold_at": 3333,
       "sold_maybe": 0,
+      "trend_per_h": -35.70946765992977,
       "vendor": 0,
       "wait_h": 4.000555555555556,
       "war": null
      },
-     "profit": 2816,
+     "profit": 2649,
      "recipe": "Azure Skyforged Wristguards",
-     "revenue": 3166,
+     "revenue": 2999,
      "spell": 1301446
     },
     {
@@ -1353,7 +1388,7 @@
         "src": "farm"
        }
       ],
-      "profit": 2753
+      "profit": 2658
      },
      "makes": 1.0,
      "mats": [
@@ -1365,6 +1400,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 2900,
       "deposit_known": true,
       "deposit_risk": 2,
       "duration_h": 24,
@@ -1377,16 +1413,18 @@
       "name": "Azure Skyforged Chain",
       "pulled": 0,
       "qty": 11,
+      "realizable": 2800,
       "sold": 2,
       "sold_at": 2900,
       "sold_maybe": 0,
+      "trend_per_h": 0.0,
       "vendor": 0,
       "wait_h": 6.0008333333333335,
       "war": null
      },
-     "profit": 2333,
+     "profit": 2238,
      "recipe": "Azure Skyforged Chain",
-     "revenue": 2755,
+     "revenue": 2660,
      "spell": 1301448
     },
     {
@@ -1401,7 +1439,7 @@
         "src": "farm"
        }
       ],
-      "profit": 1993
+      "profit": 1898
      },
      "makes": 1.0,
      "mats": [
@@ -1413,6 +1451,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 2100,
       "deposit_known": true,
       "deposit_risk": 2,
       "duration_h": 24,
@@ -1425,16 +1464,18 @@
       "name": "Azure Skyforged Greaves",
       "pulled": 0,
       "qty": 6,
+      "realizable": 2000,
       "sold": 1,
       "sold_at": 2100,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 0,
       "wait_h": 6.001111111111111,
       "war": null
      },
-     "profit": 1503,
+     "profit": 1408,
      "recipe": "Azure Skyforged Greaves",
-     "revenue": 1995,
+     "revenue": 1900,
      "spell": 1301450
     },
     {
@@ -1479,7 +1520,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 1975
+      "profit": 1880
      },
      "makes": 1.0,
      "mats": [
@@ -1512,6 +1553,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 2700,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -1524,16 +1566,18 @@
       "name": "Big Bronze Knife",
       "pulled": 1,
       "qty": 97,
+      "realizable": 2400,
       "sold": 10,
       "sold_at": 2900,
       "sold_maybe": 0,
+      "trend_per_h": 12.770097431955879,
       "vendor": 915,
       "wait_h": 2.000277777777778,
       "war": null
      },
-     "profit": 710,
+     "profit": 615,
      "recipe": "Big Bronze Knife",
-     "revenue": 2375,
+     "revenue": 2280,
      "spell": 3491
     }
    ],
@@ -1568,7 +1612,7 @@
         "src": "ah"
        }
       ],
-      "profit": 32807
+      "profit": 32712
      },
      "makes": 1.0,
      "mats": [
@@ -1595,6 +1639,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": null,
       "duration_h": null,
@@ -1607,16 +1652,18 @@
       "name": "Blue Glittering Axe",
       "pulled": null,
       "qty": 21,
+      "realizable": 42400,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
+      "trend_per_h": null,
       "vendor": 14659,
       "wait_h": null,
       "war": null
      },
-     "profit": 15174,
+     "profit": 15079,
      "recipe": "Blue Glittering Axe",
-     "revenue": 40375,
+     "revenue": 40280,
      "spell": 9995
     },
     {
@@ -1643,7 +1690,7 @@
         "src": "farm"
        }
       ],
-      "profit": 18999
+      "profit": 18998
      },
      "makes": 1.0,
      "mats": [
@@ -1665,6 +1712,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 19999,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -1677,16 +1725,18 @@
       "name": "Inlaid Mithril Cylinder",
       "pulled": 0,
       "qty": 69,
+      "realizable": 19998,
       "sold": 4,
       "sold_at": 19999,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 1000,
       "wait_h": 2.0005555555555556,
       "war": null
      },
-     "profit": 12540,
+     "profit": 12539,
      "recipe": "Inlaid Mithril Cylinder",
-     "revenue": 18999,
+     "revenue": 18998,
      "spell": 11454
     },
     {
@@ -1731,7 +1781,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 16128
+      "profit": 15891
      },
      "makes": 1.0,
      "mats": [
@@ -1764,6 +1814,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 26000,
       "deposit_known": true,
       "deposit_risk": 809,
       "duration_h": 24,
@@ -1776,16 +1827,18 @@
       "name": "Moonsteel Broadsword",
       "pulled": 0,
       "qty": 29,
+      "realizable": 26000,
       "sold": 2,
       "sold_at": 26250,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 8615,
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": 7763,
+     "profit": 7526,
      "recipe": "Moonsteel Broadsword",
-     "revenue": 24937,
+     "revenue": 24700,
      "spell": 3496
     },
     {
@@ -1812,7 +1865,7 @@
         "src": "farm"
        }
       ],
-      "profit": 9500
+      "profit": 9405
      },
      "makes": 1.0,
      "mats": [
@@ -1834,6 +1887,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": null,
       "duration_h": null,
@@ -1846,16 +1900,18 @@
       "name": "Sterling Silver Gauntlet",
       "pulled": null,
       "qty": 12,
+      "realizable": 9900,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
+      "trend_per_h": null,
       "vendor": 957,
       "wait_h": null,
       "war": null
      },
-     "profit": 6132,
+     "profit": 6037,
      "recipe": "Sterling Silver Gauntlet",
-     "revenue": 9500,
+     "revenue": 9405,
      "spell": 1252234
     },
     {
@@ -1888,7 +1944,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 6060
+      "profit": 5897
      },
      "makes": 1.0,
      "mats": [
@@ -1911,6 +1967,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 7000,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -1923,16 +1980,18 @@
       "name": "Bronze Dory",
       "pulled": 0,
       "qty": 30,
+      "realizable": 6629,
       "sold": 3,
       "sold_at": 6933,
       "sold_maybe": 0,
+      "trend_per_h": -19.228098661446033,
       "vendor": 488,
       "wait_h": 3.6672222222222226,
       "war": null
      },
-     "profit": 4580,
+     "profit": 4417,
      "recipe": "Bronze Dory",
-     "revenue": 6460,
+     "revenue": 6297,
      "spell": 1252352
     },
     {
@@ -1947,7 +2006,7 @@
         "src": "farm"
        }
       ],
-      "profit": 4655
+      "profit": 4560
      },
      "makes": 1.0,
      "mats": [
@@ -1959,6 +2018,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": null,
       "duration_h": null,
@@ -1971,16 +2031,18 @@
       "name": "Azure Skyforged Gauntlets",
       "pulled": null,
       "qty": 9,
+      "realizable": 4800,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
+      "trend_per_h": null,
       "vendor": 0,
       "wait_h": null,
       "war": null
      },
-     "profit": 4165,
+     "profit": 4070,
      "recipe": "Azure Skyforged Gauntlets",
-     "revenue": 4655,
+     "revenue": 4560,
      "spell": 1301447
     },
     {
@@ -1995,7 +2057,7 @@
         "src": "farm"
        }
       ],
-      "profit": 3784
+      "profit": 3689
      },
      "makes": 1.0,
      "mats": [
@@ -2007,6 +2069,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 4000,
       "deposit_known": true,
       "deposit_risk": 16,
       "duration_h": 24,
@@ -2019,16 +2082,18 @@
       "name": "Cloudy Skyforged Gauntlets",
       "pulled": 0,
       "qty": 13,
+      "realizable": 3900,
       "sold": 1,
       "sold_at": 4000,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 0,
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": 3294,
+     "profit": 3199,
      "recipe": "Cloudy Skyforged Gauntlets",
-     "revenue": 3800,
+     "revenue": 3705,
      "spell": 1301423
     },
     {
@@ -2043,7 +2108,7 @@
         "src": "farm"
        }
       ],
-      "profit": 3610
+      "profit": 3515
      },
      "makes": 1.0,
      "mats": [
@@ -2055,6 +2120,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": null,
       "duration_h": null,
@@ -2067,16 +2133,18 @@
       "name": "Cloudy Skyforged Wristguards",
       "pulled": null,
       "qty": 8,
+      "realizable": 3700,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
+      "trend_per_h": null,
       "vendor": 0,
       "wait_h": null,
       "war": null
      },
-     "profit": 3260,
+     "profit": 3165,
      "recipe": "Cloudy Skyforged Wristguards",
-     "revenue": 3610,
+     "revenue": 3515,
      "spell": 1301422
     },
     {
@@ -2091,7 +2159,7 @@
         "src": "farm"
        }
       ],
-      "profit": 3166
+      "profit": 2999
      },
      "makes": 1.0,
      "mats": [
@@ -2103,6 +2171,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 3300,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -2115,16 +2184,18 @@
       "name": "Azure Skyforged Wristguards",
       "pulled": 0,
       "qty": 8,
+      "realizable": 3157,
       "sold": 3,
       "sold_at": 3333,
       "sold_maybe": 0,
+      "trend_per_h": -35.70946765992977,
       "vendor": 0,
       "wait_h": 4.000555555555556,
       "war": null
      },
-     "profit": 2816,
+     "profit": 2649,
      "recipe": "Azure Skyforged Wristguards",
-     "revenue": 3166,
+     "revenue": 2999,
      "spell": 1301446
     },
     {
@@ -2157,7 +2228,7 @@
         "src": "ah"
        }
       ],
-      "profit": 15396
+      "profit": 15301
      },
      "makes": 1.0,
      "mats": [
@@ -2184,6 +2255,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": 36456,
       "duration_h": 2,
@@ -2196,16 +2268,18 @@
       "name": "Mithril Warhammer",
       "pulled": 0,
       "qty": 7,
+      "realizable": 56500,
       "sold": 0,
       "sold_at": null,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 4356,
       "wait_h": null,
       "war": null
      },
-     "profit": 2675,
+     "profit": 2580,
      "recipe": "Mithril Warhammer",
-     "revenue": 53770,
+     "revenue": 53675,
      "spell": 1252357
     },
     {
@@ -2220,7 +2294,7 @@
         "src": "farm"
        }
       ],
-      "profit": 2753
+      "profit": 2658
      },
      "makes": 1.0,
      "mats": [
@@ -2232,6 +2306,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 2900,
       "deposit_known": true,
       "deposit_risk": 2,
       "duration_h": 24,
@@ -2244,16 +2319,18 @@
       "name": "Azure Skyforged Chain",
       "pulled": 0,
       "qty": 11,
+      "realizable": 2800,
       "sold": 2,
       "sold_at": 2900,
       "sold_maybe": 0,
+      "trend_per_h": 0.0,
       "vendor": 0,
       "wait_h": 6.0008333333333335,
       "war": null
      },
-     "profit": 2333,
+     "profit": 2238,
      "recipe": "Azure Skyforged Chain",
-     "revenue": 2755,
+     "revenue": 2660,
      "spell": 1301448
     },
     {
@@ -2298,7 +2375,7 @@
         "src": "ah"
        }
       ],
-      "profit": 4852
+      "profit": 4805
      },
      "makes": 1.0,
      "mats": [
@@ -2331,6 +2408,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 8200,
       "deposit_known": true,
       "deposit_risk": 29,
       "duration_h": 24,
@@ -2343,16 +2421,18 @@
       "name": "Iridescent Hammer",
       "pulled": 0,
       "qty": 15,
+      "realizable": 8200,
       "sold": 2,
       "sold_at": 8250,
       "sold_maybe": 0,
+      "trend_per_h": 19.99666722204896,
       "vendor": 3693,
       "wait_h": 5.5008333333333335,
       "war": null
      },
-     "profit": 2162,
+     "profit": 2115,
      "recipe": "Iridescent Hammer",
-     "revenue": 7837,
+     "revenue": 7790,
      "spell": 6518
     },
     {
@@ -2385,7 +2465,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 9485
+      "profit": 9390
      },
      "makes": 1.0,
      "mats": [
@@ -2407,6 +2487,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 15000,
       "deposit_known": true,
       "deposit_risk": 290,
       "duration_h": 24,
@@ -2419,16 +2500,18 @@
       "name": "Golden Scale Coif",
       "pulled": 0,
       "qty": 28,
+      "realizable": 14400,
       "sold": 1,
       "sold_at": 15000,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 3084,
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": 2107,
+     "profit": 2012,
      "recipe": "Golden Scale Coif",
-     "revenue": 13775,
+     "revenue": 13680,
      "spell": 3503
     },
     {
@@ -2443,7 +2526,7 @@
         "src": "farm"
        }
       ],
-      "profit": 1993
+      "profit": 1898
      },
      "makes": 1.0,
      "mats": [
@@ -2455,6 +2538,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 2100,
       "deposit_known": true,
       "deposit_risk": 2,
       "duration_h": 24,
@@ -2467,16 +2551,18 @@
       "name": "Azure Skyforged Greaves",
       "pulled": 0,
       "qty": 6,
+      "realizable": 2000,
       "sold": 1,
       "sold_at": 2100,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 0,
       "wait_h": 6.001111111111111,
       "war": null
      },
-     "profit": 1503,
+     "profit": 1408,
      "recipe": "Azure Skyforged Greaves",
-     "revenue": 1995,
+     "revenue": 1900,
      "spell": 1301450
     }
    ],
@@ -2539,7 +2625,7 @@
         "src": "farm"
        }
       ],
-      "profit": 189279
+      "profit": 189184
      },
      "makes": 1.0,
      "mats": [
@@ -2566,6 +2652,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 200000,
       "deposit_known": true,
       "deposit_risk": 151,
       "duration_h": 24,
@@ -2578,16 +2665,18 @@
       "name": "Salt Shaker",
       "pulled": 0,
       "qty": 38,
+      "realizable": 199300,
       "sold": 1,
       "sold_at": 200000,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 7500,
       "wait_h": 7.00138888888889,
       "war": null
      },
-     "profit": 150780,
+     "profit": 150685,
      "recipe": "Salt Shaker",
-     "revenue": 189430,
+     "revenue": 189335,
      "spell": 19567
     },
     {
@@ -2626,7 +2715,7 @@
         "src": "ah"
        }
       ],
-      "profit": 51407
+      "profit": 51312
      },
      "makes": 1.0,
      "mats": [
@@ -2658,6 +2747,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": null,
       "duration_h": null,
@@ -2670,16 +2760,18 @@
       "name": "Green Lens",
       "pulled": null,
       "qty": 11,
+      "realizable": 69900,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
+      "trend_per_h": null,
       "vendor": 7770,
       "wait_h": null,
       "war": null
      },
-     "profit": 46647,
+     "profit": 46552,
      "recipe": "Green Lens",
-     "revenue": 66500,
+     "revenue": 66405,
      "spell": 12622
     },
     {
@@ -2718,7 +2810,7 @@
         "src": "ah"
        }
       ],
-      "profit": 49127
+      "profit": 49032
      },
      "makes": 1.0,
      "mats": [
@@ -2750,6 +2842,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": null,
       "duration_h": null,
@@ -2762,87 +2855,19 @@
       "name": "Mithril Heavy-bore Rifle",
       "pulled": null,
       "qty": 7,
+      "realizable": 57000,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
+      "trend_per_h": null,
       "vendor": 11369,
       "wait_h": null,
       "war": null
      },
-     "profit": 36589,
+     "profit": 36494,
      "recipe": "Mithril Heavy-bore Rifle",
-     "revenue": 54245,
+     "revenue": 54150,
      "spell": 12614
-    },
-    {
-     "cost": 11238,
-     "farm": {
-      "cost": 5988,
-      "mats": [
-       {
-        "id": 7911,
-        "name": "Truesilver Ore",
-        "qty": 2,
-        "src": "farm"
-       },
-       {
-        "id": 3858,
-        "name": "Mithril Ore",
-        "qty": 3,
-        "src": "farm"
-       },
-       {
-        "id": 7910,
-        "name": "Star Ruby",
-        "qty": 1,
-        "src": "ah"
-       }
-      ],
-      "profit": 41009
-     },
-     "makes": 1.0,
-     "mats": [
-      {
-       "id": 6037,
-       "name": "Truesilver Bar",
-       "qty": 2
-      },
-      {
-       "id": 7910,
-       "name": "Star Ruby",
-       "qty": 1
-      },
-      {
-       "id": 10559,
-       "name": "Mithril Tube",
-       "qty": 1
-      }
-     ],
-     "out": {
-      "ahead": 0,
-      "deposit_known": true,
-      "deposit_risk": 28,
-      "duration_h": 24,
-      "floor": 49500,
-      "floor_then": 60000,
-      "id": 10548,
-      "listing_deposit": 1500,
-      "listings": 11,
-      "median": 56000,
-      "name": "Sniper Scope",
-      "pulled": 0,
-      "qty": 37,
-      "sold": 5,
-      "sold_at": 62000,
-      "sold_maybe": 0,
-      "vendor": 2500,
-      "wait_h": 6.0008333333333335,
-      "war": null
-     },
-     "profit": 35759,
-     "recipe": "Sniper Scope",
-     "revenue": 47025,
-     "spell": 12620
     },
     {
      "cost": 10640,
@@ -2880,7 +2905,7 @@
         "src": "ah"
        }
       ],
-      "profit": 37752
+      "profit": 37657
      },
      "makes": 1.0,
      "mats": [
@@ -2912,6 +2937,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": 6300,
       "duration_h": 8,
@@ -2924,16 +2950,18 @@
       "name": "Gnomish Shrink Ray",
       "pulled": 0,
       "qty": 5,
+      "realizable": 48900,
       "sold": 0,
       "sold_at": null,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 750,
       "wait_h": null,
       "war": null
      },
-     "profit": 29610,
+     "profit": 29515,
      "recipe": "Gnomish Shrink Ray",
-     "revenue": 46550,
+     "revenue": 46455,
      "spell": 12899
     },
     {
@@ -2984,7 +3012,7 @@
         "src": "ah"
        }
       ],
-      "profit": 34369
+      "profit": 34274
      },
      "makes": 1.0,
      "mats": [
@@ -3011,6 +3039,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": null,
       "duration_h": null,
@@ -3023,17 +3052,92 @@
       "name": "Fire Goggles",
       "pulled": null,
       "qty": 5,
+      "realizable": 45200,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
+      "trend_per_h": null,
       "vendor": 3478,
       "wait_h": null,
       "war": null
      },
-     "profit": 31909,
+     "profit": 31814,
      "recipe": "Fire Goggles",
-     "revenue": 43035,
+     "revenue": 42940,
      "spell": 12594
+    },
+    {
+     "cost": 11238,
+     "farm": {
+      "cost": 5988,
+      "mats": [
+       {
+        "id": 7911,
+        "name": "Truesilver Ore",
+        "qty": 2,
+        "src": "farm"
+       },
+       {
+        "id": 3858,
+        "name": "Mithril Ore",
+        "qty": 3,
+        "src": "farm"
+       },
+       {
+        "id": 7910,
+        "name": "Star Ruby",
+        "qty": 1,
+        "src": "ah"
+       }
+      ],
+      "profit": 32864
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 6037,
+       "name": "Truesilver Bar",
+       "qty": 2
+      },
+      {
+       "id": 7910,
+       "name": "Star Ruby",
+       "qty": 1
+      },
+      {
+       "id": 10559,
+       "name": "Mithril Tube",
+       "qty": 1
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "clearing": 60000,
+      "deposit_known": true,
+      "deposit_risk": 28,
+      "duration_h": 24,
+      "floor": 49500,
+      "floor_then": 60000,
+      "id": 10548,
+      "listing_deposit": 1500,
+      "listings": 11,
+      "median": 56000,
+      "name": "Sniper Scope",
+      "pulled": 0,
+      "qty": 37,
+      "realizable": 40927,
+      "sold": 5,
+      "sold_at": 62000,
+      "sold_maybe": 0,
+      "trend_per_h": -1428.4013807838844,
+      "vendor": 2500,
+      "wait_h": 6.0008333333333335,
+      "war": null
+     },
+     "profit": 27614,
+     "recipe": "Sniper Scope",
+     "revenue": 38880,
+     "spell": 12620
     },
     {
      "cost": 5066,
@@ -3089,7 +3193,7 @@
         "src": "ah"
        }
       ],
-      "profit": 16199
+      "profit": 16104
      },
      "makes": 1.0,
      "mats": [
@@ -3127,6 +3231,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 18000,
       "deposit_known": true,
       "deposit_risk": 1,
       "duration_h": 24,
@@ -3139,16 +3244,18 @@
       "name": "Goblin Jumper Cables",
       "pulled": 0,
       "qty": 15,
+      "realizable": 17900,
       "sold": 2,
       "sold_at": 18000,
       "sold_maybe": 0,
+      "trend_per_h": 0.0,
       "vendor": 21,
       "wait_h": 5.0008333333333335,
       "war": null
      },
-     "profit": 12033,
+     "profit": 11938,
      "recipe": "Goblin Jumper Cables",
-     "revenue": 17100,
+     "revenue": 17005,
      "spell": 9273
     },
     {
@@ -3199,7 +3306,7 @@
         "src": "farm"
        }
       ],
-      "profit": 12435
+      "profit": 11102
      },
      "makes": 1.0,
      "mats": [
@@ -3226,6 +3333,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 17097,
       "deposit_known": true,
       "deposit_risk": 3,
       "duration_h": 24,
@@ -3238,16 +3346,18 @@
       "name": "Compact Harvest Reaper Kit",
       "pulled": 0,
       "qty": 47,
+      "realizable": 11690,
       "sold": 7,
       "sold_at": 16811,
       "sold_maybe": 0,
+      "trend_per_h": -400.3666055687837,
       "vendor": 4000,
       "wait_h": 3.500694444444445,
       "war": null
      },
-     "profit": 6475,
+     "profit": 5142,
      "recipe": "Compact Harvest Reaper Kit",
-     "revenue": 12438,
+     "revenue": 11105,
      "spell": 3963
     },
     {
@@ -3298,7 +3408,7 @@
         "src": "farm"
        }
       ],
-      "profit": 8652
+      "profit": 8453
      },
      "makes": 1.0,
      "mats": [
@@ -3325,6 +3435,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 10000,
       "deposit_known": true,
       "deposit_risk": 12,
       "duration_h": 24,
@@ -3337,16 +3448,18 @@
       "name": "Advanced Target Dummy",
       "pulled": 0,
       "qty": 70,
+      "realizable": 8911,
       "sold": 3,
       "sold_at": 9917,
       "sold_maybe": 0,
+      "trend_per_h": -41.65895204613473,
       "vendor": 2500,
       "wait_h": 5.0008333333333335,
       "war": null
      },
-     "profit": 4831,
+     "profit": 4632,
      "recipe": "Advanced Target Dummy",
-     "revenue": 8664,
+     "revenue": 8465,
      "spell": 3965
     },
     {
@@ -3391,7 +3504,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 7775
+      "profit": 7680
      },
      "makes": 1.0,
      "mats": [
@@ -3418,6 +3531,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 9000,
       "deposit_known": true,
       "deposit_risk": 90,
       "duration_h": 24,
@@ -3430,16 +3544,18 @@
       "name": "Portable Bronze Mortar",
       "pulled": 0,
       "qty": 8,
+      "realizable": 8600,
       "sold": 1,
       "sold_at": 9000,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 2000,
       "wait_h": 9.001388888888888,
       "war": null
      },
-     "profit": 2310,
+     "profit": 2215,
      "recipe": "Portable Bronze Mortar",
-     "revenue": 8265,
+     "revenue": 8170,
      "spell": 3960
     },
     {
@@ -3460,7 +3576,7 @@
         "src": "ah"
        }
       ],
-      "profit": 7382
+      "profit": 7287
      },
      "makes": 1.0,
      "mats": [
@@ -3477,6 +3593,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 24900,
       "deposit_known": true,
       "deposit_risk": 10,
       "duration_h": 24,
@@ -3489,16 +3606,18 @@
       "name": "Bright-Eye Goggles",
       "pulled": 0,
       "qty": 14,
+      "realizable": 9700,
       "sold": 1,
       "sold_at": 24900,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 2105,
       "wait_h": 5.0008333333333335,
       "war": null
      },
-     "profit": 5942,
+     "profit": 5847,
      "recipe": "Bright-Eye Goggles",
-     "revenue": 9310,
+     "revenue": 9215,
      "spell": 12587
     },
     {
@@ -3543,7 +3662,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 6835
+      "profit": 6395
      },
      "makes": 1.0,
      "mats": [
@@ -3570,6 +3689,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 8800,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -3582,16 +3702,18 @@
       "name": "Minor Recombobulator",
       "pulled": 0,
       "qty": 62,
+      "realizable": 6837,
       "sold": 8,
       "sold_at": 8750,
       "sold_maybe": 0,
+      "trend_per_h": -165.02222536743525,
       "vendor": 600,
       "wait_h": 2.2003333333333335,
       "war": null
      },
-     "profit": 4512,
+     "profit": 4072,
      "recipe": "Minor Recombobulator",
-     "revenue": 6935,
+     "revenue": 6495,
      "spell": 3952
     },
     {
@@ -3636,7 +3758,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 5500
+      "profit": 5046
      },
      "makes": 1.0,
      "mats": [
@@ -3669,6 +3791,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 8300,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -3681,16 +3804,18 @@
       "name": "Gnomish Universal Remote",
       "pulled": 3,
       "qty": 63,
+      "realizable": 5523,
       "sold": 6,
       "sold_at": 8683,
       "sold_maybe": 0,
+      "trend_per_h": -188.52137830260259,
       "vendor": 500,
       "wait_h": 2.000277777777778,
       "war": null
      },
-     "profit": 3765,
+     "profit": 3311,
      "recipe": "Gnomish Universal Remote",
-     "revenue": 5700,
+     "revenue": 5246,
      "spell": 9269
     },
     {
@@ -3717,7 +3842,7 @@
         "src": "farm"
        }
       ],
-      "profit": 5025
+      "profit": 5024
      },
      "makes": 1.0,
      "mats": [
@@ -3739,6 +3864,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": 2100,
       "duration_h": 24,
@@ -3751,20 +3877,22 @@
       "name": "Mechanical Repair Kit",
       "pulled": 0,
       "qty": 96,
+      "realizable": 7499,
       "sold": 0,
       "sold_at": null,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 250,
       "wait_h": null,
       "war": null
      },
-     "profit": 3116,
+     "profit": 3115,
      "recipe": "Mechanical Repair Kit",
-     "revenue": 7125,
+     "revenue": 7124,
      "spell": 15255
     }
    ],
-   "losers": 31,
+   "losers": 38,
    "priced": 75,
    "starters": [
     {
@@ -3809,7 +3937,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 6835
+      "profit": 6395
      },
      "makes": 1.0,
      "mats": [
@@ -3836,6 +3964,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 8800,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -3848,16 +3977,18 @@
       "name": "Minor Recombobulator",
       "pulled": 0,
       "qty": 62,
+      "realizable": 6837,
       "sold": 8,
       "sold_at": 8750,
       "sold_maybe": 0,
+      "trend_per_h": -165.02222536743525,
       "vendor": 600,
       "wait_h": 2.2003333333333335,
       "war": null
      },
-     "profit": 4512,
+     "profit": 4072,
      "recipe": "Minor Recombobulator",
-     "revenue": 6935,
+     "revenue": 6495,
      "spell": 3952
     },
     {
@@ -3902,7 +4033,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 5500
+      "profit": 5046
      },
      "makes": 1.0,
      "mats": [
@@ -3935,6 +4066,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 8300,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -3947,16 +4079,18 @@
       "name": "Gnomish Universal Remote",
       "pulled": 3,
       "qty": 63,
+      "realizable": 5523,
       "sold": 6,
       "sold_at": 8683,
       "sold_maybe": 0,
+      "trend_per_h": -188.52137830260259,
       "vendor": 500,
       "wait_h": 2.000277777777778,
       "war": null
      },
-     "profit": 3765,
+     "profit": 3311,
      "recipe": "Gnomish Universal Remote",
-     "revenue": 5700,
+     "revenue": 5246,
      "spell": 9269
     },
     {
@@ -3995,7 +4129,7 @@
         "src": "ah"
        }
       ],
-      "profit": 4383
+      "profit": 4382
      },
      "makes": 1.0,
      "mats": [
@@ -4022,6 +4156,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 7000,
       "deposit_known": true,
       "deposit_risk": 2,
       "duration_h": 24,
@@ -4034,16 +4169,18 @@
       "name": "EZ-Thro Copper Bomb XL",
       "pulled": 7,
       "qty": 58,
+      "realizable": 4999,
       "sold": 4,
       "sold_at": 7000,
       "sold_maybe": 0,
+      "trend_per_h": 0.0,
       "vendor": 175,
       "wait_h": 6.0008333333333335,
       "war": null
      },
-     "profit": 3215,
+     "profit": 3214,
      "recipe": "EZ-Thro Copper Bomb XL",
-     "revenue": 4750,
+     "revenue": 4749,
      "spell": 1266908
     },
     {
@@ -4070,7 +4207,7 @@
         "src": "farm"
        }
       ],
-      "profit": 5025
+      "profit": 5024
      },
      "makes": 1.0,
      "mats": [
@@ -4092,6 +4229,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": 2100,
       "duration_h": 24,
@@ -4104,99 +4242,19 @@
       "name": "Mechanical Repair Kit",
       "pulled": 0,
       "qty": 96,
+      "realizable": 7499,
       "sold": 0,
       "sold_at": null,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 250,
       "wait_h": null,
       "war": null
      },
-     "profit": 3116,
+     "profit": 3115,
      "recipe": "Mechanical Repair Kit",
-     "revenue": 7125,
+     "revenue": 7124,
      "spell": 15255
-    },
-    {
-     "cost": 2254,
-     "farm": {
-      "cost": 1774,
-      "mats": [
-       {
-        "id": 2770,
-        "name": "Copper Ore",
-        "qty": 1,
-        "src": "farm"
-       },
-       {
-        "id": 2771,
-        "name": "Tin Ore",
-        "qty": 1,
-        "src": "farm"
-       },
-       {
-        "id": 1529,
-        "name": "Jade",
-        "qty": 1,
-        "src": "ah"
-       },
-       {
-        "id": 3864,
-        "name": "Citrine",
-        "qty": 1,
-        "src": "ah"
-       },
-       {
-        "id": 2880,
-        "name": "Weak Flux",
-        "qty": 1,
-        "src": "vendor"
-       }
-      ],
-      "profit": 2878
-     },
-     "makes": 1.0,
-     "mats": [
-      {
-       "id": 1529,
-       "name": "Jade",
-       "qty": 1
-      },
-      {
-       "id": 3864,
-       "name": "Citrine",
-       "qty": 1
-      },
-      {
-       "id": 4371,
-       "name": "Bronze Tube",
-       "qty": 1
-      }
-     ],
-     "out": {
-      "ahead": 0,
-      "deposit_known": true,
-      "deposit_risk": 1,
-      "duration_h": 24,
-      "floor": 4949,
-      "floor_then": 6300,
-      "id": 4407,
-      "listing_deposit": 720,
-      "listings": 15,
-      "median": 4975,
-      "name": "Accurate Scope",
-      "pulled": 0,
-      "qty": 69,
-      "sold": 6,
-      "sold_at": 4898,
-      "sold_maybe": 0,
-      "vendor": 1200,
-      "wait_h": 3.500694444444445,
-      "war": null
-     },
-     "profit": 2398,
-     "recipe": "Accurate Scope",
-     "revenue": 4653,
-     "spell": 3979
     },
     {
      "cost": 1650,
@@ -4215,6 +4273,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 2990,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -4227,16 +4286,18 @@
       "name": "Sandpaper",
       "pulled": 0,
       "qty": 160,
+      "realizable": 2980,
       "sold": 17,
       "sold_at": 2992,
       "sold_maybe": 0,
+      "trend_per_h": -1.8637467752536878,
       "vendor": 250,
       "wait_h": 4.000555555555556,
       "war": null
      },
-     "profit": 1188,
+     "profit": 1181,
      "recipe": "Sandpaper",
-     "revenue": 2838,
+     "revenue": 2831,
      "spell": 1249634
     },
     {
@@ -4257,7 +4318,7 @@
         "src": "farm"
        }
       ],
-      "profit": 1777
+      "profit": 1710
      },
      "makes": 1.0,
      "mats": [
@@ -4274,6 +4335,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 1800,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -4286,16 +4348,18 @@
       "name": "Shadow Goggles",
       "pulled": 0,
       "qty": 137,
+      "realizable": 1800,
       "sold": 7,
       "sold_at": 1871,
       "sold_maybe": 0,
+      "trend_per_h": 52.589390040506814,
       "vendor": 722,
       "wait_h": 3.0004166666666667,
       "war": null
      },
-     "profit": 863,
+     "profit": 796,
      "recipe": "Shadow Goggles",
-     "revenue": 1777,
+     "revenue": 1710,
      "spell": 3940
     },
     {
@@ -4316,7 +4380,7 @@
         "src": "farm"
        }
       ],
-      "profit": 1451
+      "profit": 1449
      },
      "makes": 2.0,
      "mats": [
@@ -4333,6 +4397,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": null,
       "duration_h": null,
@@ -4345,17 +4410,104 @@
       "name": "Solid Dynamite",
       "pulled": null,
       "qty": 327,
+      "realizable": 763,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
+      "trend_per_h": null,
       "vendor": 350,
       "wait_h": null,
       "war": null
      },
-     "profit": 755,
+     "profit": 753,
      "recipe": "Solid Dynamite",
-     "revenue": 1451,
+     "revenue": 1449,
      "spell": 12586
+    },
+    {
+     "cost": 1956,
+     "farm": {
+      "cost": 100,
+      "mats": [
+       {
+        "id": 4234,
+        "name": "Heavy Leather",
+        "qty": 1,
+        "src": "farm"
+       },
+       {
+        "id": 2770,
+        "name": "Copper Ore",
+        "qty": 3,
+        "src": "farm"
+       },
+       {
+        "id": 2771,
+        "name": "Tin Ore",
+        "qty": 3,
+        "src": "farm"
+       },
+       {
+        "id": 2592,
+        "name": "Wool Cloth",
+        "qty": 2,
+        "src": "farm"
+       },
+       {
+        "id": 2880,
+        "name": "Weak Flux",
+        "qty": 1,
+        "src": "vendor"
+       }
+      ],
+      "profit": 2559
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 4234,
+       "name": "Heavy Leather",
+       "qty": 1
+      },
+      {
+       "id": 4371,
+       "name": "Bronze Tube",
+       "qty": 1
+      },
+      {
+       "id": 4375,
+       "name": "Whirring Bronze Gizmo",
+       "qty": 2
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "clearing": null,
+      "deposit_known": true,
+      "deposit_risk": null,
+      "duration_h": null,
+      "floor": 2800,
+      "floor_then": 2000,
+      "id": 279949,
+      "listing_deposit": null,
+      "listings": 5,
+      "median": 2800,
+      "name": "Repair Bot",
+      "pulled": null,
+      "qty": 12,
+      "realizable": 2799,
+      "sold": null,
+      "sold_at": null,
+      "sold_maybe": null,
+      "trend_per_h": null,
+      "vendor": 0,
+      "wait_h": null,
+      "war": null
+     },
+     "profit": 703,
+     "recipe": "Repair Bot",
+     "revenue": 2659,
+     "spell": 1263034
     }
    ],
    "top": [
@@ -4395,7 +4547,7 @@
         "src": "farm"
        }
       ],
-      "profit": 189279
+      "profit": 189184
      },
      "makes": 1.0,
      "mats": [
@@ -4422,6 +4574,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 200000,
       "deposit_known": true,
       "deposit_risk": 151,
       "duration_h": 24,
@@ -4434,16 +4587,18 @@
       "name": "Salt Shaker",
       "pulled": 0,
       "qty": 38,
+      "realizable": 199300,
       "sold": 1,
       "sold_at": 200000,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 7500,
       "wait_h": 7.00138888888889,
       "war": null
      },
-     "profit": 150780,
+     "profit": 150685,
      "recipe": "Salt Shaker",
-     "revenue": 189430,
+     "revenue": 189335,
      "spell": 19567
     },
     {
@@ -4482,7 +4637,7 @@
         "src": "ah"
        }
       ],
-      "profit": 51407
+      "profit": 51312
      },
      "makes": 1.0,
      "mats": [
@@ -4514,6 +4669,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": null,
       "duration_h": null,
@@ -4526,16 +4682,18 @@
       "name": "Green Lens",
       "pulled": null,
       "qty": 11,
+      "realizable": 69900,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
+      "trend_per_h": null,
       "vendor": 7770,
       "wait_h": null,
       "war": null
      },
-     "profit": 46647,
+     "profit": 46552,
      "recipe": "Green Lens",
-     "revenue": 66500,
+     "revenue": 66405,
      "spell": 12622
     },
     {
@@ -4574,7 +4732,7 @@
         "src": "ah"
        }
       ],
-      "profit": 49127
+      "profit": 49032
      },
      "makes": 1.0,
      "mats": [
@@ -4606,6 +4764,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": null,
       "duration_h": null,
@@ -4618,87 +4777,19 @@
       "name": "Mithril Heavy-bore Rifle",
       "pulled": null,
       "qty": 7,
+      "realizable": 57000,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
+      "trend_per_h": null,
       "vendor": 11369,
       "wait_h": null,
       "war": null
      },
-     "profit": 36589,
+     "profit": 36494,
      "recipe": "Mithril Heavy-bore Rifle",
-     "revenue": 54245,
+     "revenue": 54150,
      "spell": 12614
-    },
-    {
-     "cost": 11238,
-     "farm": {
-      "cost": 5988,
-      "mats": [
-       {
-        "id": 7911,
-        "name": "Truesilver Ore",
-        "qty": 2,
-        "src": "farm"
-       },
-       {
-        "id": 3858,
-        "name": "Mithril Ore",
-        "qty": 3,
-        "src": "farm"
-       },
-       {
-        "id": 7910,
-        "name": "Star Ruby",
-        "qty": 1,
-        "src": "ah"
-       }
-      ],
-      "profit": 41009
-     },
-     "makes": 1.0,
-     "mats": [
-      {
-       "id": 6037,
-       "name": "Truesilver Bar",
-       "qty": 2
-      },
-      {
-       "id": 7910,
-       "name": "Star Ruby",
-       "qty": 1
-      },
-      {
-       "id": 10559,
-       "name": "Mithril Tube",
-       "qty": 1
-      }
-     ],
-     "out": {
-      "ahead": 0,
-      "deposit_known": true,
-      "deposit_risk": 28,
-      "duration_h": 24,
-      "floor": 49500,
-      "floor_then": 60000,
-      "id": 10548,
-      "listing_deposit": 1500,
-      "listings": 11,
-      "median": 56000,
-      "name": "Sniper Scope",
-      "pulled": 0,
-      "qty": 37,
-      "sold": 5,
-      "sold_at": 62000,
-      "sold_maybe": 0,
-      "vendor": 2500,
-      "wait_h": 6.0008333333333335,
-      "war": null
-     },
-     "profit": 35759,
-     "recipe": "Sniper Scope",
-     "revenue": 47025,
-     "spell": 12620
     },
     {
      "cost": 11126,
@@ -4748,7 +4839,7 @@
         "src": "ah"
        }
       ],
-      "profit": 34369
+      "profit": 34274
      },
      "makes": 1.0,
      "mats": [
@@ -4775,6 +4866,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": null,
       "duration_h": null,
@@ -4787,16 +4879,18 @@
       "name": "Fire Goggles",
       "pulled": null,
       "qty": 5,
+      "realizable": 45200,
       "sold": null,
       "sold_at": null,
       "sold_maybe": null,
+      "trend_per_h": null,
       "vendor": 3478,
       "wait_h": null,
       "war": null
      },
-     "profit": 31909,
+     "profit": 31814,
      "recipe": "Fire Goggles",
-     "revenue": 43035,
+     "revenue": 42940,
      "spell": 12594
     },
     {
@@ -4835,7 +4929,7 @@
         "src": "ah"
        }
       ],
-      "profit": 37752
+      "profit": 37657
      },
      "makes": 1.0,
      "mats": [
@@ -4867,6 +4961,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": 6300,
       "duration_h": 8,
@@ -4879,17 +4974,92 @@
       "name": "Gnomish Shrink Ray",
       "pulled": 0,
       "qty": 5,
+      "realizable": 48900,
       "sold": 0,
       "sold_at": null,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 750,
       "wait_h": null,
       "war": null
      },
-     "profit": 29610,
+     "profit": 29515,
      "recipe": "Gnomish Shrink Ray",
-     "revenue": 46550,
+     "revenue": 46455,
      "spell": 12899
+    },
+    {
+     "cost": 11238,
+     "farm": {
+      "cost": 5988,
+      "mats": [
+       {
+        "id": 7911,
+        "name": "Truesilver Ore",
+        "qty": 2,
+        "src": "farm"
+       },
+       {
+        "id": 3858,
+        "name": "Mithril Ore",
+        "qty": 3,
+        "src": "farm"
+       },
+       {
+        "id": 7910,
+        "name": "Star Ruby",
+        "qty": 1,
+        "src": "ah"
+       }
+      ],
+      "profit": 32864
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 6037,
+       "name": "Truesilver Bar",
+       "qty": 2
+      },
+      {
+       "id": 7910,
+       "name": "Star Ruby",
+       "qty": 1
+      },
+      {
+       "id": 10559,
+       "name": "Mithril Tube",
+       "qty": 1
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "clearing": 60000,
+      "deposit_known": true,
+      "deposit_risk": 28,
+      "duration_h": 24,
+      "floor": 49500,
+      "floor_then": 60000,
+      "id": 10548,
+      "listing_deposit": 1500,
+      "listings": 11,
+      "median": 56000,
+      "name": "Sniper Scope",
+      "pulled": 0,
+      "qty": 37,
+      "realizable": 40927,
+      "sold": 5,
+      "sold_at": 62000,
+      "sold_maybe": 0,
+      "trend_per_h": -1428.4013807838844,
+      "vendor": 2500,
+      "wait_h": 6.0008333333333335,
+      "war": null
+     },
+     "profit": 27614,
+     "recipe": "Sniper Scope",
+     "revenue": 38880,
+     "spell": 12620
     },
     {
      "cost": 5066,
@@ -4945,7 +5115,7 @@
         "src": "ah"
        }
       ],
-      "profit": 16199
+      "profit": 16104
      },
      "makes": 1.0,
      "mats": [
@@ -4983,6 +5153,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 18000,
       "deposit_known": true,
       "deposit_risk": 1,
       "duration_h": 24,
@@ -4995,17 +5166,81 @@
       "name": "Goblin Jumper Cables",
       "pulled": 0,
       "qty": 15,
+      "realizable": 17900,
       "sold": 2,
       "sold_at": 18000,
       "sold_maybe": 0,
+      "trend_per_h": 0.0,
       "vendor": 21,
       "wait_h": 5.0008333333333335,
       "war": null
      },
-     "profit": 12033,
+     "profit": 11938,
      "recipe": "Goblin Jumper Cables",
-     "revenue": 17100,
+     "revenue": 17005,
      "spell": 9273
+    },
+    {
+     "cost": 3358,
+     "farm": {
+      "cost": 1918,
+      "mats": [
+       {
+        "id": 4234,
+        "name": "Heavy Leather",
+        "qty": 6,
+        "src": "farm"
+       },
+       {
+        "id": 3864,
+        "name": "Citrine",
+        "qty": 2,
+        "src": "ah"
+       }
+      ],
+      "profit": 7287
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 3864,
+       "name": "Citrine",
+       "qty": 2
+      },
+      {
+       "id": 4234,
+       "name": "Heavy Leather",
+       "qty": 6
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "clearing": 24900,
+      "deposit_known": true,
+      "deposit_risk": 10,
+      "duration_h": 24,
+      "floor": 9800,
+      "floor_then": 7500,
+      "id": 10499,
+      "listing_deposit": 1263,
+      "listings": 14,
+      "median": 10000,
+      "name": "Bright-Eye Goggles",
+      "pulled": 0,
+      "qty": 14,
+      "realizable": 9700,
+      "sold": 1,
+      "sold_at": 24900,
+      "sold_maybe": 0,
+      "trend_per_h": null,
+      "vendor": 2105,
+      "wait_h": 5.0008333333333335,
+      "war": null
+     },
+     "profit": 5847,
+     "recipe": "Bright-Eye Goggles",
+     "revenue": 9215,
+     "spell": 12587
     },
     {
      "cost": 5960,
@@ -5055,7 +5290,7 @@
         "src": "farm"
        }
       ],
-      "profit": 12435
+      "profit": 11102
      },
      "makes": 1.0,
      "mats": [
@@ -5082,6 +5317,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 17097,
       "deposit_known": true,
       "deposit_risk": 3,
       "duration_h": 24,
@@ -5094,76 +5330,19 @@
       "name": "Compact Harvest Reaper Kit",
       "pulled": 0,
       "qty": 47,
+      "realizable": 11690,
       "sold": 7,
       "sold_at": 16811,
       "sold_maybe": 0,
+      "trend_per_h": -400.3666055687837,
       "vendor": 4000,
       "wait_h": 3.500694444444445,
       "war": null
      },
-     "profit": 6475,
+     "profit": 5142,
      "recipe": "Compact Harvest Reaper Kit",
-     "revenue": 12438,
+     "revenue": 11105,
      "spell": 3963
-    },
-    {
-     "cost": 3358,
-     "farm": {
-      "cost": 1918,
-      "mats": [
-       {
-        "id": 4234,
-        "name": "Heavy Leather",
-        "qty": 6,
-        "src": "farm"
-       },
-       {
-        "id": 3864,
-        "name": "Citrine",
-        "qty": 2,
-        "src": "ah"
-       }
-      ],
-      "profit": 7382
-     },
-     "makes": 1.0,
-     "mats": [
-      {
-       "id": 3864,
-       "name": "Citrine",
-       "qty": 2
-      },
-      {
-       "id": 4234,
-       "name": "Heavy Leather",
-       "qty": 6
-      }
-     ],
-     "out": {
-      "ahead": 0,
-      "deposit_known": true,
-      "deposit_risk": 10,
-      "duration_h": 24,
-      "floor": 9800,
-      "floor_then": 7500,
-      "id": 10499,
-      "listing_deposit": 1263,
-      "listings": 14,
-      "median": 10000,
-      "name": "Bright-Eye Goggles",
-      "pulled": 0,
-      "qty": 14,
-      "sold": 1,
-      "sold_at": 24900,
-      "sold_maybe": 0,
-      "vendor": 2105,
-      "wait_h": 5.0008333333333335,
-      "war": null
-     },
-     "profit": 5942,
-     "recipe": "Bright-Eye Goggles",
-     "revenue": 9310,
-     "spell": 12587
     },
     {
      "cost": 3821,
@@ -5213,7 +5392,7 @@
         "src": "farm"
        }
       ],
-      "profit": 8652
+      "profit": 8453
      },
      "makes": 1.0,
      "mats": [
@@ -5240,6 +5419,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 10000,
       "deposit_known": true,
       "deposit_risk": 12,
       "duration_h": 24,
@@ -5252,16 +5432,18 @@
       "name": "Advanced Target Dummy",
       "pulled": 0,
       "qty": 70,
+      "realizable": 8911,
       "sold": 3,
       "sold_at": 9917,
       "sold_maybe": 0,
+      "trend_per_h": -41.65895204613473,
       "vendor": 2500,
       "wait_h": 5.0008333333333335,
       "war": null
      },
-     "profit": 4831,
+     "profit": 4632,
      "recipe": "Advanced Target Dummy",
-     "revenue": 8664,
+     "revenue": 8465,
      "spell": 3965
     },
     {
@@ -5306,7 +5488,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 6835
+      "profit": 6395
      },
      "makes": 1.0,
      "mats": [
@@ -5333,6 +5515,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 8800,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -5345,16 +5528,18 @@
       "name": "Minor Recombobulator",
       "pulled": 0,
       "qty": 62,
+      "realizable": 6837,
       "sold": 8,
       "sold_at": 8750,
       "sold_maybe": 0,
+      "trend_per_h": -165.02222536743525,
       "vendor": 600,
       "wait_h": 2.2003333333333335,
       "war": null
      },
-     "profit": 4512,
+     "profit": 4072,
      "recipe": "Minor Recombobulator",
-     "revenue": 6935,
+     "revenue": 6495,
      "spell": 3952
     },
     {
@@ -5399,7 +5584,7 @@
         "src": "vendor"
        }
       ],
-      "profit": 5500
+      "profit": 5046
      },
      "makes": 1.0,
      "mats": [
@@ -5432,6 +5617,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 8300,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -5444,16 +5630,18 @@
       "name": "Gnomish Universal Remote",
       "pulled": 3,
       "qty": 63,
+      "realizable": 5523,
       "sold": 6,
       "sold_at": 8683,
       "sold_maybe": 0,
+      "trend_per_h": -188.52137830260259,
       "vendor": 500,
       "wait_h": 2.000277777777778,
       "war": null
      },
-     "profit": 3765,
+     "profit": 3311,
      "recipe": "Gnomish Universal Remote",
-     "revenue": 5700,
+     "revenue": 5246,
      "spell": 9269
     },
     {
@@ -5492,7 +5680,7 @@
         "src": "ah"
        }
       ],
-      "profit": 4383
+      "profit": 4382
      },
      "makes": 1.0,
      "mats": [
@@ -5519,6 +5707,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 7000,
       "deposit_known": true,
       "deposit_risk": 2,
       "duration_h": 24,
@@ -5531,16 +5720,18 @@
       "name": "EZ-Thro Copper Bomb XL",
       "pulled": 7,
       "qty": 58,
+      "realizable": 4999,
       "sold": 4,
       "sold_at": 7000,
       "sold_maybe": 0,
+      "trend_per_h": 0.0,
       "vendor": 175,
       "wait_h": 6.0008333333333335,
       "war": null
      },
-     "profit": 3215,
+     "profit": 3214,
      "recipe": "EZ-Thro Copper Bomb XL",
-     "revenue": 4750,
+     "revenue": 4749,
      "spell": 1266908
     },
     {
@@ -5567,7 +5758,7 @@
         "src": "farm"
        }
       ],
-      "profit": 5025
+      "profit": 5024
      },
      "makes": 1.0,
      "mats": [
@@ -5589,6 +5780,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": 2100,
       "duration_h": 24,
@@ -5601,16 +5793,18 @@
       "name": "Mechanical Repair Kit",
       "pulled": 0,
       "qty": 96,
+      "realizable": 7499,
       "sold": 0,
       "sold_at": null,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 250,
       "wait_h": null,
       "war": null
      },
-     "profit": 3116,
+     "profit": 3115,
      "recipe": "Mechanical Repair Kit",
-     "revenue": 7125,
+     "revenue": 7124,
      "spell": 15255
     }
    ],
@@ -5640,7 +5834,7 @@
         "src": "farm"
        }
       ],
-      "profit": 4750
+      "profit": 4406
      },
      "makes": 1.0,
      "mats": [
@@ -5652,6 +5846,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 6099,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -5664,16 +5859,18 @@
       "name": "Thorium Bar",
       "pulled": 92,
       "qty": 917,
+      "realizable": 4638,
       "sold": 61,
       "sold_at": 6054,
       "sold_maybe": 0,
+      "trend_per_h": -175.6798409910115,
       "vendor": 600,
       "wait_h": 2.0526388888888887,
       "war": null
      },
-     "profit": 2352,
+     "profit": 2008,
      "recipe": "Smelt Thorium",
-     "revenue": 4750,
+     "revenue": 4406,
      "spell": 16153
     },
     {
@@ -5700,7 +5897,7 @@
         "src": "farm"
        }
       ],
-      "profit": 1473
+      "profit": 1472
      },
      "makes": 1.0,
      "mats": [
@@ -5722,6 +5919,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": null,
       "deposit_known": true,
       "deposit_risk": 1400,
       "duration_h": 24,
@@ -5734,16 +5932,18 @@
       "name": "Rock Garden",
       "pulled": 0,
       "qty": 26,
+      "realizable": 3024,
       "sold": 0,
       "sold_at": null,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 0,
       "wait_h": null,
       "war": null
      },
-     "profit": -42,
+     "profit": -43,
      "recipe": "Rock Garden",
-     "revenue": 2873,
+     "revenue": 2872,
      "spell": 1262975
     },
     {
@@ -5758,7 +5958,7 @@
         "src": "farm"
        }
       ],
-      "profit": 1235
+      "profit": 1232
      },
      "makes": 1.0,
      "mats": [
@@ -5770,6 +5970,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 1385,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -5782,16 +5983,18 @@
       "name": "Truesilver Bar",
       "pulled": 1,
       "qty": 214,
+      "realizable": 1297,
       "sold": 26,
       "sold_at": 1373,
       "sold_maybe": 0,
+      "trend_per_h": -1.2265046134539235,
       "vendor": 1250,
       "wait_h": 2.000277777777778,
       "war": null
      },
-     "profit": -1355,
+     "profit": -1358,
      "recipe": "Smelt Truesilver",
-     "revenue": 1235,
+     "revenue": 1232,
      "spell": 10098
     },
     {
@@ -5806,7 +6009,7 @@
         "src": "farm"
        }
       ],
-      "profit": 838
+      "profit": 826
      },
      "makes": 1.0,
      "mats": [
@@ -5818,6 +6021,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 874,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -5830,16 +6034,18 @@
       "name": "Mithril Bar",
       "pulled": 4,
       "qty": 1011,
+      "realizable": 870,
       "sold": 267,
       "sold_at": 883,
       "sold_maybe": 0,
+      "trend_per_h": -2.00734713619886,
       "vendor": 400,
       "wait_h": 1.8712499999999999,
       "war": null
      },
-     "profit": 88,
+     "profit": 76,
      "recipe": "Smelt Mithril",
-     "revenue": 838,
+     "revenue": 826,
      "spell": 10097
     },
     {
@@ -5854,7 +6060,7 @@
         "src": "farm"
        }
       ],
-      "profit": 748
+      "profit": 753
      },
      "makes": 1.0,
      "mats": [
@@ -5866,6 +6072,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 800,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -5878,16 +6085,18 @@
       "name": "Gold Bar",
       "pulled": 2,
       "qty": 437,
+      "realizable": 793,
       "sold": 86,
       "sold_at": 788,
       "sold_maybe": 0,
+      "trend_per_h": 9.573865629024601,
       "vendor": 600,
       "wait_h": 1.7145238095238093,
       "war": null
      },
-     "profit": -62,
+     "profit": -57,
      "recipe": "Smelt Gold",
-     "revenue": 748,
+     "revenue": 753,
      "spell": 3308
     },
     {
@@ -5902,7 +6111,7 @@
         "src": "farm"
        }
       ],
-      "profit": 384
+      "profit": 382
      },
      "makes": 1.0,
      "mats": [
@@ -5914,6 +6123,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 418,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -5926,77 +6136,19 @@
       "name": "Silver Bar",
       "pulled": 127,
       "qty": 1770,
+      "realizable": 403,
       "sold": 127,
       "sold_at": 417,
       "sold_maybe": 0,
+      "trend_per_h": -0.5815594448666628,
       "vendor": 100,
       "wait_h": 2.000277777777778,
       "war": null
      },
-     "profit": -516,
+     "profit": -518,
      "recipe": "Smelt Silver",
-     "revenue": 384,
+     "revenue": 382,
      "spell": 2658
-    },
-    {
-     "cost": 850,
-     "farm": {
-      "cost": 500,
-      "mats": [
-       {
-        "id": 2772,
-        "name": "Iron Ore",
-        "qty": 1,
-        "src": "farm"
-       },
-       {
-        "id": 3857,
-        "name": "Coal",
-        "qty": 1,
-        "src": "vendor"
-       }
-      ],
-      "profit": 338
-     },
-     "makes": 1.0,
-     "mats": [
-      {
-       "id": 3575,
-       "name": "Iron Bar",
-       "qty": 1
-      },
-      {
-       "id": 3857,
-       "name": "Coal",
-       "qty": 1,
-       "vendor": true
-      }
-     ],
-     "out": {
-      "ahead": 0,
-      "deposit_known": true,
-      "deposit_risk": 0,
-      "duration_h": 24,
-      "floor": 883,
-      "floor_then": 925,
-      "id": 3859,
-      "listing_deposit": 100,
-      "listings": 36,
-      "median": 884,
-      "name": "Steel Bar",
-      "pulled": 46,
-      "qty": 1007,
-      "sold": 195,
-      "sold_at": 911,
-      "sold_maybe": 0,
-      "vendor": 60,
-      "wait_h": 4.000555555555556,
-      "war": null
-     },
-     "profit": -12,
-     "recipe": "Smelt Steel",
-     "revenue": 838,
-     "spell": 3569
     },
     {
      "cost": 289,
@@ -6016,7 +6168,7 @@
         "src": "farm"
        }
       ],
-      "profit": 332
+      "profit": 328
      },
      "makes": 2.0,
      "mats": [
@@ -6033,6 +6185,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 175,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -6045,16 +6198,18 @@
       "name": "Bronze Bar",
       "pulled": 1001,
       "qty": 11007,
+      "realizable": 173,
       "sold": 1080,
       "sold_at": 179,
       "sold_maybe": 437,
+      "trend_per_h": -0.25568662730064484,
       "vendor": 50,
       "wait_h": 2.0187500000000003,
       "war": null
      },
-     "profit": 43,
+     "profit": 39,
      "recipe": "Smelt Bronze",
-     "revenue": 332,
+     "revenue": 328,
      "spell": 2659
     },
     {
@@ -6069,7 +6224,7 @@
         "src": "farm"
        }
       ],
-      "profit": 327
+      "profit": 326
      },
      "makes": 1.0,
      "mats": [
@@ -6081,6 +6236,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 359,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -6093,17 +6249,82 @@
       "name": "Iron Bar",
       "pulled": 9,
       "qty": 3030,
+      "realizable": 344,
       "sold": 306,
       "sold_at": 352,
       "sold_maybe": 107,
+      "trend_per_h": 3.495873601309614,
       "vendor": 200,
       "wait_h": 2.0379166666666664,
       "war": null
      },
-     "profit": 20,
+     "profit": 19,
      "recipe": "Smelt Iron",
-     "revenue": 327,
+     "revenue": 326,
      "spell": 3307
+    },
+    {
+     "cost": 850,
+     "farm": {
+      "cost": 500,
+      "mats": [
+       {
+        "id": 2772,
+        "name": "Iron Ore",
+        "qty": 1,
+        "src": "farm"
+       },
+       {
+        "id": 3857,
+        "name": "Coal",
+        "qty": 1,
+        "src": "vendor"
+       }
+      ],
+      "profit": 326
+     },
+     "makes": 1.0,
+     "mats": [
+      {
+       "id": 3575,
+       "name": "Iron Bar",
+       "qty": 1
+      },
+      {
+       "id": 3857,
+       "name": "Coal",
+       "qty": 1,
+       "vendor": true
+      }
+     ],
+     "out": {
+      "ahead": 0,
+      "clearing": 898,
+      "deposit_known": true,
+      "deposit_risk": 0,
+      "duration_h": 24,
+      "floor": 883,
+      "floor_then": 925,
+      "id": 3859,
+      "listing_deposit": 100,
+      "listings": 36,
+      "median": 884,
+      "name": "Steel Bar",
+      "pulled": 46,
+      "qty": 1007,
+      "realizable": 870,
+      "sold": 195,
+      "sold_at": 911,
+      "sold_maybe": 0,
+      "trend_per_h": -3.0547705401395446,
+      "vendor": 60,
+      "wait_h": 4.000555555555556,
+      "war": null
+     },
+     "profit": -24,
+     "recipe": "Smelt Steel",
+     "revenue": 826,
+     "spell": 3569
     },
     {
      "cost": 195,
@@ -6117,7 +6338,7 @@
         "src": "farm"
        }
       ],
-      "profit": 204
+      "profit": 203
      },
      "makes": 1.0,
      "mats": [
@@ -6129,6 +6350,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 216,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -6141,16 +6363,18 @@
       "name": "Tin Bar",
       "pulled": 178,
       "qty": 3412,
+      "realizable": 214,
       "sold": 251,
       "sold_at": 230,
       "sold_maybe": 0,
+      "trend_per_h": 6.545353347719597,
       "vendor": 35,
       "wait_h": 1.7145238095238093,
       "war": null
      },
-     "profit": 9,
+     "profit": 8,
      "recipe": "Smelt Tin",
-     "revenue": 204,
+     "revenue": 203,
      "spell": 3304
     },
     {
@@ -6165,7 +6389,7 @@
         "src": "farm"
        }
       ],
-      "profit": 57
+      "profit": 54
      },
      "makes": 1.0,
      "mats": [
@@ -6177,6 +6401,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 84,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 8,
@@ -6189,16 +6414,18 @@
       "name": "Copper Bar",
       "pulled": 848,
       "qty": 9082,
+      "realizable": 57,
       "sold": 1191,
       "sold_at": 82,
       "sold_maybe": 34,
+      "trend_per_h": -1.506620763218268,
       "vendor": 10,
       "wait_h": 1.3458333333333334,
       "war": null
      },
-     "profit": -12,
+     "profit": -15,
      "recipe": "Smelt Copper",
-     "revenue": 57,
+     "revenue": 54,
      "spell": 2657
     },
     {
@@ -6219,7 +6446,7 @@
         "src": "farm"
        }
       ],
-      "profit": 38
+      "profit": 36
      },
      "makes": 1.0,
      "mats": [
@@ -6236,6 +6463,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 44,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -6248,16 +6476,18 @@
       "name": "Lodestone",
       "pulled": 0,
       "qty": 295,
+      "realizable": 38,
       "sold": 38,
       "sold_at": 44,
       "sold_maybe": 0,
+      "trend_per_h": -0.2457576708526141,
       "vendor": 0,
       "wait_h": 2.7504166666666667,
       "war": null
      },
-     "profit": -40,
+     "profit": -42,
      "recipe": "Lodestone",
-     "revenue": 38,
+     "revenue": 36,
      "spell": 1230161
     }
    ],
@@ -6276,7 +6506,7 @@
         "src": "farm"
        }
       ],
-      "profit": 4750
+      "profit": 4406
      },
      "makes": 1.0,
      "mats": [
@@ -6288,6 +6518,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 6099,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -6300,16 +6531,18 @@
       "name": "Thorium Bar",
       "pulled": 92,
       "qty": 917,
+      "realizable": 4638,
       "sold": 61,
       "sold_at": 6054,
       "sold_maybe": 0,
+      "trend_per_h": -175.6798409910115,
       "vendor": 600,
       "wait_h": 2.0526388888888887,
       "war": null
      },
-     "profit": 2352,
+     "profit": 2008,
      "recipe": "Smelt Thorium",
-     "revenue": 4750,
+     "revenue": 4406,
      "spell": 16153
     },
     {
@@ -6324,7 +6557,7 @@
         "src": "farm"
        }
       ],
-      "profit": 838
+      "profit": 826
      },
      "makes": 1.0,
      "mats": [
@@ -6336,6 +6569,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 874,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -6348,16 +6582,18 @@
       "name": "Mithril Bar",
       "pulled": 4,
       "qty": 1011,
+      "realizable": 870,
       "sold": 267,
       "sold_at": 883,
       "sold_maybe": 0,
+      "trend_per_h": -2.00734713619886,
       "vendor": 400,
       "wait_h": 1.8712499999999999,
       "war": null
      },
-     "profit": 88,
+     "profit": 76,
      "recipe": "Smelt Mithril",
-     "revenue": 838,
+     "revenue": 826,
      "spell": 10097
     },
     {
@@ -6378,7 +6614,7 @@
         "src": "farm"
        }
       ],
-      "profit": 332
+      "profit": 328
      },
      "makes": 2.0,
      "mats": [
@@ -6395,6 +6631,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 175,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -6407,16 +6644,18 @@
       "name": "Bronze Bar",
       "pulled": 1001,
       "qty": 11007,
+      "realizable": 173,
       "sold": 1080,
       "sold_at": 179,
       "sold_maybe": 437,
+      "trend_per_h": -0.25568662730064484,
       "vendor": 50,
       "wait_h": 2.0187500000000003,
       "war": null
      },
-     "profit": 43,
+     "profit": 39,
      "recipe": "Smelt Bronze",
-     "revenue": 332,
+     "revenue": 328,
      "spell": 2659
     },
     {
@@ -6431,7 +6670,7 @@
         "src": "farm"
        }
       ],
-      "profit": 327
+      "profit": 326
      },
      "makes": 1.0,
      "mats": [
@@ -6443,6 +6682,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 359,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -6455,16 +6695,18 @@
       "name": "Iron Bar",
       "pulled": 9,
       "qty": 3030,
+      "realizable": 344,
       "sold": 306,
       "sold_at": 352,
       "sold_maybe": 107,
+      "trend_per_h": 3.495873601309614,
       "vendor": 200,
       "wait_h": 2.0379166666666664,
       "war": null
      },
-     "profit": 20,
+     "profit": 19,
      "recipe": "Smelt Iron",
-     "revenue": 327,
+     "revenue": 326,
      "spell": 3307
     },
     {
@@ -6479,7 +6721,7 @@
         "src": "farm"
        }
       ],
-      "profit": 204
+      "profit": 203
      },
      "makes": 1.0,
      "mats": [
@@ -6491,6 +6733,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 216,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -6503,16 +6746,18 @@
       "name": "Tin Bar",
       "pulled": 178,
       "qty": 3412,
+      "realizable": 214,
       "sold": 251,
       "sold_at": 230,
       "sold_maybe": 0,
+      "trend_per_h": 6.545353347719597,
       "vendor": 35,
       "wait_h": 1.7145238095238093,
       "war": null
      },
-     "profit": 9,
+     "profit": 8,
      "recipe": "Smelt Tin",
-     "revenue": 204,
+     "revenue": 203,
      "spell": 3304
     }
    ],
@@ -6535,6 +6780,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 189998,
       "deposit_known": true,
       "deposit_risk": 282,
       "duration_h": 24,
@@ -6547,16 +6793,18 @@
       "name": "Azerothium Bar",
       "pulled": 0,
       "qty": 34,
+      "realizable": 169999,
       "sold": 6,
       "sold_at": 189998,
       "sold_maybe": 0,
+      "trend_per_h": null,
       "vendor": 3000,
       "wait_h": 12.001666666666667,
       "war": null
      },
-     "profit": 144403,
+     "profit": 144402,
      "recipe": "Smelt Azerothium",
-     "revenue": 161500,
+     "revenue": 161499,
      "spell": 1249637
     },
     {
@@ -6571,7 +6819,7 @@
         "src": "farm"
        }
       ],
-      "profit": 4750
+      "profit": 4406
      },
      "makes": 1.0,
      "mats": [
@@ -6583,6 +6831,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 6099,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -6595,16 +6844,18 @@
       "name": "Thorium Bar",
       "pulled": 92,
       "qty": 917,
+      "realizable": 4638,
       "sold": 61,
       "sold_at": 6054,
       "sold_maybe": 0,
+      "trend_per_h": -175.6798409910115,
       "vendor": 600,
       "wait_h": 2.0526388888888887,
       "war": null
      },
-     "profit": 2352,
+     "profit": 2008,
      "recipe": "Smelt Thorium",
-     "revenue": 4750,
+     "revenue": 4406,
      "spell": 16153
     },
     {
@@ -6619,7 +6870,7 @@
         "src": "farm"
        }
       ],
-      "profit": 838
+      "profit": 826
      },
      "makes": 1.0,
      "mats": [
@@ -6631,6 +6882,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 874,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -6643,16 +6895,18 @@
       "name": "Mithril Bar",
       "pulled": 4,
       "qty": 1011,
+      "realizable": 870,
       "sold": 267,
       "sold_at": 883,
       "sold_maybe": 0,
+      "trend_per_h": -2.00734713619886,
       "vendor": 400,
       "wait_h": 1.8712499999999999,
       "war": null
      },
-     "profit": 88,
+     "profit": 76,
      "recipe": "Smelt Mithril",
-     "revenue": 838,
+     "revenue": 826,
      "spell": 10097
     },
     {
@@ -6673,7 +6927,7 @@
         "src": "farm"
        }
       ],
-      "profit": 332
+      "profit": 328
      },
      "makes": 2.0,
      "mats": [
@@ -6690,6 +6944,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 175,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -6702,16 +6957,18 @@
       "name": "Bronze Bar",
       "pulled": 1001,
       "qty": 11007,
+      "realizable": 173,
       "sold": 1080,
       "sold_at": 179,
       "sold_maybe": 437,
+      "trend_per_h": -0.25568662730064484,
       "vendor": 50,
       "wait_h": 2.0187500000000003,
       "war": null
      },
-     "profit": 43,
+     "profit": 39,
      "recipe": "Smelt Bronze",
-     "revenue": 332,
+     "revenue": 328,
      "spell": 2659
     },
     {
@@ -6726,7 +6983,7 @@
         "src": "farm"
        }
       ],
-      "profit": 327
+      "profit": 326
      },
      "makes": 1.0,
      "mats": [
@@ -6738,6 +6995,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 359,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -6750,16 +7008,18 @@
       "name": "Iron Bar",
       "pulled": 9,
       "qty": 3030,
+      "realizable": 344,
       "sold": 306,
       "sold_at": 352,
       "sold_maybe": 107,
+      "trend_per_h": 3.495873601309614,
       "vendor": 200,
       "wait_h": 2.0379166666666664,
       "war": null
      },
-     "profit": 20,
+     "profit": 19,
      "recipe": "Smelt Iron",
-     "revenue": 327,
+     "revenue": 326,
      "spell": 3307
     },
     {
@@ -6774,7 +7034,7 @@
         "src": "farm"
        }
       ],
-      "profit": 204
+      "profit": 203
      },
      "makes": 1.0,
      "mats": [
@@ -6786,6 +7046,7 @@
      ],
      "out": {
       "ahead": 0,
+      "clearing": 216,
       "deposit_known": true,
       "deposit_risk": 0,
       "duration_h": 24,
@@ -6798,16 +7059,18 @@
       "name": "Tin Bar",
       "pulled": 178,
       "qty": 3412,
+      "realizable": 214,
       "sold": 251,
       "sold_at": 230,
       "sold_maybe": 0,
+      "trend_per_h": 6.545353347719597,
       "vendor": 35,
       "wait_h": 1.7145238095238093,
       "war": null
      },
-     "profit": 9,
+     "profit": 8,
      "recipe": "Smelt Tin",
-     "revenue": 204,
+     "revenue": 203,
      "spell": 3304
     }
    ],
@@ -6862,6 +7125,7 @@
   "cloth": [
    {
     "ahead": 0,
+    "clearing": 29,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -6874,15 +7138,18 @@
     "name": "Linen Cloth",
     "pulled": 574,
     "qty": 33574,
+    "realizable": 21,
     "sold": 870,
     "sold_at": 29,
     "sold_maybe": 503,
+    "trend_per_h": -0.18954100894764095,
     "vendor": 13,
     "wait_h": 1.0988636363636364,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 102,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -6895,15 +7162,18 @@
     "name": "Wool Cloth",
     "pulled": 1319,
     "qty": 6572,
+    "realizable": 75,
     "sold": 2469,
     "sold_at": 106,
     "sold_maybe": 274,
+    "trend_per_h": -0.6492133250508347,
     "vendor": 33,
     "wait_h": 1.0072916666666667,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 199,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -6916,15 +7186,18 @@
     "name": "Silk Cloth",
     "pulled": 46,
     "qty": 5207,
+    "realizable": 198,
     "sold": 981,
     "sold_at": 199,
     "sold_maybe": 709,
+    "trend_per_h": 0.05118727489231024,
     "vendor": 150,
     "wait_h": 1.0988636363636364,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 579,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -6937,15 +7210,18 @@
     "name": "Mageweave Cloth",
     "pulled": 105,
     "qty": 12857,
+    "realizable": 524,
     "sold": 313,
     "sold_at": 600,
     "sold_maybe": 0,
+    "trend_per_h": 9.65447843448796,
     "vendor": 250,
     "wait_h": 1.5002083333333334,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 1498,
     "deposit_known": true,
     "deposit_risk": 1,
     "duration_h": 24,
@@ -6958,15 +7234,18 @@
     "name": "Runecloth",
     "pulled": 4,
     "qty": 2704,
+    "realizable": 1383,
     "sold": 169,
     "sold_at": 1498,
     "sold_maybe": 0,
+    "trend_per_h": 0.23055289359590553,
     "vendor": 400,
     "wait_h": 4.000555555555556,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 5500,
     "deposit_known": true,
     "deposit_risk": 188,
     "duration_h": 24,
@@ -6979,9 +7258,11 @@
     "name": "Felcloth",
     "pulled": 32,
     "qty": 244,
+    "realizable": 4467,
     "sold": 4,
     "sold_at": 5500,
     "sold_maybe": 0,
+    "trend_per_h": null,
     "vendor": 2000,
     "wait_h": 12.001666666666667,
     "war": "relisting"
@@ -6990,6 +7271,7 @@
   "herbalism": [
    {
     "ahead": 0,
+    "clearing": 30,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -7002,15 +7284,18 @@
     "name": "Peacebloom",
     "pulled": 18,
     "qty": 6128,
+    "realizable": 28,
     "sold": 348,
     "sold_at": 38,
     "sold_maybe": 0,
+    "trend_per_h": 1.327922765951138,
     "vendor": 10,
     "wait_h": 1.2001666666666666,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 18,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -7023,15 +7308,18 @@
     "name": "Silverleaf",
     "pulled": 166,
     "qty": 5122,
+    "realizable": 16,
     "sold": 896,
     "sold_at": 18,
     "sold_maybe": 0,
+    "trend_per_h": -0.12709938008843114,
     "vendor": 10,
     "wait_h": 1.091060606060606,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 30,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -7044,15 +7332,18 @@
     "name": "Earthroot",
     "pulled": 98,
     "qty": 2299,
+    "realizable": 25,
     "sold": 166,
     "sold_at": 30,
     "sold_maybe": 0,
+    "trend_per_h": 0.34408557111453886,
     "vendor": 20,
     "wait_h": 1.5002083333333334,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 34,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -7065,15 +7356,18 @@
     "name": "Mageroyal",
     "pulled": 8,
     "qty": 1393,
+    "realizable": 26,
     "sold": 167,
     "sold_at": 35,
     "sold_maybe": 0,
+    "trend_per_h": -0.5889328961145526,
     "vendor": 20,
     "wait_h": 1.5002083333333334,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 92,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7086,15 +7380,18 @@
     "name": "Briarthorn",
     "pulled": 25,
     "qty": 1491,
+    "realizable": 89,
     "sold": 201,
     "sold_at": 92,
     "sold_maybe": 0,
+    "trend_per_h": -0.252358581430857,
     "vendor": 25,
     "wait_h": 1.7145238095238093,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 100,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7107,15 +7404,18 @@
     "name": "Bruiseweed",
     "pulled": 47,
     "qty": 2841,
+    "realizable": 87,
     "sold": 221,
     "sold_at": 102,
     "sold_maybe": 0,
+    "trend_per_h": 0.1511265293194802,
     "vendor": 25,
     "wait_h": 1.7145238095238093,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 269,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -7128,15 +7428,18 @@
     "name": "Swiftthistle",
     "pulled": 36,
     "qty": 1168,
+    "realizable": 212,
     "sold": 336,
     "sold_at": 266,
     "sold_maybe": 0,
+    "trend_per_h": -5.948219253840583,
     "vendor": 15,
     "wait_h": 1.2001666666666666,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 150,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7149,15 +7452,18 @@
     "name": "Wild Steelbloom",
     "pulled": 184,
     "qty": 1946,
+    "realizable": 95,
     "sold": 159,
     "sold_at": 154,
     "sold_maybe": 0,
+    "trend_per_h": -2.480208092934253,
     "vendor": 50,
     "wait_h": 2.000277777777778,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 190,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7170,15 +7476,18 @@
     "name": "Grave Moss",
     "pulled": 37,
     "qty": 3149,
+    "realizable": 144,
     "sold": 172,
     "sold_at": 199,
     "sold_maybe": 0,
+    "trend_per_h": 9.078503115993943,
     "vendor": 25,
     "wait_h": 3.0004166666666667,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 100,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -7191,15 +7500,18 @@
     "name": "Kingsblood",
     "pulled": 18,
     "qty": 2017,
+    "realizable": 91,
     "sold": 296,
     "sold_at": 94,
     "sold_maybe": 0,
+    "trend_per_h": 3.544840593591187,
     "vendor": 30,
     "wait_h": 1.5002083333333334,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 125,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -7212,15 +7524,18 @@
     "name": "Liferoot",
     "pulled": 72,
     "qty": 1248,
+    "realizable": 120,
     "sold": 189,
     "sold_at": 131,
     "sold_maybe": 0,
+    "trend_per_h": -3.567237173596985,
     "vendor": 75,
     "wait_h": 1.5002083333333334,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 220,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7233,15 +7548,18 @@
     "name": "Fadeleaf",
     "pulled": 53,
     "qty": 2600,
+    "realizable": 220,
     "sold": 101,
     "sold_at": 223,
     "sold_maybe": 0,
+    "trend_per_h": -0.1357145829388629,
     "vendor": 125,
     "wait_h": 2.000277777777778,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 390,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7254,15 +7572,18 @@
     "name": "Goldthorn",
     "pulled": 33,
     "qty": 965,
+    "realizable": 333,
     "sold": 84,
     "sold_at": 399,
     "sold_maybe": 0,
+    "trend_per_h": -3.566545191066253,
     "vendor": 150,
     "wait_h": 2.400333333333333,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 200,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7275,15 +7596,18 @@
     "name": "Khadgar's Whisker",
     "pulled": 12,
     "qty": 2912,
+    "realizable": 199,
     "sold": 42,
     "sold_at": 223,
     "sold_maybe": 0,
+    "trend_per_h": 13.970489267651601,
     "vendor": 175,
     "wait_h": 3.0004166666666667,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 949,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7296,15 +7620,18 @@
     "name": "Wintersbite",
     "pulled": 110,
     "qty": 590,
+    "realizable": 949,
     "sold": 109,
     "sold_at": 921,
     "sold_maybe": 0,
+    "trend_per_h": 18.385196934855855,
     "vendor": 100,
     "wait_h": 2.400333333333333,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 1000,
     "deposit_known": true,
     "deposit_risk": 3,
     "duration_h": 24,
@@ -7317,15 +7644,18 @@
     "name": "Firebloom",
     "pulled": 35,
     "qty": 512,
+    "realizable": 815,
     "sold": 32,
     "sold_at": 1007,
     "sold_maybe": 0,
+    "trend_per_h": -6.817148916841845,
     "vendor": 250,
     "wait_h": 6.0008333333333335,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 1200,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7338,15 +7668,18 @@
     "name": "Purple Lotus",
     "pulled": 95,
     "qty": 1761,
+    "realizable": 454,
     "sold": 4,
     "sold_at": 1124,
     "sold_maybe": 0,
+    "trend_per_h": -50.79541658233893,
     "vendor": 300,
     "wait_h": 4.000555555555556,
     "war": "relisting"
    },
    {
     "ahead": 0,
+    "clearing": 1999,
     "deposit_known": true,
     "deposit_risk": 2,
     "duration_h": 24,
@@ -7359,15 +7692,18 @@
     "name": "Arthas' Tears",
     "pulled": 2,
     "qty": 83,
+    "realizable": 1998,
     "sold": 8,
     "sold_at": 1999,
     "sold_maybe": 0,
+    "trend_per_h": null,
     "vendor": 95,
     "wait_h": 6.001111111111111,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 1450,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7380,15 +7716,18 @@
     "name": "Sungrass",
     "pulled": 39,
     "qty": 928,
+    "realizable": 1450,
     "sold": 69,
     "sold_at": 1450,
     "sold_maybe": 0,
+    "trend_per_h": 0.0,
     "vendor": 60,
     "wait_h": 4.000555555555556,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 697,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7401,15 +7740,18 @@
     "name": "Blindweed",
     "pulled": 30,
     "qty": 418,
+    "realizable": 576,
     "sold": 163,
     "sold_at": 653,
     "sold_maybe": 0,
+    "trend_per_h": -17.499069303515657,
     "vendor": 375,
     "wait_h": 2.000277777777778,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 1804,
     "deposit_known": true,
     "deposit_risk": 35,
     "duration_h": 24,
@@ -7422,15 +7764,18 @@
     "name": "Ghost Mushroom",
     "pulled": 4,
     "qty": 67,
+    "realizable": 1804,
     "sold": 2,
     "sold_at": 2152,
     "sold_maybe": 0,
+    "trend_per_h": null,
     "vendor": 375,
     "wait_h": 12.001666666666667,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 1800,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7443,15 +7788,18 @@
     "name": "Gromsblood",
     "pulled": 0,
     "qty": 67,
+    "realizable": 1509,
     "sold": 39,
     "sold_at": 1740,
     "sold_maybe": 0,
+    "trend_per_h": -34.38068935529796,
     "vendor": 250,
     "wait_h": 4.000555555555556,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 797,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7464,15 +7812,18 @@
     "name": "Golden Sansam",
     "pulled": 2,
     "qty": 361,
+    "realizable": 596,
     "sold": 29,
     "sold_at": 805,
     "sold_maybe": 0,
+    "trend_per_h": -5.543434352922708,
     "vendor": 100,
     "wait_h": 3.0004166666666667,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 6700,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7485,15 +7836,18 @@
     "name": "Dreamfoil",
     "pulled": 17,
     "qty": 796,
+    "realizable": 942,
     "sold": 7,
     "sold_at": 7177,
     "sold_maybe": 0,
+    "trend_per_h": -352.2218300893202,
     "vendor": 100,
     "wait_h": 3.0004166666666667,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 3477,
     "deposit_known": true,
     "deposit_risk": 16,
     "duration_h": 24,
@@ -7506,15 +7860,18 @@
     "name": "Mountain Silversage",
     "pulled": 0,
     "qty": 483,
+    "realizable": 3199,
     "sold": 5,
     "sold_at": 3477,
     "sold_maybe": 0,
+    "trend_per_h": null,
     "vendor": 150,
     "wait_h": 12.001666666666667,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": null,
     "deposit_known": true,
     "deposit_risk": 2100,
     "duration_h": 24,
@@ -7527,15 +7884,18 @@
     "name": "Plaguebloom",
     "pulled": 0,
     "qty": 262,
+    "realizable": 7399,
     "sold": 0,
     "sold_at": null,
     "sold_maybe": 0,
+    "trend_per_h": null,
     "vendor": 250,
     "wait_h": null,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 10000,
     "deposit_known": true,
     "deposit_risk": 3,
     "duration_h": 24,
@@ -7548,15 +7908,18 @@
     "name": "Icecap",
     "pulled": 0,
     "qty": 102,
+    "realizable": 1,
     "sold": 10,
     "sold_at": 15000,
     "sold_maybe": 0,
+    "trend_per_h": -3333.024719925867,
     "vendor": 250,
     "wait_h": 6.0008333333333335,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 178900,
     "deposit_known": true,
     "deposit_risk": 5,
     "duration_h": 24,
@@ -7569,9 +7932,11 @@
     "name": "Black Lotus",
     "pulled": 1,
     "qty": 59,
+    "realizable": 73450,
     "sold": 5,
     "sold_at": 187339,
     "sold_maybe": 0,
+    "trend_per_h": -21086.285397944863,
     "vendor": 1000,
     "wait_h": 5.0008333333333335,
     "war": null
@@ -7580,6 +7945,7 @@
   "mining": [
    {
     "ahead": 0,
+    "clearing": 79,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -7592,15 +7958,18 @@
     "name": "Copper Ore",
     "pulled": 3078,
     "qty": 23160,
+    "realizable": 62,
     "sold": 982,
     "sold_at": 77,
     "sold_maybe": 0,
+    "trend_per_h": -0.9192053261107506,
     "vendor": 5,
     "wait_h": 1.3335185185185185,
     "war": "relisting"
    },
    {
     "ahead": 0,
+    "clearing": 84,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -7613,15 +7982,18 @@
     "name": "Copper Bar",
     "pulled": 848,
     "qty": 9082,
+    "realizable": 57,
     "sold": 1191,
     "sold_at": 82,
     "sold_maybe": 34,
+    "trend_per_h": -1.506620763218268,
     "vendor": 10,
     "wait_h": 1.3458333333333334,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 10,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -7634,15 +8006,18 @@
     "name": "Rough Stone",
     "pulled": 853,
     "qty": 10376,
+    "realizable": 5,
     "sold": 1265,
     "sold_at": 10,
     "sold_maybe": 0,
+    "trend_per_h": -0.09808595615562339,
     "vendor": 2,
     "wait_h": 1.000138888888889,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 17,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7655,15 +8030,18 @@
     "name": "Malachite",
     "pulled": 33,
     "qty": 2255,
+    "realizable": 14,
     "sold": 154,
     "sold_at": 20,
     "sold_maybe": 96,
+    "trend_per_h": 0.3261489788589164,
     "vendor": 15,
     "wait_h": 2.0118055555555556,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 129,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7676,15 +8054,18 @@
     "name": "Tigerseye",
     "pulled": 6,
     "qty": 582,
+    "realizable": 110,
     "sold": 80,
     "sold_at": 143,
     "sold_maybe": 0,
+    "trend_per_h": 2.0651060187539274,
     "vendor": 100,
     "wait_h": 1.7145238095238093,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 300,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -7697,15 +8078,18 @@
     "name": "Shadowgem",
     "pulled": 24,
     "qty": 719,
+    "realizable": 257,
     "sold": 24,
     "sold_at": 301,
     "sold_maybe": 0,
+    "trend_per_h": -1.256716780070882,
     "vendor": 250,
     "wait_h": 1.5002083333333334,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 216,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -7718,15 +8102,18 @@
     "name": "Tin Ore",
     "pulled": 43,
     "qty": 1527,
+    "realizable": 195,
     "sold": 554,
     "sold_at": 226,
     "sold_maybe": 0,
+    "trend_per_h": 3.3921511329697225,
     "vendor": 25,
     "wait_h": 1.2001666666666666,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 216,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7739,15 +8126,18 @@
     "name": "Tin Bar",
     "pulled": 178,
     "qty": 3412,
+    "realizable": 214,
     "sold": 251,
     "sold_at": 230,
     "sold_maybe": 0,
+    "trend_per_h": 6.545353347719597,
     "vendor": 35,
     "wait_h": 1.7145238095238093,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 115,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -7760,15 +8150,18 @@
     "name": "Coarse Stone",
     "pulled": 136,
     "qty": 3927,
+    "realizable": 88,
     "sold": 386,
     "sold_at": 118,
     "sold_maybe": 0,
+    "trend_per_h": 2.4077726261795798,
     "vendor": 15,
     "wait_h": 1.5002083333333334,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 600,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -7781,15 +8174,18 @@
     "name": "Moss Agate",
     "pulled": 7,
     "qty": 517,
+    "realizable": 485,
     "sold": 37,
     "sold_at": 636,
     "sold_maybe": 0,
+    "trend_per_h": -11.593450321702264,
     "vendor": 400,
     "wait_h": 1.2001666666666666,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 623,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7802,15 +8198,18 @@
     "name": "Lesser Moonstone",
     "pulled": 16,
     "qty": 265,
+    "realizable": 611,
     "sold": 13,
     "sold_at": 623,
     "sold_maybe": 0,
+    "trend_per_h": -1.5905437220059926,
     "vendor": 600,
     "wait_h": 2.000277777777778,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 625,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -7823,15 +8222,18 @@
     "name": "Silver Ore",
     "pulled": 20,
     "qty": 720,
+    "realizable": 527,
     "sold": 107,
     "sold_at": 650,
     "sold_maybe": 0,
+    "trend_per_h": -4.4608509917498615,
     "vendor": 75,
     "wait_h": 1.5002083333333334,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 418,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7844,15 +8246,18 @@
     "name": "Silver Bar",
     "pulled": 127,
     "qty": 1770,
+    "realizable": 403,
     "sold": 127,
     "sold_at": 417,
     "sold_maybe": 0,
+    "trend_per_h": -0.5815594448666628,
     "vendor": 100,
     "wait_h": 2.000277777777778,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 314,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -7865,15 +8270,18 @@
     "name": "Iron Ore",
     "pulled": 139,
     "qty": 5740,
+    "realizable": 307,
     "sold": 435,
     "sold_at": 311,
     "sold_maybe": 0,
+    "trend_per_h": 2.750917150463917,
     "vendor": 150,
     "wait_h": 1.5002083333333334,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 359,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7886,15 +8294,18 @@
     "name": "Iron Bar",
     "pulled": 9,
     "qty": 3030,
+    "realizable": 344,
     "sold": 306,
     "sold_at": 352,
     "sold_maybe": 107,
+    "trend_per_h": 3.495873601309614,
     "vendor": 200,
     "wait_h": 2.0379166666666664,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 898,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7907,15 +8318,18 @@
     "name": "Steel Bar",
     "pulled": 46,
     "qty": 1007,
+    "realizable": 870,
     "sold": 195,
     "sold_at": 911,
     "sold_maybe": 0,
+    "trend_per_h": -3.0547705401395446,
     "vendor": 60,
     "wait_h": 4.000555555555556,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 400,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -7928,15 +8342,18 @@
     "name": "Heavy Stone",
     "pulled": 10,
     "qty": 3749,
+    "realizable": 357,
     "sold": 599,
     "sold_at": 403,
     "sold_maybe": 0,
+    "trend_per_h": 1.1611049491017744,
     "vendor": 60,
     "wait_h": 1.091060606060606,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 798,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7949,15 +8366,18 @@
     "name": "Gold Ore",
     "pulled": 4,
     "qty": 635,
+    "realizable": 797,
     "sold": 73,
     "sold_at": 785,
     "sold_maybe": 0,
+    "trend_per_h": 16.748267069859633,
     "vendor": 500,
     "wait_h": 2.000277777777778,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 800,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7970,15 +8390,18 @@
     "name": "Gold Bar",
     "pulled": 2,
     "qty": 437,
+    "realizable": 793,
     "sold": 86,
     "sold_at": 788,
     "sold_maybe": 0,
+    "trend_per_h": 9.573865629024601,
     "vendor": 600,
     "wait_h": 1.7145238095238093,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 821,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -7991,15 +8414,18 @@
     "name": "Mithril Ore",
     "pulled": 2,
     "qty": 2174,
+    "realizable": 808,
     "sold": 252,
     "sold_at": 799,
     "sold_maybe": 0,
+    "trend_per_h": 12.413133848634786,
     "vendor": 250,
     "wait_h": 2.400333333333333,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 874,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -8012,15 +8438,18 @@
     "name": "Mithril Bar",
     "pulled": 4,
     "qty": 1011,
+    "realizable": 870,
     "sold": 267,
     "sold_at": 883,
     "sold_maybe": 0,
+    "trend_per_h": -2.00734713619886,
     "vendor": 400,
     "wait_h": 1.8712499999999999,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 200,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -8033,15 +8462,18 @@
     "name": "Solid Stone",
     "pulled": 164,
     "qty": 3723,
+    "realizable": 200,
     "sold": 489,
     "sold_at": 223,
     "sold_maybe": 0,
+    "trend_per_h": 6.853707887833035,
     "vendor": 100,
     "wait_h": 1.7145238095238093,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 1000,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -8054,15 +8486,18 @@
     "name": "Truesilver Ore",
     "pulled": 16,
     "qty": 428,
+    "realizable": 1000,
     "sold": 52,
     "sold_at": 1026,
     "sold_maybe": 0,
+    "trend_per_h": 27.391484131250444,
     "vendor": 500,
     "wait_h": 2.400333333333333,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 1385,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -8075,15 +8510,18 @@
     "name": "Truesilver Bar",
     "pulled": 1,
     "qty": 214,
+    "realizable": 1297,
     "sold": 26,
     "sold_at": 1373,
     "sold_maybe": 0,
+    "trend_per_h": -1.2265046134539235,
     "vendor": 1250,
     "wait_h": 2.000277777777778,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 5349,
     "deposit_known": true,
     "deposit_risk": 3,
     "duration_h": 24,
@@ -8096,15 +8534,18 @@
     "name": "Thorium Ore",
     "pulled": 132,
     "qty": 2301,
+    "realizable": 2787,
     "sold": 141,
     "sold_at": 5639,
     "sold_maybe": 0,
+    "trend_per_h": 2041.0000000000002,
     "vendor": 250,
     "wait_h": 6.0008333333333335,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 6099,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -8117,15 +8558,18 @@
     "name": "Thorium Bar",
     "pulled": 92,
     "qty": 917,
+    "realizable": 4638,
     "sold": 61,
     "sold_at": 6054,
     "sold_maybe": 0,
+    "trend_per_h": -175.6798409910115,
     "vendor": 600,
     "wait_h": 2.0526388888888887,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": null,
     "deposit_known": true,
     "deposit_risk": 2100,
     "duration_h": 24,
@@ -8138,15 +8582,18 @@
     "name": "Dense Stone",
     "pulled": 96,
     "qty": 2717,
+    "realizable": 1973,
     "sold": 0,
     "sold_at": null,
     "sold_maybe": 0,
+    "trend_per_h": null,
     "vendor": 250,
     "wait_h": null,
     "war": "relisting"
    },
    {
     "ahead": 0,
+    "clearing": 2597,
     "deposit_known": true,
     "deposit_risk": 47,
     "duration_h": 24,
@@ -8159,9 +8606,11 @@
     "name": "Dark Iron Ore",
     "pulled": 0,
     "qty": 656,
+    "realizable": 1348,
     "sold": 7,
     "sold_at": 2597,
     "sold_maybe": 0,
+    "trend_per_h": null,
     "vendor": 500,
     "wait_h": 12.001666666666667,
     "war": null
@@ -8170,6 +8619,7 @@
   "skinning": [
    {
     "ahead": 0,
+    "clearing": 10,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -8182,15 +8632,18 @@
     "name": "Ruined Leather Scraps",
     "pulled": 168,
     "qty": 4518,
+    "realizable": 6,
     "sold": 567,
     "sold_at": 10,
     "sold_maybe": 0,
+    "trend_per_h": 0.036870922256882196,
     "vendor": 7,
     "wait_h": 1.7145238095238093,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 30,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -8203,15 +8656,18 @@
     "name": "Light Leather",
     "pulled": 341,
     "qty": 18178,
+    "realizable": 26,
     "sold": 1014,
     "sold_at": 30,
     "sold_maybe": 0,
+    "trend_per_h": 0.010045490485749584,
     "vendor": 15,
     "wait_h": 1.2001666666666666,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 180,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -8224,15 +8680,18 @@
     "name": "Light Hide",
     "pulled": 87,
     "qty": 1280,
+    "realizable": 130,
     "sold": 128,
     "sold_at": 190,
     "sold_maybe": 0,
+    "trend_per_h": -4.765564625500252,
     "vendor": 50,
     "wait_h": 1.5002083333333334,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 106,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -8245,15 +8704,18 @@
     "name": "Medium Leather",
     "pulled": 363,
     "qty": 9576,
+    "realizable": 94,
     "sold": 1381,
     "sold_at": 107,
     "sold_maybe": 0,
+    "trend_per_h": -0.3264633281966424,
     "vendor": 50,
     "wait_h": 1.2001666666666666,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 234,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -8266,15 +8728,18 @@
     "name": "Medium Hide",
     "pulled": 8,
     "qty": 1351,
+    "realizable": 200,
     "sold": 129,
     "sold_at": 235,
     "sold_maybe": 0,
+    "trend_per_h": -3.016614706407495,
     "vendor": 125,
     "wait_h": 1.091060606060606,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 221,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -8287,15 +8752,18 @@
     "name": "Heavy Leather",
     "pulled": 26,
     "qty": 3685,
+    "realizable": 218,
     "sold": 480,
     "sold_at": 226,
     "sold_maybe": 0,
+    "trend_per_h": -1.7134481094451153,
     "vendor": 150,
     "wait_h": 1.5002083333333334,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 1095,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -8308,15 +8776,18 @@
     "name": "Heavy Hide",
     "pulled": 1,
     "qty": 576,
+    "realizable": 1019,
     "sold": 49,
     "sold_at": 1103,
     "sold_maybe": 0,
+    "trend_per_h": -4.04427694134409,
     "vendor": 200,
     "wait_h": 1.3335185185185185,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 572,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -8329,15 +8800,18 @@
     "name": "Thick Leather",
     "pulled": 160,
     "qty": 3899,
+    "realizable": 499,
     "sold": 323,
     "sold_at": 593,
     "sold_maybe": 0,
+    "trend_per_h": 11.94265601177722,
     "vendor": 300,
     "wait_h": 1.091060606060606,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 528,
     "deposit_known": true,
     "deposit_risk": 4,
     "duration_h": 24,
@@ -8350,15 +8824,18 @@
     "name": "Thick Hide",
     "pulled": 52,
     "qty": 809,
+    "realizable": 70,
     "sold": 2,
     "sold_at": 649,
     "sold_maybe": 0,
+    "trend_per_h": -80.6517311620991,
     "vendor": 500,
     "wait_h": 5.5008333333333335,
     "war": "relisting"
    },
    {
     "ahead": 0,
+    "clearing": 796,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -8371,15 +8848,18 @@
     "name": "Rugged Leather",
     "pulled": 16,
     "qty": 1586,
+    "realizable": 647,
     "sold": 102,
     "sold_at": 738,
     "sold_maybe": 0,
+    "trend_per_h": 47.94508246406949,
     "vendor": 500,
     "wait_h": 2.000277777777778,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 2419,
     "deposit_known": true,
     "deposit_risk": 6,
     "duration_h": 24,
@@ -8392,15 +8872,18 @@
     "name": "Rugged Hide",
     "pulled": 2,
     "qty": 137,
+    "realizable": 2312,
     "sold": 12,
     "sold_at": 2402,
     "sold_maybe": 0,
+    "trend_per_h": 50.49298708495727,
     "vendor": 500,
     "wait_h": 6.0008333333333335,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 300,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -8413,15 +8896,18 @@
     "name": "Raptor Hide",
     "pulled": 25,
     "qty": 717,
+    "realizable": 268,
     "sold": 51,
     "sold_at": 296,
     "sold_maybe": 0,
+    "trend_per_h": 0.4345759298943417,
     "vendor": 208,
     "wait_h": 2.000277777777778,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 75,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 8,
@@ -8434,15 +8920,18 @@
     "name": "Slimy Murloc Scale",
     "pulled": 9,
     "qty": 1253,
+    "realizable": 74,
     "sold": 287,
     "sold_at": 75,
     "sold_maybe": 0,
+    "trend_per_h": 0.0,
     "vendor": 75,
     "wait_h": 1.3458333333333334,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 25,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -8455,15 +8944,18 @@
     "name": "Black Whelp Scale",
     "pulled": 0,
     "qty": 2913,
+    "realizable": 24,
     "sold": 165,
     "sold_at": 25,
     "sold_maybe": 0,
+    "trend_per_h": 0.0,
     "vendor": 25,
     "wait_h": 2.000277777777778,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 1500,
     "deposit_known": true,
     "deposit_risk": 0,
     "duration_h": 24,
@@ -8476,15 +8968,18 @@
     "name": "Scorpid Scale",
     "pulled": 4,
     "qty": 362,
+    "realizable": 1500,
     "sold": 19,
     "sold_at": 1964,
     "sold_maybe": 0,
+    "trend_per_h": 107.20155014031644,
     "vendor": 250,
     "wait_h": 2.7504166666666667,
     "war": null
    },
    {
     "ahead": 0,
+    "clearing": 870,
     "deposit_known": true,
     "deposit_risk": 47,
     "duration_h": 24,
@@ -8497,9 +8992,11 @@
     "name": "Worn Dragonscale",
     "pulled": 2,
     "qty": 157,
+    "realizable": 578,
     "sold": 9,
     "sold_at": 810,
     "sold_maybe": 0,
+    "trend_per_h": null,
     "vendor": 500,
     "wait_h": 12.001666666666667,
     "war": null
@@ -8572,6 +9069,7 @@
   "2775": "uncommon",
   "2776": "uncommon",
   "279948": "common",
+  "279949": "common",
   "279960": "common",
   "2835": "common",
   "2836": "common",
@@ -8601,7 +9099,7 @@
   "3819": "common",
   "3821": "common",
   "3837": "common",
-  "3844": "rare",
+  "3843": "common",
   "3845": "common",
   "3848": "uncommon",
   "3853": "uncommon",
@@ -8613,7 +9111,6 @@
   "4232": "common",
   "4234": "common",
   "4235": "common",
-  "4255": "uncommon",
   "4304": "common",
   "4306": "common",
   "4338": "common",
@@ -8632,7 +9129,6 @@
   "4400": "common",
   "4403": "common",
   "4404": "common",
-  "4407": "common",
   "4461": "common",
   "4625": "common",
   "5500": "uncommon",

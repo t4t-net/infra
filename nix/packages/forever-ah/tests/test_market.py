@@ -4,6 +4,7 @@ import unittest
 from support import HERE
 
 import market  # noqa: E402
+from fills import Fill  # noqa: E402
 from observe import Listing  # noqa: E402
 
 assert (HERE.parent / "market.py").exists(), "support puts th package on th path"
@@ -28,6 +29,32 @@ class WalkBook(unittest.TestCase):
 
     def test_fractional_quantities_from_smelting_chains(self):
         self.assertEqual(market.walk_book(COPPER, 0.5, 85), 30)
+
+
+def sale(t, price, q=1):
+    return Fill(1, t - 3600, t, price, q, "api", "sale")
+
+
+class Prices(unittest.TestCase):
+    def test_clearing_is_th_weighted_median(self):
+        self.assertEqual(market.clearing_price([sale(0, 50, 1), sale(0, 60, 10), sale(0, 99, 2)]), 60)
+        self.assertIsNone(market.clearing_price([]))
+
+    def test_trend_is_copper_per_hour(self):
+        # thorium-ish crash: 300 -> 200 over 2h
+        self.assertAlmostEqual(market.trend_per_h([sale(0, 300), sale(3600, 250), sale(7200, 200)]), -50)
+        self.assertIsNone(market.trend_per_h([sale(0, 300, 5)]))
+
+    def test_realizable_undercuts_nd_caps_at_clearing(self):
+        self.assertEqual(market.realizable(100, 1, None, None, None), 99)
+        self.assertEqual(market.realizable(100, 1, 80, None, None), 80)
+
+    def test_falling_prices_r_projected_rising_arent(self):
+        self.assertEqual(market.realizable(100, 1, None, -10, 3), 69)
+        self.assertEqual(market.realizable(100, 1, None, 10, 3), 99)
+
+    def test_gear_cant_go_under_1s(self):
+        self.assertEqual(market.realizable(100, 100, None, -50, 5), 100)
 
 
 if __name__ == "__main__":

@@ -55,6 +55,19 @@ def analyze(args, db):
         print(f"{name[:35]:<36}{g(cost):>10}{g(revenue):>11}{g(profit):>10}{n:>5}")
 
 
+def covered_seconds(spans):
+    """length of th union of (from, to) stretches"""
+    total, end = 0, None
+    for a, b in sorted(spans):
+        if end is None or a > end:
+            total += b - a
+            end = b
+        elif b > end:
+            total += b - end
+            end = b
+    return total
+
+
 def market_data(args, db):
     """Everything th site shows, from th dumps in th last args.hours."""
     since = (args.now or int(time.time())) - args.hours * 3600
@@ -74,9 +87,18 @@ def market_data(args, db):
     # sales: see fills.api_fills 4 th rule. sprees (dumps w any sale) matter cuz buyers come in bursts (heavy
     # dynamite: 142 units in 4 buyouts over 12h, nothing between), so timing a listing off units/h said ~5m when
     # th real answer was th next spree, hours away
+    # th addon's watch polls (in th window, nothing after --now) take over th api windows they covered, nd their
+    # live tail after th last dump is th freshest sales data there is. see fills.merge
+    now_t = args.now or int(time.time())
     obs = observe.api_observations(db, snaps)
+    watch = {i: [o for o in s if since <= o.t <= now_t] for i, s in observe.watch_observations(db, args.house).items()}
+    watch = {i: s for i, s in watch.items() if s}
+    dump_times = [t for _, t in snaps]
+    merged = (f for i in obs.keys() | watch.keys()
+              for f in fills.merge(list(fills.api_fills(obs.get(i, []))), list(fills.watch_fills(watch.get(i, []))),
+                                   fills.watch_spans(watch.get(i, [])), dump_times))
     recent_since = snaps[max(0, len(snaps) - args.dry_dumps)][1]
-    sold, pulled, recent, events = fills.tally((f for s in obs.values() for f in fills.api_fills(s)), recent_since)
+    sold, pulled, recent, events = fills.tally(merged, recent_since)
     recent_h = (snaps[-1][1] - snaps[max(0, len(snaps) - 1 - args.dry_dumps)][1]) / 3600
     # items r tracked from th first dump they have raw listings in; items added 2 th watchlist mid-window
     # (or never listed) get "-" instead of a fake zero. under an hour of tracking measures nothing yet
@@ -84,7 +106,14 @@ def market_data(args, db):
     marks = ",".join("?" * len(snaps))
     first_seen = dict(db.execute(f"select item_id, min(snapshot_id) from auction where snapshot_id in ({marks}) group by item_id",
                                  [s for s, _ in snaps]))
-    tracked_h = {i: (snaps[-1][1] - dump_time[sid]) / 3600 for i, sid in first_seen.items()}
+    # nd watched items add th stretches their polls actually covered. a lone poll covers nothing, nd th gap
+    # between th last dump nd th first poll wasnt watched by anyone, so neither stretches th denominator
+    covered = defaultdict(list)
+    for i, sid in first_seen.items():
+        covered[i].append((dump_time[sid], snaps[-1][1]))
+    for i, s in watch.items():
+        covered[i] += fills.watch_spans(s)
+    tracked_h = {i: covered_seconds(spans) / 3600 for i, spans in covered.items() if spans}
 
     # gear, rods etc cant be listed under 1s (th ah errors), stackables go down 2 1c. at th minimum u cant
     # undercut, so u queue behind every unit already listed there

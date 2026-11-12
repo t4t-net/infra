@@ -5623,12 +5623,12 @@
       "listings": 44,
       "median": 5000,
       "name": "Thorium Bar",
-      "pulled": 81,
+      "pulled": 92,
       "qty": 917,
-      "sold": 59,
-      "sold_at": 6107,
+      "sold": 61,
+      "sold_at": 6054,
       "vendor": 600,
-      "wait_h": 2.6671296296296294,
+      "wait_h": 2.0526388888888887,
       "war": null
      },
      "profit": 1250,
@@ -5758,7 +5758,7 @@
         "src": "farm"
        }
       ],
-      "profit": 853
+      "profit": 838
      },
      "makes": 1.0,
      "mats": [
@@ -5779,15 +5779,15 @@
       "name": "Mithril Bar",
       "pulled": 4,
       "qty": 1011,
-      "sold": 97,
-      "sold_at": 898,
+      "sold": 267,
+      "sold_at": 883,
       "vendor": 400,
-      "wait_h": 2.2003333333333335,
+      "wait_h": 1.8712499999999999,
       "war": null
      },
-     "profit": 35,
+     "profit": 20,
      "recipe": "Smelt Mithril",
-     "revenue": 853,
+     "revenue": 838,
      "spell": 10097
     },
     {
@@ -5976,12 +5976,12 @@
       "listings": 220,
       "median": 189,
       "name": "Bronze Bar",
-      "pulled": 625,
+      "pulled": 1001,
       "qty": 11007,
-      "sold": 698,
-      "sold_at": 181,
+      "sold": 1517,
+      "sold_at": 178,
       "vendor": 50,
-      "wait_h": 2.400333333333333,
+      "wait_h": 2.0187500000000003,
       "war": null
      },
      "profit": -14,
@@ -6022,10 +6022,10 @@
       "name": "Iron Bar",
       "pulled": 9,
       "qty": 3030,
-      "sold": 186,
-      "sold_at": 347,
+      "sold": 413,
+      "sold_at": 354,
       "vendor": 200,
-      "wait_h": 2.400333333333333,
+      "wait_h": 2.0379166666666664,
       "war": null
      },
      "profit": 1,
@@ -6108,12 +6108,12 @@
       "listings": 279,
       "median": 85,
       "name": "Copper Bar",
-      "pulled": 617,
+      "pulled": 848,
       "qty": 9082,
-      "sold": 1166,
-      "sold_at": 83,
+      "sold": 1225,
+      "sold_at": 82,
       "vendor": 10,
-      "wait_h": 1.5002083333333334,
+      "wait_h": 1.3458333333333334,
       "war": null
      },
      "profit": -36,
@@ -6192,7 +6192,7 @@
         "src": "farm"
        }
       ],
-      "profit": 853
+      "profit": 838
      },
      "makes": 1.0,
      "mats": [
@@ -6213,15 +6213,15 @@
       "name": "Mithril Bar",
       "pulled": 4,
       "qty": 1011,
-      "sold": 97,
-      "sold_at": 898,
+      "sold": 267,
+      "sold_at": 883,
       "vendor": 400,
-      "wait_h": 2.2003333333333335,
+      "wait_h": 1.8712499999999999,
       "war": null
      },
-     "profit": 35,
+     "profit": 20,
      "recipe": "Smelt Mithril",
-     "revenue": 853,
+     "revenue": 838,
      "spell": 10097
     },
     {
@@ -6257,10 +6257,10 @@
       "name": "Iron Bar",
       "pulled": 9,
       "qty": 3030,
-      "sold": 186,
-      "sold_at": 347,
+      "sold": 413,
+      "sold_at": 354,
       "vendor": 200,
-      "wait_h": 2.400333333333333,
+      "wait_h": 2.0379166666666664,
       "war": null
      },
      "profit": 1,
@@ -6339,12 +6339,12 @@
       "listings": 44,
       "median": 5000,
       "name": "Thorium Bar",
-      "pulled": 81,
+      "pulled": 92,
       "qty": 917,
-      "sold": 59,
-      "sold_at": 6107,
+      "sold": 61,
+      "sold_at": 6054,
       "vendor": 600,
-      "wait_h": 2.6671296296296294,
+      "wait_h": 2.0526388888888887,
       "war": null
      },
      "profit": 1250,
@@ -6364,7 +6364,7 @@
         "src": "farm"
        }
       ],
-      "profit": 853
+      "profit": 838
      },
      "makes": 1.0,
      "mats": [
@@ -6385,15 +6385,15 @@
       "name": "Mithril Bar",
       "pulled": 4,
       "qty": 1011,
-      "sold": 97,
-      "sold_at": 898,
+      "sold": 267,
+      "sold_at": 883,
       "vendor": 400,
-      "wait_h": 2.2003333333333335,
+      "wait_h": 1.8712499999999999,
       "war": null
      },
-     "profit": 35,
+     "profit": 20,
      "recipe": "Smelt Mithril",
-     "revenue": 853,
+     "revenue": 838,
      "spell": 10097
     },
     {
@@ -6429,10 +6429,10 @@
       "name": "Iron Bar",
       "pulled": 9,
       "qty": 3030,
-      "sold": 186,
-      "sold_at": 347,
+      "sold": 413,
+      "sold_at": 354,
       "vendor": 200,
-      "wait_h": 2.400333333333333,
+      "wait_h": 2.0379166666666664,
       "war": null
      },
      "profit": 1,
@@ -6499,12 +6499,12 @@
     "listings": 893,
     "median": 29,
     "name": "Linen Cloth",
-    "pulled": 439,
+    "pulled": 574,
     "qty": 33574,
-    "sold": 870,
-    "sold_at": 29,
+    "sold": 1373,
+    "sold_at": 28,
     "vendor": 13,
-    "wait_h": 1.091060606060606,
+    "wait_h": 1.0072916666666667,
     "war": null
    },
    {
@@ -6516,12 +6516,12 @@
     "listings": 311,
     "median": 130,
     "name": "Wool Cloth",
-    "pulled": 1178,
+    "pulled": 1319,
     "qty": 6572,
-    "sold": 1946,
+    "sold": 2743,
     "sold_at": 106,
     "vendor": 33,
-    "wait_h": 1.091060606060606,
+    "wait_h": 1.0072916666666667,
     "war": null
    },
    {
@@ -6535,10 +6535,10 @@
     "name": "Silk Cloth",
     "pulled": 46,
     "qty": 5207,
-    "sold": 981,
-    "sold_at": 199,
+    "sold": 1690,
+    "sold_at": 196,
     "vendor": 150,
-    "wait_h": 1.091060606060606,
+    "wait_h": 1.0072916666666667,
     "war": null
    },
    {
@@ -7098,12 +7098,12 @@
     "listings": 279,
     "median": 85,
     "name": "Copper Bar",
-    "pulled": 617,
+    "pulled": 848,
     "qty": 9082,
-    "sold": 1166,
-    "sold_at": 83,
+    "sold": 1225,
+    "sold_at": 82,
     "vendor": 10,
-    "wait_h": 1.5002083333333334,
+    "wait_h": 1.3458333333333334,
     "war": null
    },
    {
@@ -7132,12 +7132,12 @@
     "listings": 827,
     "median": 36,
     "name": "Malachite",
-    "pulled": 32,
+    "pulled": 33,
     "qty": 2255,
-    "sold": 154,
-    "sold_at": 20,
+    "sold": 250,
+    "sold_at": 18,
     "vendor": 15,
-    "wait_h": 2.000277777777778,
+    "wait_h": 1.7244047619047618,
     "war": null
    },
    {
@@ -7321,10 +7321,10 @@
     "name": "Iron Bar",
     "pulled": 9,
     "qty": 3030,
-    "sold": 186,
-    "sold_at": 347,
+    "sold": 413,
+    "sold_at": 354,
     "vendor": 200,
-    "wait_h": 2.400333333333333,
+    "wait_h": 2.0379166666666664,
     "war": null
    },
    {
@@ -7423,10 +7423,10 @@
     "name": "Mithril Bar",
     "pulled": 4,
     "qty": 1011,
-    "sold": 97,
-    "sold_at": 898,
+    "sold": 267,
+    "sold_at": 883,
     "vendor": 400,
-    "wait_h": 2.2003333333333335,
+    "wait_h": 1.8712499999999999,
     "war": null
    },
    {
@@ -7506,12 +7506,12 @@
     "listings": 44,
     "median": 5000,
     "name": "Thorium Bar",
-    "pulled": 81,
+    "pulled": 92,
     "qty": 917,
-    "sold": 59,
-    "sold_at": 6107,
+    "sold": 61,
+    "sold_at": 6054,
     "vendor": 600,
-    "wait_h": 2.6671296296296294,
+    "wait_h": 2.0526388888888887,
     "war": null
    },
    {
@@ -7763,12 +7763,12 @@
     "listings": 314,
     "median": 75,
     "name": "Slimy Murloc Scale",
-    "pulled": 5,
+    "pulled": 9,
     "qty": 1253,
-    "sold": 283,
+    "sold": 287,
     "sold_at": 75,
     "vendor": 75,
-    "wait_h": 1.5002083333333334,
+    "wait_h": 1.3458333333333334,
     "war": null
    },
    {

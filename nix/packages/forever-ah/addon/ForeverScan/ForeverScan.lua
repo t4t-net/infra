@@ -15,6 +15,7 @@ local WATCH_EVERY_S = 5   -- 1 search per tick, blizz allows 100/min nd ellie's 
 local WATCH_DEPTH = 100   -- cheapest listings kept per poll, th rest of th book barely moves
 local WATCH_KEEP = 5000   -- polls kept in th saved file, ~7h of a 12 item list
 local WATCH_WAIT_S = 30   -- give up on a search tht never answered
+local REMIND_S = 900      -- data only in memory this long gets a "reload 2 save it?" popup
 -- busiest commodities in house 111 (most listings gone per dump, 2026-11-11) + ellie's mining/bs bars,
 -- then (v2) th ores nd tin bar so smelting spreads come from th same minute
 local WATCH_DEFAULT = { 12359, 3860, 3575, 2841, 2840, 1081, 5784, 774, 814, 4306, 2592, 2589,
@@ -25,6 +26,8 @@ local WATCH_DEFAULT_V1 = 12  -- how many of WATCH_DEFAULT a v1 list already got
 local db
 local watch = { i = 0 }   -- pending = th search waiting on its results
 local ticker
+local savedThrough        -- server time th saved file covers: everything up 2 this login or /reload
+local snoozeUntil = 0
 local scan                -- th scan in flight, nil when idle
 local gen = 0             -- bumps on every update so stale settle timers bail
 
@@ -157,7 +160,52 @@ local function watchSafe()
     return mode == AuctionHouseFrameDisplayMode.Buy or mode == AuctionHouseFrameDisplayMode.ItemBuy
 end
 
+-- wow only writes SavedVariables on /reload or logout, nd th gaming pc only ships th file when it changes.
+-- so data sitting in memory isnt on forever-gold yet. a reload only from a click: never a surprise one
+-- mid-purchase
+StaticPopupDialogs.FOREVERSCAN_RELOAD = {
+    text = "ForeverScan has %s of AH data only in memory. Reload 2 save it so forever-gold gets it?",
+    button1 = "Reload",
+    button2 = "Later",
+    OnAccept = function()
+        ReloadUI()
+    end,
+    OnCancel = function()
+        snoozeUntil = GetServerTime() + REMIND_S
+    end,
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+    preferredIndex = 3,
+}
+
+local function remind(anyAge)
+    if InCombatLockdown() or scan or GetServerTime() < snoozeUntil then
+        return
+    end
+    local oldest
+    for k = #db.watch_polls, 1, -1 do
+        local p = db.watch_polls[k]
+        if p.t <= savedThrough then
+            break
+        end
+        oldest = p.t
+    end
+    for _, s in ipairs(db.scans) do
+        if s.n and s.server_time > savedThrough then
+            oldest = math.min(oldest or s.server_time, s.server_time)
+        end
+    end
+    local age = oldest and GetServerTime() - oldest
+    if not age or (not anyAge and age < REMIND_S) then
+        return
+    end
+    snoozeUntil = GetServerTime() + REMIND_S
+    StaticPopup_Show("FOREVERSCAN_RELOAD", age < 120 and "a minute" or ("%d minutes"):format(floor(age / 60)))
+end
+
 local function watchTick()
+    remind(false)
     local list = db.watchlist
     if not db.watch_on or #list == 0 or scan or not watchSafe() then
         return
@@ -296,6 +344,7 @@ f:SetScript("OnEvent", function(_, event, arg)
         end
         db.watch_polls = db.watch_polls or {}
         db.deposits = db.deposits or {}
+        savedThrough = GetServerTime()
         f:RegisterEvent("AUCTION_HOUSE_SHOW")
         f:RegisterEvent("AUCTION_HOUSE_CLOSED")
         f:RegisterEvent("REPLICATE_ITEM_LIST_UPDATE")
@@ -316,6 +365,10 @@ f:SetScript("OnEvent", function(_, event, arg)
             end
         end)
     elseif event == "AUCTION_HOUSE_CLOSED" then
+        -- walking away from th AH is th natural moment 2 save, whatever th data's age
+        C_Timer.After(0.5, function()
+            remind(true)
+        end)
         if ticker then
             ticker:Cancel()
             ticker = nil

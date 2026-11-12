@@ -12,6 +12,33 @@ let
 
   forever-ah = "${lib.getExe pkgs.rv32ima.forever-ah} --db ${db}";
 
+  # th ForeverScan addon's SavedVariables, pushed from ellie's gaming pc. th inbox isnt state: if it's wiped
+  # th pc just sends th file again next time it changes
+  inbox = "/var/lib/forever-ah-inbox";
+  # generated on desktop-kdblba8 (2026-11-11), private half never left it
+  foreverScanKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOAjP3Jprli7zWzo6zF5+oYBlbHrgo0pv+oAUpGbdOoJ forever-scan@desktop-kdblba8";
+  # th only thing th pc's key can do: drop one file in th inbox. capped, written aside nd renamed into
+  # place so th import never reads half an upload
+  ingest = pkgs.writeShellApplication {
+    name = "forever-ah-ingest";
+    runtimeInputs = [ pkgs.coreutils ];
+    text = ''
+      max=$((64 * 1024 * 1024))
+      tmp=$(mktemp ${inbox}/.upload.XXXXXX)
+      trap 'rm -f "$tmp"' EXIT
+      head -c $((max + 1)) > "$tmp"
+      size=$(stat -c %s "$tmp")
+      if [ "$size" -gt "$max" ] || [ "$size" -eq 0 ]; then
+        echo "$size bytes, not taking it (want 1 2 $max)" >&2
+        exit 1
+      fi
+      chmod 0644 "$tmp"
+      mv "$tmp" ${inbox}/ForeverScan.lua
+      trap - EXIT
+      echo "got $size bytes"
+    '';
+  };
+
   # sws's default sends max-age=86400 on index.html, so browsers kept a day-old page pointing at
   # an old bundle. html nd json change every deploy/hour; vite's hashed assets never change
   swsConfig = (pkgs.formats.toml { }).generate "forever-gold-sws.toml" {
@@ -135,6 +162,31 @@ in
     rv32ima.machine.tailscale.services.forever-gold = {
       inherit port;
     };
+
+    # th gaming pc ships ForeverScan.lua here w `ssh forever-ingest@psychoboost < file`. a plain key, not a
+    # ca cert: certs expire fast, so th pc wud need a credential tht can mint them, nd its th least trusted
+    # box around (third-party addons nd launchers). this key can only ever run ingest
+    users.users.forever-ingest = {
+      isSystemUser = true;
+      group = "forever-ingest";
+      # forced commands still go through th login shell's -c, nologin wud refuse them
+      shell = pkgs.bashInteractive;
+      openssh.authorizedKeys.keys = [
+        ''restrict,command="${lib.getExe ingest}" ${foreverScanKey}''
+      ];
+    };
+    users.groups.forever-ingest = { };
+    systemd.tmpfiles.rules = [ "d ${inbox} 0755 forever-ingest forever-ingest -" ];
+
+    # a fresh upload gets imported nd th site re-exported right away, so "live" on th page means live
+    systemd.paths.forever-ah-addon-import = {
+      wantedBy = [ "paths.target" ];
+      pathConfig.PathChanged = "${inbox}/ForeverScan.lua";
+    };
+    systemd.services.forever-ah-addon-import = job "import th ForeverScan addon's dumps nd watch polls" [
+      "addon-import ${inbox}/ForeverScan.lua --house 111"
+      "export --out ${www}/data.json"
+    ];
 
     # 4 poking at it over ssh: FOREVER_AH_DB is already set, so just `forever-ah analyze`
     environment.systemPackages = [ pkgs.rv32ima.forever-ah ];

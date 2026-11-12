@@ -124,6 +124,11 @@ class Merge(unittest.TestCase):
         got = fills.merge([], watch, [(7300, 7360)], self.dumps)
         self.assertEqual([(f.source, f.t_to) for f in got], [("watch", 7360)])
 
+    def test_a_sweep_over_several_polls_is_one_spree(self):
+        f = [fill("watch", 0, 60), fill("watch", 60, 120), fill("watch", 120, 180), fill("watch", 5000, 5060)]
+        self.assertEqual(fills.tally(f, 0)[3][1], 2)
+        self.assertEqual(fills.sprees([0, 3600, 7200]), 3)
+
     def test_tally_ignores_expiries(self):
         sold, pulled, _, _ = fills.tally([fill("watch", 0, 60, 5), fill("watch", 0, 60, 9, "expire")], 0)
         self.assertEqual((sold[1], pulled[1]), ([5, 50], 0))

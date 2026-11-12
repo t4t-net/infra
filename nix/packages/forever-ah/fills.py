@@ -121,14 +121,27 @@ def merge(api, watch, spans, dump_times, coverage=0.8):
     return out
 
 
+SPREE_GAP = 1800  # sales closer than this belong 2 one buying spree
+
+
+def sprees(times, gap=SPREE_GAP):
+    """how many bursts a set of sale times makes: a new one starts after `gap` seconds w no sales. api fills
+    r an hour apart so each window stays its own spree, but a sweep spread over five watch polls is one"""
+    count, last = 0, None
+    for t in sorted(times):
+        if last is None or t - last > gap:
+            count += 1
+        last = t
+    return count
+
+
 def tally(fills, recent_since):
     """per item: sold [units, copper], pulled units, units sold in windows ending at or after recent_since,
-    nd how many distinct windows had a sale (sprees). expiries count as neither. th spree count is th api's
-    hourly-window notion; minute-level watch fills need real time-gap clustering (MARKET.md), not this"""
+    nd how many buying sprees th sales came in. expiries count as neither"""
     sold = defaultdict(lambda: [0, 0])
     pulled = defaultdict(int)
     recent = defaultdict(int)
-    spree_windows = defaultdict(set)
+    sale_times = defaultdict(set)
     for f in fills:
         if f.kind == "pull":
             pulled[f.item_id] += f.quantity
@@ -137,7 +150,7 @@ def tally(fills, recent_since):
             continue
         sold[f.item_id][0] += f.quantity
         sold[f.item_id][1] += f.quantity * f.unit_price
-        spree_windows[f.item_id].add(f.t_to)
+        sale_times[f.item_id].add(f.t_to)
         if f.t_to >= recent_since:
             recent[f.item_id] += f.quantity
-    return sold, pulled, recent, defaultdict(int, {i: len(w) for i, w in spree_windows.items()})
+    return sold, pulled, recent, defaultdict(int, {i: sprees(ts) for i, ts in sale_times.items()})

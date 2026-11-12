@@ -78,8 +78,9 @@ class Rule(unittest.TestCase):
         self.assertEqual((f.t_from, f.t_to, f.source, f.item_id), (100, 3700, "api", 1))
 
     def test_tally_counts_sprees_per_window(self):
-        f = run(api(0, (50, 5, 1, "LONG"), (51, 5, 2, "LONG")), api(10, (51, 5, 2, "LONG")), api(20), api(30))
-        sold, pulled, recent, sprees = fills.tally(f, recent_since=20)
+        # hourly dumps, like th real api
+        f = run(api(0, (50, 5, 1, "LONG"), (51, 5, 2, "LONG")), api(3600, (51, 5, 2, "LONG")), api(7200), api(10800))
+        sold, pulled, recent, sprees = fills.tally(f, recent_since=7200)
         self.assertEqual((sold[1], sprees[1], recent[1], pulled[1]), ([10, 505], 2, 5, 0))
 
 

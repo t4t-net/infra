@@ -15,8 +15,20 @@ python3Packages.buildPythonApplication {
       ./forever_ah.py
       ./questie.py
       ./tact.py
+      ./tests/test_snapshot.py
+      ./tests/fixture.sqlite.gz
+      ./tests/golden
     ];
   };
+
+  # export on a frozen fixture vs tests/golden, so a refactor tht moves a number fails th build.
+  # offline: th test turns any api call into a failure
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    ${python3Packages.python.interpreter} -m unittest discover -s tests -v
+    runHook postCheck
+  '';
 
   # th cli imports tact from its own dir, nd python resolves th bin symlink 2 find it
   installPhase = ''

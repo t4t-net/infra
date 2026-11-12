@@ -783,7 +783,7 @@ def analyze(args, db):
 
 def market_data(args, db):
     """Everything th site shows, from th dumps in th last args.hours."""
-    since = int(time.time()) - args.hours * 3600
+    since = (args.now or int(time.time())) - args.hours * 3600
     # one snapshot per distinct dump; scrapes from before Last-Modified tracking can repeat a dump
     snaps, seen = [], set()
     for sid, ts, dts in db.execute(
@@ -1201,6 +1201,7 @@ def main():
     ex.add_argument("--dry-dumps", type=int, default=3, help="recent dumps a craft must have sold in...")
     ex.add_argument("--dry-expect", type=float, default=5, help="...when th window's rate expects this many sales in them")
     ex.add_argument("--out", required=True, help="data.json path, next 2 th forever-ah-site files")
+    ex.add_argument("--now", type=int, help="unix time 2 export as of, 4 tests (default: th real now)")
     al = sub.add_parser("alert")
     al.add_argument("--data", required=True, help="th data.json export just wrote")
     al.add_argument("--state", required=True, help="where 2 remember wat was already open")

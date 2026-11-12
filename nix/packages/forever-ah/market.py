@@ -53,34 +53,15 @@ def analyze(args, db):
         print(f"{name[:35]:<36}{g(cost):>10}{g(revenue):>11}{g(profit):>10}{n:>5}")
 
 
-def market_data(args, db):
-    """Everything th site shows, from th dumps in th last args.hours."""
-    since = (args.now or int(time.time())) - args.hours * 3600
-    # one snapshot per distinct dump; scrapes from before Last-Modified tracking can repeat a dump
-    snaps, seen = [], set()
-    for sid, ts, dts in db.execute(
-            "select id, ts, data_ts from snapshot where house_id = ? and ts >= ? order by ts", (args.house, since)):
-        if (dts or ts) not in seen:
-            seen.add(dts or ts)
-            snaps.append((sid, dts or ts))
-    if not snaps:
-        raise SystemExit(f"no snapshots of house {args.house} in th last {args.hours}h")
-    bw_last = db.execute("select id from snapshot where house_id = ? order by ts desc limit 1", (args.blackwater,)).fetchone()
-
-    def book(sid):
-        return {i: (med, mn, q, n) for i, med, mn, q, n in db.execute(
-            "select item_id, median_unit, min_unit, quantity, auctions from price where snapshot_id = ? order by quantity", (sid,))}
-
-    now, then = book(snaps[-1][0]), book(snaps[0][0])
-    bw = book(bw_last[0]) if bw_last else {}
-    items = {i: (n, s, b) for i, n, s, b in db.execute("select id, name, sell_price, purchase_price from item_live")}
-
+def legacy_sales(db, snaps, dry_dumps):
+    """th api sales rule as market_data has always run it, kept as th reference fills.py is checked against.
+    (sold [units, copper], pulled units, recent units, dumps w a sale) per item"""
     # sales: listings tht vanished w time left. buyers take th cheapest first, so one tht vanished while a cheaper
     # listing from th same dump is still up was pulled (cancelled or reposted), not bought. th next dump's floor
     # isnt good enough 4 this: fresh undercuts land below it nd turned real sales on busy bars into "cancels"
     sold = defaultdict(lambda: [0, 0])
     pulled = defaultdict(int)
-    recent = defaultdict(int)  # units sold in th last args.dry_dumps dumps
+    recent = defaultdict(int)  # units sold in th last dry_dumps dumps
     # dumps w any sales. buyers come in sprees (heavy dynamite: 142 units in 4 buyouts over 12h, nothing between),
     # so timing a listing off units/h said ~5m when th real answer was th next spree, hours away
     events = defaultdict(int)
@@ -103,10 +84,36 @@ def market_data(args, db):
             bought.add(iid)
             sold[iid][0] += gone
             sold[iid][1] += gone * price
-            if n >= len(snaps) - 1 - args.dry_dumps:
+            if n >= len(snaps) - 1 - dry_dumps:
                 recent[iid] += gone
         for iid in bought:
             events[iid] += 1
+    return sold, pulled, recent, events
+
+
+def market_data(args, db):
+    """Everything th site shows, from th dumps in th last args.hours."""
+    since = (args.now or int(time.time())) - args.hours * 3600
+    # one snapshot per distinct dump; scrapes from before Last-Modified tracking can repeat a dump
+    snaps, seen = [], set()
+    for sid, ts, dts in db.execute(
+            "select id, ts, data_ts from snapshot where house_id = ? and ts >= ? order by ts", (args.house, since)):
+        if (dts or ts) not in seen:
+            seen.add(dts or ts)
+            snaps.append((sid, dts or ts))
+    if not snaps:
+        raise SystemExit(f"no snapshots of house {args.house} in th last {args.hours}h")
+    bw_last = db.execute("select id from snapshot where house_id = ? order by ts desc limit 1", (args.blackwater,)).fetchone()
+
+    def book(sid):
+        return {i: (med, mn, q, n) for i, med, mn, q, n in db.execute(
+            "select item_id, median_unit, min_unit, quantity, auctions from price where snapshot_id = ? order by quantity", (sid,))}
+
+    now, then = book(snaps[-1][0]), book(snaps[0][0])
+    bw = book(bw_last[0]) if bw_last else {}
+    items = {i: (n, s, b) for i, n, s, b in db.execute("select id, name, sell_price, purchase_price from item_live")}
+
+    sold, pulled, recent, events = legacy_sales(db, snaps, args.dry_dumps)
     recent_h = (snaps[-1][1] - snaps[max(0, len(snaps) - 1 - args.dry_dumps)][1]) / 3600
     # items r tracked from th first dump they have raw listings in; items added 2 th watchlist mid-window
     # (or never listed) get "-" instead of a fake zero. under an hour of tracking measures nothing yet

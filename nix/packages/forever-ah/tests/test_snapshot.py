@@ -6,22 +6,18 @@
 th refactor's safety net: splitting th code shudnt change a single number. when a change is MEANT 2
 change numbers, regenerate th golden nd th jj diff of tests/golden is th review
 """
-import gzip
 import json
 import os
-import shutil
 import sys
 import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
 
-HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parent))
+from support import HERE, NOW, fixture_db
+
 import api  # noqa: E402
 import forever_ah  # noqa: E402
-
-NOW = 1794450101 + 60  # just after th fixture's last dump (make_fixture prints it)
 
 
 def diffs(a, b, path="$"):
@@ -46,9 +42,7 @@ def diffs(a, b, path="$"):
 class Snapshot(unittest.TestCase):
     def test_export(self):
         with tempfile.TemporaryDirectory() as tmp:
-            db = Path(tmp) / "fixture.sqlite"
-            with gzip.open(HERE / "fixture.sqlite.gz") as g, open(db, "wb") as f:
-                shutil.copyfileobj(g, f)
+            db = fixture_db(tmp)
             out = Path(tmp) / "www" / "data.json"
             argv = ["forever-ah", "--db", str(db), "export", "--now", str(NOW), "--out", str(out)]
             # th fixture carries names nd qualities 4 everything shown, so reaching 4 th api is a bug. patched on

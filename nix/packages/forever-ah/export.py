@@ -6,6 +6,7 @@ import urllib.request
 from pathlib import Path
 
 
+from api import Client, creds
 from market import market_data
 
 
@@ -81,9 +82,43 @@ def write_json(path, data):
     tmp.replace(path)
 
 
+def name_shown(args, db, data):
+    """names nd qualities 4 everything th site will show, off th api 4 anything th crawls never cached. lives
+    here, not in th model: th model shudnt make network calls, nd only th site cares wat things r called"""
+    # names nd qualities 4 anything shown tht th recipe crawl didnt cover, cached so this only costs calls once
+    crafts, gather, flips, vendor = data["crafts"], data["gather"], data["flips"], data["vendor"]
+    shown = [m for ms in gather.values() for m in ms] + flips + vendor
+    shown_ids = {m["id"] for m in shown}
+    for v in crafts.values():
+        for r in v["top"] + v["starters"] + v["farmed"]:
+            shown_ids.add(r["out"]["id"])
+            shown_ids.update(m["id"] for m in r["mats"] + r.get("farm", {}).get("mats", []))
+    quality = dict(db.execute("select id, quality from item_quality"))
+    named = {i for (i,) in db.execute("select id from item where name is not null")}
+    # anything shown w/o a cached quality or name (flips can be any item, not just recipe mats)
+    todo = sorted((shown_ids - quality.keys()) | (shown_ids - named))
+    if todo:
+        api = Client(args.region, *creds())
+        for i, it in zip(todo, api.get_many([f"/data/wow/item/{i}" for i in todo], "static")):
+            quality[i] = it["quality"]["type"].lower() if it and it.get("quality") else "common"
+            db.execute("insert or replace into item_quality values (?, ?)", (i, quality[i]))
+            if it:
+                db.execute("insert into item values (?, ?, ?, ?, 1) on conflict(id) do update set name = excluded.name",
+                           (i, it["name"], it.get("sell_price"), it.get("purchase_price")))
+        db.commit()
+        names = dict(db.execute("select id, name from item where name is not null"))
+        for m in shown:
+            if m["name"].startswith("item ") and m["id"] in names:
+                m["name"] = names[m["id"]]
+    flips = [f for f in flips if not f["name"].startswith("item ")][:10]
+    data["flips"] = flips
+    data["quality"] = {i: quality[i] for i in shown_ids}
+
+
 def export(args, db):
     """Write fresh data.json + quests.json 4 th site, renamed into place so th page never fetches half of one."""
     data = market_data(args, db)
+    name_shown(args, db, data)
     out = Path(args.out)
     write_json(out, data)
     q = quest_data(args, db)

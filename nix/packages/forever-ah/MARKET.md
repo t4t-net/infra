@@ -1,8 +1,8 @@
 # forever-ah market model
 
 design doc 4 rebuilding th market model (`market_data` in forever_ah.py) instead of patching it again.
-status: **building**, 2026-11-11. migration steps 1-3 done (see th migration section). nothing open,
-blackwater's cut is deferred.
+status: **built**, 2026-11-11. all 5 migration steps done; wat's still missing is listed at th end of th
+migration section. blackwater's cut is deferred.
 
 ## why rebuild
 
@@ -150,9 +150,10 @@ scrape.py       api scrape (unchanged)
 addon.py        savedvars parser + addon-import
 observe.py      sources → observations
 fills.py        per-source sale inference + merge
-market.py       per-item derived quantities, pure functions
+market.py       per-item derived quantities, pure functions + market_data wiring
 crafts.py       craft/farm costing
-export.py       data.json, name backfill, flips, vendor
+spreads.py      cross-house flips nd under-vendor listings (moved out of export: theyre model, not output)
+export.py       data.json, name backfill
 tact.py, questie.py  unchanged
 ```
 
@@ -179,8 +180,21 @@ only touched in observe.py nd export.py, so everything in between is testable w 
 3. add watch fills nd merging, compare against api fills 4 windows both cover. **done** 4 th rule nd
    merge, anchored on real 2026-11-11 sweeps. th api-vs-watch comparison needs a longer session tht
    overlaps api dumps, th fixture's 14 min of polls all land after its last dump
-4. swap consumers over 2 th new market functions one at a time (crafts last, its th biggest)
-5. delete th old `market_data`
+4. swap consumers over 2 th new market functions one at a time (crafts last, its th biggest). **done**,
+   one commit each: fills (no diff), spree clustering (no diff), watch merge, deposits + duration,
+   walk-th-book mat cost, maybe-sales, trend/clearing/realizable, freshness markers, name backfill out of
+   th model (no diff), nd th site showing it all
+5. delete th old `market_data`. **done** as: crafts nd spreads moved out, market_data is wiring now. th
+   old api loop survives only as tests/legacy.py, th reference fills.api_fills is checked against
+
+still missing, roughly in order:
+- **api vs watch on real data**: th fixture's watch polls all land after its last api dump. needs a
+  longer session w th hourly scrape running, then compare both sources' fills 4 th same hour
+- **getting th addon's file 2 psychoboost**: nothing ships ForeverScan.lua there yet, so th live site
+  runs on th api alone. a watcher on desktop-kdblba8 or a path unit
+- **batch mat cost**: needs output stack sizes (ItemSparse `Stackable`), not stored yet
+- **market() is still a closure** over market_data's locals. pulling it into a context object wud let
+  its numbers b tested per item like walk_book nd realizable already r
 
 each step is its own commit nd leaves th site working.
 

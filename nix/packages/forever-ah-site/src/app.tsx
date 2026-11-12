@@ -416,8 +416,10 @@ export function App() {
               <dt>game</dt><dd>wow: forever</dd>
               <dt>house</dt><dd>111, normal, alliance</dd>
               <dt>window</dt><dd>{D.dumps} dumps over {D.hours}h</dd>
-              <dt>latest</dt><dd>{when(D.dump)}</dd>
-              <dt>source</dt><dd>battle.net api</dd>
+              {/* th api dump is hourly; watched items can b fresher, nd th header shudnt undersell or blur tht */}
+              <dt>api dump</dt><dd>{when(D.dump)} <span className="c">(hourly)</span></dd>
+              {D.watch_as_of ? <><dt>live</dt><dd>{when(D.watch_as_of)} <span className="c">(addon, {D.watch_items} items)</span></dd></> : null}
+              <dt>source</dt><dd>battle.net api{D.watch_as_of ? ' + ForeverScan addon' : ''}</dd>
             </dl>
           </div>
         </header>

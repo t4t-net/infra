@@ -283,5 +283,9 @@ def market_data(args, db):
 
     return {
         "house": args.house, "dump": snaps[-1][1], "first_dump": snaps[0][1], "dumps": len(snaps),
+        # th addon's newest look nd how many items it's live 4. "dump" is only th hourly api, so a header
+        # showing just tht undersells how fresh th watched rows r
+        "watch_as_of": max((t for t, src in seen.values() if src == "watch"), default=None),
+        "watch_items": sum(1 for _, src in seen.values() if src == "watch"),
         "hours": round((snaps[-1][1] - snaps[0][1]) / 3600), "crafts": crafts, "gather": gather, "flips": flips, "vendor": vendor,
     }

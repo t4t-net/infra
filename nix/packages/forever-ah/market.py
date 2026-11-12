@@ -2,6 +2,7 @@
 import math
 import time
 from collections import defaultdict
+from itertools import accumulate
 
 
 import fills
@@ -53,6 +54,9 @@ def analyze(args, db):
     print(f"{'recipe':<36}{'buy mats':>10}{'sell(min)':>11}{'profit':>10}{'#ah':>5}")
     for profit, name, cost, revenue, n in rows[:args.top]:
         print(f"{name[:35]:<36}{g(cost):>10}{g(revenue):>11}{g(profit):>10}{n:>5}")
+
+
+LIVE_S = 900  # a book seen this recently counts as real-time on th site, older is "delayed"
 
 
 def clearing_price(sales):
@@ -143,6 +147,23 @@ def market_data(args, db):
     obs = observe.api_observations(db, snaps)
     watch = {i: [o for o in s if since <= o.t <= now_t] for i, s in observe.watch_observations(db, args.house).items()}
     watch = {i: s for i, s in watch.items() if s}
+    # th freshest book 4 each item w raw listings: th last api dump's, or a watch poll if one came after it
+    books = {i: s[-1] for i, s in obs.items()}
+    for i, s in watch.items():
+        if i not in books or s[-1].t > books[i].t:
+            books[i] = s[-1]
+    # newest wins: a watch poll after th last dump replaces th dump's floor, median nd quantity. listings stay
+    # th api's, watch rows r price levels w seller counts, not auctions. every row says where its book came
+    # from nd whether thats real-time or th hourly dump
+    seen = {i: (snaps[-1][1], "api") for i in now}
+    for i, b in books.items():
+        if b.source == "watch" and b.t > snaps[-1][1] and b.listings:
+            lots = sorted((l.unit_price, l.quantity) for l in b.listings if l.unit_price is not None)
+            qty = sum(q for _, q in lots)
+            med = next(price for price, acc in zip((p for p, _ in lots), accumulate(q for _, q in lots))
+                       if acc * 2 >= qty)
+            now[i] = (med, lots[0][0], qty, now[i][3] if i in now else None)
+            seen[i] = (b.t, "watch")
     dump_times = [t for _, t in snaps]
     merged = {i: fills.merge(list(fills.api_fills(obs.get(i, []))), list(fills.watch_fills(watch.get(i, []))),
                              fills.watch_spans(watch.get(i, [])), dump_times)
@@ -244,13 +265,11 @@ def market_data(args, db):
             "listing_deposit": listing_deposit,
             "deposit_known": sell is not None,
             "vendor": (items.get(i) or (None, None))[1],
+            "as_of": seen.get(i, (None,))[0],
+            "source": seen.get(i, (None, None))[1],
+            "live": i in seen and now_t - seen[i][0] <= LIVE_S,
         }
 
-    # th freshest book 4 each item w raw listings: th last api dump's, or a watch poll if one came after it
-    books = {i: s[-1] for i, s in obs.items()}
-    for i, s in watch.items():
-        if i not in books or s[-1].t > books[i].t:
-            books[i] = s[-1]
 
     def buy_cost(i, q):
         return walk_book(books[i].listings if i in books else (), q, now[i][0])

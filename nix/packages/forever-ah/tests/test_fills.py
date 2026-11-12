@@ -6,7 +6,7 @@ import unittest
 from support import NOW, fixture_db
 
 import fills  # noqa: E402
-import market  # noqa: E402
+import legacy  # noqa: E402
 import observe  # noqa: E402
 from observe import Listing, Observation  # noqa: E402
 
@@ -28,7 +28,7 @@ class MatchesLegacy(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             db = sqlite3.connect(fixture_db(tmp))
             dumps = observe.api_dumps(db, 111, NOW - 24 * 3600)
-            old = market.legacy_sales(db, dumps, DRY_DUMPS)
+            old = legacy.legacy_sales(db, dumps, DRY_DUMPS)
             recent_since = dumps[max(0, len(dumps) - DRY_DUMPS)][1]
             new = fills.tally((f for s in observe.api_observations(db, dumps).values() for f in fills.api_fills(s)),
                               recent_since)

@@ -140,4 +140,4 @@ def tally(fills, recent_since):
         spree_windows[f.item_id].add(f.t_to)
         if f.t_to >= recent_since:
             recent[f.item_id] += f.quantity
-    return sold, pulled, recent, {i: len(w) for i, w in spree_windows.items()}
+    return sold, pulled, recent, defaultdict(int, {i: len(w) for i, w in spree_windows.items()})

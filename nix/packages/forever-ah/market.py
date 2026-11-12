@@ -4,6 +4,8 @@ import time
 from collections import defaultdict
 
 
+import fills
+import observe
 from api import Client, creds
 from game import GATHERED, PROFESSIONS, VENDOR_MATS
 
@@ -53,54 +55,10 @@ def analyze(args, db):
         print(f"{name[:35]:<36}{g(cost):>10}{g(revenue):>11}{g(profit):>10}{n:>5}")
 
 
-def legacy_sales(db, snaps, dry_dumps):
-    """th api sales rule as market_data has always run it, kept as th reference fills.py is checked against.
-    (sold [units, copper], pulled units, recent units, dumps w a sale) per item"""
-    # sales: listings tht vanished w time left. buyers take th cheapest first, so one tht vanished while a cheaper
-    # listing from th same dump is still up was pulled (cancelled or reposted), not bought. th next dump's floor
-    # isnt good enough 4 this: fresh undercuts land below it nd turned real sales on busy bars into "cancels"
-    sold = defaultdict(lambda: [0, 0])
-    pulled = defaultdict(int)
-    recent = defaultdict(int)  # units sold in th last dry_dumps dumps
-    # dumps w any sales. buyers come in sprees (heavy dynamite: 142 units in 4 buyouts over 12h, nothing between),
-    # so timing a listing off units/h said ~5m when th real answer was th next spree, hours away
-    events = defaultdict(int)
-    for n, ((a, _), (b, _)) in enumerate(zip(snaps, snaps[1:])):
-        after = dict(db.execute("select auction_id, quantity from auction where snapshot_id = ?", (b,)))
-        rows = db.execute("select auction_id, item_id, unit_price, quantity, time_left from auction where snapshot_id = ?",
-                          (a,)).fetchall()
-        floor = {}
-        for aid, iid, price, _, _ in rows:
-            if aid in after and price is not None and price < floor.get(iid, math.inf):
-                floor[iid] = price
-        bought = set()
-        for aid, iid, price, q, tl in rows:
-            gone = q - after.get(aid, 0)
-            if price is None or tl == "SHORT" or gone <= 0:
-                continue
-            if price > floor.get(iid, math.inf):
-                pulled[iid] += gone
-                continue
-            bought.add(iid)
-            sold[iid][0] += gone
-            sold[iid][1] += gone * price
-            if n >= len(snaps) - 1 - dry_dumps:
-                recent[iid] += gone
-        for iid in bought:
-            events[iid] += 1
-    return sold, pulled, recent, events
-
-
 def market_data(args, db):
     """Everything th site shows, from th dumps in th last args.hours."""
     since = (args.now or int(time.time())) - args.hours * 3600
-    # one snapshot per distinct dump; scrapes from before Last-Modified tracking can repeat a dump
-    snaps, seen = [], set()
-    for sid, ts, dts in db.execute(
-            "select id, ts, data_ts from snapshot where house_id = ? and ts >= ? order by ts", (args.house, since)):
-        if (dts or ts) not in seen:
-            seen.add(dts or ts)
-            snaps.append((sid, dts or ts))
+    snaps = observe.api_dumps(db, args.house, since)
     if not snaps:
         raise SystemExit(f"no snapshots of house {args.house} in th last {args.hours}h")
     bw_last = db.execute("select id from snapshot where house_id = ? order by ts desc limit 1", (args.blackwater,)).fetchone()
@@ -113,7 +71,12 @@ def market_data(args, db):
     bw = book(bw_last[0]) if bw_last else {}
     items = {i: (n, s, b) for i, n, s, b in db.execute("select id, name, sell_price, purchase_price from item_live")}
 
-    sold, pulled, recent, events = legacy_sales(db, snaps, args.dry_dumps)
+    # sales: see fills.api_fills 4 th rule. sprees (dumps w any sale) matter cuz buyers come in bursts (heavy
+    # dynamite: 142 units in 4 buyouts over 12h, nothing between), so timing a listing off units/h said ~5m when
+    # th real answer was th next spree, hours away
+    obs = observe.api_observations(db, snaps)
+    recent_since = snaps[max(0, len(snaps) - args.dry_dumps)][1]
+    sold, pulled, recent, events = fills.tally((f for s in obs.values() for f in fills.api_fills(s)), recent_since)
     recent_h = (snaps[-1][1] - snaps[max(0, len(snaps) - 1 - args.dry_dumps)][1]) / 3600
     # items r tracked from th first dump they have raw listings in; items added 2 th watchlist mid-window
     # (or never listed) get "-" instead of a fake zero. under an hour of tracking measures nothing yet

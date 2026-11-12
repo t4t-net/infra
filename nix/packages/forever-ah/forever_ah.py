@@ -51,9 +51,9 @@ def main():
     ex.add_argument("--house", type=int, default=111)
     ex.add_argument("--blackwater", type=int, default=117, help="th neutral house alliance can also reach")
     ex.add_argument("--hours", type=int, default=24, help="trend nd sales window")
-    ex.add_argument("--deposit", type=int, default=100, help="copper per auction, lost if it expires or gets cancelled")
-    ex.add_argument("--auction-hours", type=int, default=24, help="how long a listing runs b4 it expires")
-    ex.add_argument("--max-relists", type=int, default=14, help="expired listings b4 u'd give up on selling it")
+    ex.add_argument("--deposit", type=int, default=100,
+                    help="copper per listing 4 items w no known vendor price (others use game.deposit's formula)")
+    ex.add_argument("--give-up-days", type=int, default=14, help="days of relisting b4 u'd vendor it instead")
     ex.add_argument("--war-ratio", type=float, default=3, help="hide crafts w this many units pulled per unit sold")
     ex.add_argument("--dry-dumps", type=int, default=3, help="recent dumps a craft must have sold in...")
     ex.add_argument("--dry-expect", type=float, default=5, help="...when th window's rate expects this many sales in them")

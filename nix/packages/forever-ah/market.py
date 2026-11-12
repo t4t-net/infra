@@ -7,7 +7,7 @@ from collections import defaultdict
 import fills
 import observe
 from api import Client, creds
-from game import GATHERED, PROFESSIONS, VENDOR_MATS
+from game import AUCTION_DURATIONS, GATHERED, PROFESSIONS, VENDOR_MATS, deposit
 
 
 def g(c):
@@ -123,9 +123,9 @@ def market_data(args, db):
         "select a.item_id, sum(a.quantity) from auction a join price p on p.snapshot_id = a.snapshot_id "
         "and p.item_id = a.item_id where a.snapshot_id = ? and a.unit_price = p.min_unit group by a.item_id", (last,)))
 
-    def sell_odds(rate, need):
-        """chance of at least `need` buying sprees b4 a listing expires, sprees being poisson at rate/h"""
-        mu = rate * args.auction_hours
+    def sell_odds(rate, need, hours):
+        """chance of at least `need` buying sprees b4 a listing of `hours` expires, sprees being poisson at rate/h"""
+        mu = rate * hours
         if not mu:
             return 0.0
         return max(0.0, 1 - sum(math.exp(k * math.log(mu) - mu - math.lgamma(k + 1)) for k in range(need)))
@@ -142,12 +142,19 @@ def market_data(args, db):
         # th queue ahead nd ur whole stack
         need = math.ceil((ahead + stack) / (units / events[i])) if units else None
         # th deposit only comes back on a sale, so every listing tht expires first loses one. thats geometric
-        # in th odds of selling per listing; past 2 weeks of relisting u'd give up nd vendor it
+        # in th odds of selling per listing; past args.give_up_days of relisting u'd give up nd vendor it. each
+        # listing length trades a cheaper deposit against worse odds of a spree landing b4 it runs out, so
+        # take whichever loses least. items w no known vendor price fall back 2 th flat args.deposit guess
+        sell = (items.get(i) or (None, None))[1]
         if rate is None:
-            deposits = None
+            deposits = duration = listing_deposit = None
         else:
-            p = sell_odds(rate, need) if need else 0.0
-            deposits = round(args.deposit * min((1 - p) / p if p else math.inf, args.max_relists))
+            options = []
+            for h, percent in AUCTION_DURATIONS:
+                p = sell_odds(rate, need, h) if need else 0.0
+                d = deposit(sell, max(1, round(stack)), percent) if sell is not None else args.deposit
+                options.append((round(d * min((1 - p) / p if p else math.inf, args.give_up_days * 24 / h)), h, d))
+            deposits, duration, listing_deposit = min(options)
         # no real market, just sellers undercutting each other: way more pulled nd reposted than bought, or sales
         # tht stopped dead (th window's rate says there shud have been a handful by now) while sellers keep
         # reposting. a quiet few hours on its own is just a quiet few hours
@@ -170,6 +177,11 @@ def market_data(args, db):
             "wait_h": need / rate if rate else None,
             "ahead": ahead,
             "deposit_risk": deposits,
+            # wat th deposit_risk assumes: list 4 duration_h at listing_deposit each (deposit_known: from th
+            # formula, not th flat guess)
+            "duration_h": duration,
+            "listing_deposit": listing_deposit,
+            "deposit_known": sell is not None,
             "vendor": (items.get(i) or (None, None))[1],
         }
 

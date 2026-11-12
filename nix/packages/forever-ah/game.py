@@ -24,3 +24,13 @@ VENDOR_MATS = {"Weak Flux", "Strong Flux", "Coal", "Fine Thread", "Coarse Thread
 
 
 ALLIANCE_RACES, HORDE_RACES =1 | 4 | 8 | 64, 2 | 16 | 32 | 128  # human dwarf nelf gnome / orc undead tauren troll
+
+
+# forever's listing lengths nd th deposit each charges, as a % of th vendor sell price per unit, floored at
+# 1s per listing. matched 228/228 deposits th addon read (2026-11-11). NOT classic's 12/24/48h
+AUCTION_DURATIONS = ((2, 5), (8, 20), (24, 60))  # (hours, % of vendor price)
+
+
+def deposit(sell_price, quantity, percent):
+    """copper it costs 2 list `quantity` of an item tht vendors 4 `sell_price`, at one of AUCTION_DURATIONS"""
+    return max(100, sell_price * quantity * percent // 100)

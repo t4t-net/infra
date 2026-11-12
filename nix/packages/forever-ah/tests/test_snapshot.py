@@ -18,6 +18,7 @@ from unittest import mock
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
+import api  # noqa: E402
 import forever_ah  # noqa: E402
 
 NOW = 1794450101 + 60  # just after th fixture's last dump (make_fixture prints it)
@@ -50,9 +51,10 @@ class Snapshot(unittest.TestCase):
                 shutil.copyfileobj(g, f)
             out = Path(tmp) / "www" / "data.json"
             argv = ["forever-ah", "--db", str(db), "export", "--now", str(NOW), "--out", str(out)]
-            # th fixture carries names nd qualities 4 everything shown, so reaching 4 th api is a bug
+            # th fixture carries names nd qualities 4 everything shown, so reaching 4 th api is a bug. patched on
+            # th class so it catches every module tht imported Client
             offline = AssertionError("export tried 2 call th api, th fixture is missing a name or quality")
-            with mock.patch.object(sys, "argv", argv), mock.patch.object(forever_ah, "Client", side_effect=offline):
+            with mock.patch.object(sys, "argv", argv), mock.patch.object(api.Client, "__init__", side_effect=offline):
                 forever_ah.main()
 
             for name in ("data.json", "quests.json"):

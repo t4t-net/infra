@@ -10,6 +10,7 @@ id (not per dump) keeps th same listings in or out across every dump, so "vanish
 """
 import argparse
 import gzip
+import json
 import shutil
 import sqlite3
 import sys
@@ -17,7 +18,8 @@ import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-import forever_ah  # noqa: E402
+import game  # noqa: E402
+import schema  # noqa: E402
 
 HOUSES = (111, 117)
 PROFESSIONS = (186, 164, 202)  # mining, blacksmithing, engineering (heavy dynamite's sprees live here)
@@ -35,7 +37,7 @@ def main():
     with tempfile.TemporaryDirectory() as tmp:
         dst = Path(tmp) / "fixture.sqlite"
         db = sqlite3.connect(dst, uri=True)  # so th source can attach read-only
-        db.executescript(forever_ah.SCHEMA)
+        db.executescript(schema.SCHEMA)
         db.execute("attach ? as src", (f"file:{args.src}?mode=ro",))
         # th migrations main() runs add these 2 old dbs; th fixture gets them up front
         for col in ("spell_id", "learn_skill", "yellow_skill", "grey_skill"):
@@ -54,7 +56,7 @@ def main():
             f"select item_id from src.reagent where recipe_id in ({marks}) union "
             f"select crafted_item_id from src.recipe where id in ({marks}) and crafted_item_id is not null",
             recipes + recipes)}
-        items |= {i for ids in forever_ah.GATHERED.values() for i in ids}
+        items |= {i for ids in game.GATHERED.values() for i in ids}
         db.execute("create temp table keep (id integer primary key)")
         db.executemany("insert or ignore into keep values (?)", [(i,) for i in items])
 
@@ -71,7 +73,7 @@ def main():
         for choice, fixed in db.execute("select reward_choice, reward_fixed from quest").fetchall():
             for ids in (choice, fixed):
                 db.executemany("insert or ignore into keep values (?)",
-                               [(i,) for i in forever_ah.json.loads(ids or "[]")])
+                               [(i,) for i in json.loads(ids or "[]")])
         for table in ("item", "item_hotfix", "item_quality"):
             db.execute(f"insert into {table} select * from src.{table} where id in (select id from keep)")
         # export backfills names nd qualities 4 anything it shows off th api, nd th test runs offline. th real

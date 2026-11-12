@@ -11,11 +11,9 @@ python3Packages.buildPythonApplication {
 
   src = lib.fileset.toSource {
     root = ./.;
+    # every module (nd th tests' .py), but not __pycache__ or th addon's lua
     fileset = lib.fileset.unions [
-      ./forever_ah.py
-      ./questie.py
-      ./tact.py
-      ./tests/test_snapshot.py
+      (lib.fileset.fileFilter (f: f.hasExt "py") ./.)
       ./tests/fixture.sqlite.gz
       ./tests/golden
     ];
@@ -30,11 +28,13 @@ python3Packages.buildPythonApplication {
     runHook postCheck
   '';
 
-  # th cli imports tact from its own dir, nd python resolves th bin symlink 2 find it
+  # th cli imports its sibling modules from its own dir, nd python resolves th bin symlink 2 find it
   installPhase = ''
     runHook preInstall
     install -Dm755 forever_ah.py $out/libexec/forever-ah/forever_ah.py
-    install -Dm644 tact.py questie.py -t $out/libexec/forever-ah/
+    for f in *.py; do
+      [ "$f" = forever_ah.py ] || install -Dm644 "$f" -t $out/libexec/forever-ah/
+    done
     mkdir -p $out/bin
     ln -s $out/libexec/forever-ah/forever_ah.py $out/bin/forever-ah
     runHook postInstall

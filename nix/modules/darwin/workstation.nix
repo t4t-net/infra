@@ -16,6 +16,7 @@
     (self.lib.nixosModule "home-manager/common")
     (self.lib.nixosModule "home-manager/fish")
     (self.lib.nixosModule "home-manager/ghostty")
+    (self.lib.nixosModule "home-manager/gh")
     (self.lib.nixosModule "home-manager/neovim")
     (self.lib.nixosModule "home-manager/jujutsu")
     (self.lib.nixosModule "home-manager/claude-code")

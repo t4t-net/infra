@@ -28,7 +28,8 @@
               {
                 type = "command";
                 command = "${voiceHooks}/bin/luna-voice-lint";
-                timeout = 10;
+                # async: th lint lands w ellie's next prompt instead of making me resend a message she already has
+                async = true;
               }
             ];
           }

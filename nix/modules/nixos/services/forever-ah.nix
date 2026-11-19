@@ -186,7 +186,7 @@ in
       pathConfig.PathChanged = "${inbox}/ForeverScan.lua";
     };
     systemd.services.forever-ah-addon-import = job "import th ForeverScan addon's dumps nd watch polls" [
-      "addon-import ${inbox}/ForeverScan.lua --house 111"
+      "addon-import ${inbox}/ForeverScan.lua --house 111 --neutral-house 117"
       "export --out ${www}/data.json"
     ];
 

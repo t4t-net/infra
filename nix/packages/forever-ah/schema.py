@@ -168,14 +168,16 @@ create table if not exists addon_watch (
 create index if not exists addon_watch_auction on addon_watch(auction_id);
 -- real deposits from th addon (CalculateCommodityDeposit / CalculateItemDeposit), latest reading wins.
 -- gear only gets priced while its in ellie's bags, so coverage grows as she plays
+-- per house: blackwater's deposits r 5x alliance's (25/100/300% of vendor price vs 5/20/60, 2026-11-18)
 create table if not exists addon_deposit (
+  house_id integer not null,
   item_id integer not null,
   duration integer not null,      -- blizz's dropdown index, 1-3; labels in addon_deposit_duration
   quantity integer not null,
   deposit integer not null,       -- copper
   commodity integer not null,
   server_ts integer not null,
-  primary key (item_id, duration, quantity)
+  primary key (house_id, item_id, duration, quantity)
 );
 create table if not exists addon_deposit_duration (
   duration integer primary key,
@@ -187,6 +189,15 @@ create table if not exists addon_deposit_duration (
 def connect(path):
     # scrape nd recipes share th db on a timer, so wait out th other's write lock instead of dying
     db = sqlite3.connect(path, timeout=60)
+    # addon_deposit had no house b4 2026-11-18, everything in it was read at th alliance AH (bar one booty bay
+    # visit, retagged by hand). a primary key cant b altered, so move it aside nd copy
+    if (db.execute("select 1 from sqlite_master where name = 'addon_deposit'").fetchone()
+            and "house_id" not in {c[1] for c in db.execute("pragma table_info(addon_deposit)")}):
+        db.execute("alter table addon_deposit rename to addon_deposit_old")
+        db.executescript(SCHEMA)
+        db.execute("insert into addon_deposit select 111, * from addon_deposit_old")
+        db.execute("drop table addon_deposit_old")
+        db.commit()
     db.executescript(SCHEMA)
     if "data_ts" not in {c[1] for c in db.execute("pragma table_info(snapshot)")}:
         db.execute("alter table snapshot add column data_ts integer")

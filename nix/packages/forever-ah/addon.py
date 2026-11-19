@@ -1,5 +1,6 @@
 """ForeverScan's SavedVariables: a tiny lua parser nd th import into th addon_* tables."""
 import json
+import math
 import re
 import time
 from pathlib import Path
@@ -67,6 +68,24 @@ def parse_savedvars(text):
 TIME_LEFT = {0: "SHORT", 1: "MEDIUM", 2: "LONG", 3: "VERY_LONG"}  # Enum.AuctionHouseTimeLeftBand
 
 
+def scan_house(args, db, s):
+    """which house a full dump came from. th addon says since 2026-11-18 (`ah`); older ones r sized against
+    both houses' nearest api dumps, cuz blackwater is ~1/7 th listings nd a full dump replaces th whole book
+    th site prices from. no size (timed out, died early) nd no `ah` stays th faction house"""
+    if s.get("ah"):
+        return args.neutral_house if s["ah"].get("kind") == "neutral" else args.house
+    if not s.get("n"):
+        return args.house
+
+    def size(house):
+        near = db.execute("select id from snapshot where house_id = ? order by abs(coalesce(data_ts, ts) - ?) limit 1",
+                          (house, s["server_time"])).fetchone()
+        return near and db.execute("select sum(auctions) from price where snapshot_id = ?", near).fetchone()[0]
+
+    off = {h: abs(math.log(s["n"] / n)) for h in (args.house, args.neutral_house) if (n := size(h))}
+    return min(off, key=off.get) if off else args.house
+
+
 def addon_import(args, db):
     """Load ForeverScan's in-game dumps. re-importing th same file is a no-op, scans r keyed by time + character"""
     sv = parse_savedvars(Path(args.savedvars).read_text(encoding="utf-8", errors="replace")).get("ForeverScanDB") or {}
@@ -75,16 +94,19 @@ def addon_import(args, db):
     watched = {i for (i,) in db.execute("select item_id from reagent union select crafted_item_id from recipe")}
     for s in sv.get("scans") or []:
         events = s.get("events") or []
+        house = scan_house(args, db, s)
         cur = db.execute(
             "insert or ignore into addon_scan (server_ts, character, house_id, build, listings, missing_info, "
             "first_event_ms, read_ms, forced, timed_out, since_last, sample_links, error) "
             "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (s["server_time"], s.get("character") or "?", args.house, s.get("build"), s.get("n"), s.get("missing"),
+            (s["server_time"], s.get("character") or "?", house, s.get("build"), s.get("n"), s.get("missing"),
              events[0]["ms"] if events else None, s.get("read_ms"), int(bool(s.get("forced"))),
              int(bool(s.get("timed_out"))), s.get("since_last"), json.dumps(s["links"]) if s.get("links") else None,
              s.get("error")),
         )
         when = time.strftime("%m-%d %H:%M", time.localtime(s["server_time"]))
+        if house != args.house:
+            when += f" (house {house}{'' if s.get('ah') else ', guessed from its size'})"
         if not cur.rowcount:
             print(f"{when} already imported")
             continue
@@ -115,13 +137,13 @@ def addon_import(args, db):
             print(f"{when} timed out, {s.get('since_last')}s after th previous request")
         elif s.get("error"):
             print(f"{when} partial, {len(listings)} watched/bonus rows b4 th read died at {s['error']}")
-            check_against_api(db, sid, args.house, s["server_time"])
+            check_against_api(db, sid, house, s["server_time"])
         else:
             print(f"{when} {s.get('n')} listings, first update {events[0]['ms'] if events else '?'} ms, "
                   f"{len(listings)} watched/suffixed rows")
             for link in (s.get("links") or [])[:3]:
                 print(f"  sample link {link}")
-            check_against_api(db, sid, args.house, s["server_time"])
+            check_against_api(db, sid, house, s["server_time"])
 
     new = rows = jumped = 0
     latest = 0
@@ -132,10 +154,12 @@ def addon_import(args, db):
             jumped += 1
             continue
         latest = max(latest, p["t"])
+        # th addon tags polls at a neutral auctioneer since 2026-11-18. older untagged ones can only b assumed
+        house = args.neutral_house if p.get("ah") == "neutral" else args.house
         cur = db.execute(
             "insert or ignore into addon_watch_poll (server_ts, character, house_id, item_id, results, full, ms) "
             "values (?, ?, ?, ?, ?, ?, ?)",
-            (p["t"], p.get("c") or "?", args.house, p["item"], p.get("n") or 0, int(bool(p.get("full"))),
+            (p["t"], p.get("c") or "?", house, p["item"], p.get("n") or 0, int(bool(p.get("full"))),
              p.get("ms")))
         if not cur.rowcount:
             continue
@@ -153,17 +177,18 @@ def addon_import(args, db):
 
     db.executemany("insert or replace into addon_deposit_duration values (?, ?)",
                    list(enumerate(sv.get("deposit_durations") or [], 1)))
-    deposits = [(item, int(d), int(q), int(cost), int(rec.get("kind") == "commodity"), rec["t"])
-                for item, rec in (sv.get("deposits") or {}).items()
+    deposits = [(house, item, int(d), int(q), int(cost), int(rec.get("kind") == "commodity"), rec["t"])
+                for key, house in (("deposits", args.house), ("deposits_neutral", args.neutral_house))
+                for item, rec in (sv.get(key) or {}).items()
                 for d, q, cost in (c.split(":") for c in rec.get("costs", "").split(" ") if c)]
     # only overwrite w a newer reading, so importing an old file cant roll deposits back
     db.executemany(
-        "insert into addon_deposit values (?, ?, ?, ?, ?, ?) on conflict(item_id, duration, quantity) do update "
+        "insert into addon_deposit values (?, ?, ?, ?, ?, ?, ?) on conflict(house_id, item_id, duration, quantity) do update "
         "set deposit = excluded.deposit, commodity = excluded.commodity, server_ts = excluded.server_ts "
         "where excluded.server_ts > addon_deposit.server_ts", deposits)
     db.commit()
     if deposits:
-        print(f"deposits: {len({d[0] for d in deposits})} items")
+        print(f"deposits: {len({d[:2] for d in deposits})} items")
 
 
 def check_against_api(db, sid, house, ts):

@@ -3,7 +3,7 @@
 ## Title: ForeverScan
 ## Notes: proof of concept: full AH dumps via C_AuctionHouse.ReplicateItems into SavedVariables 4 forever-ah
 ## Author: luna
-## Version: 0.1.0
+## Version: 0.2.0
 ## SavedVariables: ForeverScanDB
 
 ForeverScan.lua

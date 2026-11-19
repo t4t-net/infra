@@ -29,6 +29,27 @@ local WATCH_DEFAULT_V1 = 12  -- how many of WATCH_DEFAULT a v1 list already got
 -- files nd th importer keep working
 local now = time
 
+-- which AH ellie's standing at. th api has no house id nd every auctioneer opens th same frame, but booty
+-- bay's dump landed in house 111 on 2026-11-18. faction auctioneers have a faction group, th goblins at
+-- th neutral ones dont; th zone is th fallback if th npc unit isnt set. kept whole on scans as evidence
+local NEUTRAL_ZONES = { ["Booty Bay"] = true, ["Gadgetzan"] = true, ["Everlook"] = true }
+local here
+
+local function whichAH()
+    local guid, faction = UnitGUID("npc"), UnitFactionGroup("npc")
+    local zone, sub = GetRealZoneText(), GetSubZoneText()
+    local neutral
+    if faction == "Alliance" or faction == "Horde" then
+        neutral = false
+    elseif guid then
+        neutral = true
+    else
+        neutral = NEUTRAL_ZONES[sub] or NEUTRAL_ZONES[zone] or false
+    end
+    return { kind = neutral and "neutral" or "faction", npc = guid and tonumber((select(6, strsplit("-", guid)))),
+             npc_faction = faction, zone = zone, subzone = sub }
+end
+
 local db
 local watch = { i = 0 }   -- pending = th search waiting on its results
 local ticker
@@ -143,6 +164,7 @@ local function start(force)
         build = ("%s.%s"):format(version, build),
         toc = toc,
         faction = UnitFactionGroup("player"),
+        ah = here,
         character = UnitName("player"),
         since_last = db.last_request and (now() - db.last_request) or nil,
         events = {},
@@ -255,6 +277,7 @@ local function watchRead(item)
     polls[#polls + 1] = {
         t = p.server_time, c = UnitName("player"), item = item, ms = floor(debugprofilestop() - p.t0), n = n,
         full = C_AuctionHouse.HasFullCommoditySearchResults(item), rows = table.concat(rows, " "),
+        ah = here and here.kind,
     }
     while #polls > WATCH_KEEP do
         table.remove(polls, 1)
@@ -267,7 +290,8 @@ end
 local DEPOSIT_QTYS = { 1, 20 }
 
 local function recordDeposits()
-    local t, done = now(), {}
+    -- blackwater charges 5x, so its readings go in their own table instead of overwriting alliance's
+    local t, done, into = now(), {}, here and here.kind == "neutral" and db.deposits_neutral or db.deposits
     db.deposit_durations = { AUCTION_DURATION_ONE, AUCTION_DURATION_TWO, AUCTION_DURATION_THREE }
     local function put(id, kind, calc)
         done[id] = true
@@ -282,7 +306,7 @@ local function recordDeposits()
             end
         end
         if #costs > 0 then
-            db.deposits[id] = { t = t, kind = kind, costs = table.concat(costs, " ") }
+            into[id] = { t = t, kind = kind, costs = table.concat(costs, " ") }
         end
     end
     local function commodity(id)
@@ -356,6 +380,7 @@ f:SetScript("OnEvent", function(_, event, arg)
         end
         db.watch_polls = db.watch_polls or {}
         db.deposits = db.deposits or {}
+        db.deposits_neutral = db.deposits_neutral or {}
         savedThrough = now()
         f:RegisterEvent("AUCTION_HOUSE_SHOW")
         f:RegisterEvent("AUCTION_HOUSE_CLOSED")
@@ -364,6 +389,7 @@ f:SetScript("OnEvent", function(_, event, arg)
         f:RegisterEvent("AUCTION_HOUSE_THROTTLED_MESSAGE_DROPPED")
         f:RegisterEvent("AUCTION_HOUSE_THROTTLED_MESSAGE_QUEUED")
     elseif event == "AUCTION_HOUSE_SHOW" then
+        here = whichAH()
         -- let blizz's own frame send its first queries b4 we pile on
         C_Timer.After(2, start)
         if ticker then
@@ -448,7 +474,7 @@ SlashCmdList.FOREVERSCAN = function(msg)
         elseif C_AuctionHouse.GetNumReplicateItems() == 0 then
             say("nothing held, needs a fresh dump")
         else
-            scan = { t0 = debugprofilestop(), server_time = now(), character = UnitName("player"),
+            scan = { t0 = debugprofilestop(), server_time = now(), character = UnitName("player"), ah = here,
                      reread = true, events = {}, throttle = {} }
             finish()
         end
@@ -462,6 +488,10 @@ SlashCmdList.FOREVERSCAN = function(msg)
             priced = priced + 1
         end
         say("deposits known 4 %d items", priced)
+        if here then
+            say("this AH: %s (npc %s, %s, %s / %s)", here.kind, tostring(here.npc), tostring(here.npc_faction),
+                tostring(here.zone), tostring(here.subzone))
+        end
         local last_poll = db.watch_polls[#db.watch_polls]
         say("watch %s%s, %d polls saved, last %s", db.watch_on and "on" or "off",
             ticker and (watchSafe() and " nd polling" or " but paused on this screen") or "", #db.watch_polls,

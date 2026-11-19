@@ -104,6 +104,17 @@ function Block({ head, rows, notes }: { head: string[]; rows: Cell[][]; notes?: 
 
 type Market = { id: number; name: string; wait_h: number | null; ahead: number; deposit_risk: number | null; floor: number | null; median: number | null; qty: number | null; listings: number | null; floor_then: number | null; sold: number | null; sold_at: number | null; vendor: number | null
   sold_maybe: number | null; as_of: number | null; source: 'api' | 'addon' | 'watch' | null; duration_h: number | null; listing_deposit: number | null; deposit_known: boolean; trend_per_h: number | null }
+// a blackwater -> here spread, w th same sales fields as a Market 4 th sell side here plus wat its floor did
+type Flip = Market & { buy: number; buy_listings: number; sell: number; sell_listings: number; profit: number; open: number
+  war: string | null; tracked_h: number; floor_low: number | null; floor_med: number | null; floor_high: number | null; floor_dumps: number }
+
+// th median floor over th window, flagged wen th price th spread is figured from sits well above it: tht's a
+// spike, not a market, nd its usually gone by th time u get back from blackwater
+function usual(f: Flip): Run[] {
+  if (f.floor_med == null) return [{ t: '-', c: 'c' }]
+  const p = Math.round((f.sell / f.floor_med - 1) * 100)
+  return [...money(f.floor_med), ...(p >= 25 ? [{ t: ` (+${p}%)`, c: 'down' }] : [])]
+}
 type Farm = { cost: number; profit: number; mats: { id: number; name: string; qty: number; src: 'farm' | 'ah' | 'vendor' }[] }
 type Craft = { recipe: string; spell: number | null; makes: number; cost: number; revenue: number; profit: number; mats: { id: number; name: string; qty: number; vendor?: boolean }[]; out: Market; farm?: Farm }
 
@@ -334,6 +345,7 @@ raid-launch:  stones, flasks, thorium         `}<span className="c"># raids open
   }
 
   if (view === 'flips') {
+    const flips = D.flips as Flip[]
     return (
       <Section title="flips">
         <p>
@@ -346,19 +358,29 @@ raid-launch:  stones, flasks, thorium         `}<span className="c"># raids open
           many of the last {D.dumps} dumps each one was open for. plan trips around the ones that are open nearly
           every time.
         </p>
+        <p>
+          sold and sells in are how the item actually moves here, same as the profession tables. usual is the
+          median floor over the window, flagged when today's price is way above it: that spread is a spike and
+          probably closes before you get back. the line under each row is the floor's whole range.
+        </p>
         <Block
-          head={['item', 'blackwater', 'here', 'profit', 'open']}
-          rows={(D.flips as { id: number; name: string; buy: number; buy_listings: number; sell: number; sell_listings: number; profit: number; open: number }[]).map(f => [
+          head={['item', 'blackwater', 'here', 'profit', 'sold', 'sells in', 'usual', 'open']}
+          rows={flips.map(f => [
             item(f.id, f.name), [...money(f.buy), { t: ` (${f.buy_listings})`, c: 'c' }], [...money(f.sell), { t: ` (${f.sell_listings})`, c: 'c' }], money(f.profit),
+            sold(f), f.war ? [{ t: f.war === 'relisting' ? 'war' : 'dried up', c: 'down' }] : wait(f), usual(f),
             [{ t: `${f.open}/${D.dumps}`, c: f.open * 2 < D.dumps ? 'c' : undefined }],
           ])}
+          notes={flips.map(f => f.floor_dumps
+            ? [{ t: 'floor ' }, ...money(f.floor_low), ...(f.floor_high !== f.floor_low ? [{ t: ' to ' }, ...money(f.floor_high)] : []),
+               { t: `, up ${f.floor_dumps}/${D.dumps} dumps` }, ...plan(f)]
+            : [{ t: 'no floor history' }])}
         />
         <h3>under vendor price</h3>
         <p>
           listed for less than a vendor pays, so buy it and sell it to any vendor. gear can only be listed in whole
           silvers, so when sellers undercut a wall at 4s they land on 3s even if it vendors for 3s 7c. most of these
           are a few copper each and get sniped within the hour; the open column counts the dumps in a row it's been
-          up. under is how many are below vendor, when we track that item's listings.
+          up. under is how many are below vendor.
         </p>
         <Block
           head={['item', 'listed', 'vendor', 'profit', 'under', 'open']}

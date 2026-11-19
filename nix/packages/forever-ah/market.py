@@ -293,7 +293,7 @@ def market_data(args, db):
     # th item's had raw listings 4 an hour (everything only got them from 2026-11-18), so new flips say "-"
     for f in flips:
         m = market(f["id"])
-        f.update({k: m[k] for k in ("sold", "sold_maybe", "war", "wait_h", "trend_per_h")},
+        f.update({k: m[k] for k in ("sold", "sold_maybe", "war", "wait_h", "ahead", "trend_per_h")},
                  tracked_h=round(tracked_h.get(f["id"], 0), 1))
 
     return {

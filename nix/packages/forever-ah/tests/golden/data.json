@@ -7378,6 +7378,7 @@
  "first_dump": 1794403357,
  "flips": [
   {
+   "ahead": 0,
    "buy": 5000,
    "buy_listings": 3,
    "floor_dumps": 13,
@@ -7398,6 +7399,7 @@
    "war": null
   },
   {
+   "ahead": 0,
    "buy": 7200,
    "buy_listings": 2,
    "floor_dumps": 13,
@@ -7418,6 +7420,7 @@
    "war": null
   },
   {
+   "ahead": 0,
    "buy": 1300,
    "buy_listings": 29,
    "floor_dumps": 13,

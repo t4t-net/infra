@@ -16,8 +16,12 @@
 body { margin: 0; background: var(--bg); }
 ::selection { background: var(--fg); color: var(--bg); }
 
+/* wide enough 4 every table row (engineering's craft table is th widest, 116 chars on 2026-11-18) plus th
+   frame's 4ch padding a side; prose stays at a readable measure below. th kaomoji gutters r sized from this 2 */
+:root { --page: 128ch; }
+
 main {
-  max-width: 80ch;
+  max-width: var(--page);
   margin: 0 auto;
   padding: 2rem 16px;
 }
@@ -47,7 +51,7 @@ main {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: calc((100vw - 80ch) / 2 - 2ch);
+  width: calc((100vw - var(--page)) / 2 - 2ch);
   overflow: hidden;
 }
 .gutter.left  { left: 0; }
@@ -140,7 +144,7 @@ h2::after {
   opacity: .4;
 }
 
-p { margin: 0 0 1em; }
+p { margin: 0 0 1em; max-width: 80ch; }
 
 dl { display: grid; grid-template-columns: max-content 1fr; gap: 0 2ch; margin: 0; }
 dd { margin: 0; }
@@ -157,6 +161,8 @@ pre {
   overflow-x: auto;
 }
 pre .c { color: var(--mute); }
+/* th "# mats" lines under craft rows run 2 200+ chars; folding them keeps th table from side scrolling */
+pre .wrap { white-space: pre-wrap; }
 
 footer {
   margin-top: 3rem;

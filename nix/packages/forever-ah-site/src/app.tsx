@@ -97,7 +97,7 @@ function Block({ head, rows, notes }: { head: string[]; rows: Cell[][]; notes?: 
   return (
     <pre>
       <span className="c">{line(head.map(h => h))}</span>{'\n'}
-      {rows.map((r, k) => <>{line(r)}{notes?.[k] ? <span className="c">{'\n  # '}<Runs cell={notes[k]} /></span> : null}{'\n'}</>)}
+      {rows.map((r, k) => <>{line(r)}{notes?.[k] ? <span className="c wrap">{'\n  # '}<Runs cell={notes[k]} /></span> : null}{'\n'}</>)}
     </pre>
   )
 }

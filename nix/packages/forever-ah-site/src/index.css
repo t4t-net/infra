@@ -241,3 +241,7 @@ a.con-green:hover { color: #40c040; } a.con-grey:hover { color: #808080; }
 /* th frame hugs its widest table (up 2 --page) nd sits centered, so everything inside shares one left edge.
    centering each block on its own gave prose, tables nd th header 3 different left edges nd looked off */
 .frame { width: fit-content; max-width: 100%; margin: 0 auto; }
+/* fit-content sizes th frame by its widest UNWRAPPED child, nd th view links on one line r ~134ch, so th
+   frame always maxed out nd everything sat left again. these fill wateva width th tables nd prose set
+   instead of setting it */
+.views, footer { width: 0; min-width: 100%; }

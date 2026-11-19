@@ -36,6 +36,8 @@ ForeverScanDB = {{
 {poll(NOW - 90)}
 {poll(NOW - 80, '["ah"] = "neutral",')}
 {poll(NOW - 70, '["ah"] = "faction",')}
+{{ ["t"] = {NOW - 60}, ["c"] = "test", ["item"] = {LINEN}, ["n"] = 0, ["rows"] = "", ["passive"] = true, ["ah"] = "faction", }},
+{poll(NOW - 59, '["ah"] = "faction", ["passive"] = true,')}
 }},
 ["deposits"] = {{ [{LINEN}] = {{ ["t"] = {NOW}, ["kind"] = "commodity", ["costs"] = "1:1:5 3:20:60" }}, }},
 ["deposits_neutral"] = {{ [{LINEN}] = {{ ["t"] = {NOW}, ["kind"] = "commodity", ["costs"] = "1:1:25 3:20:300" }}, }},
@@ -73,6 +75,11 @@ class AddonImport(unittest.TestCase):
 
     def test_polls(self):
         self.assertEqual((self.polls[NOW - 90], self.polls[NOW - 80], self.polls[NOW - 70]), (111, 117, 111))
+
+    def test_empty_passive_polls_are_dropped(self):
+        # th empty one is blizz clearing th list mid-refresh; th full read right after it is real
+        self.assertNotIn(NOW - 60, self.polls)
+        self.assertEqual(self.polls[NOW - 59], 111)
 
     def test_deposits_keep_both_houses(self):
         self.assertEqual(self.deposits, [(111, 1, 1, 5), (111, 2, 1, 20), (111, 3, 20, 60), (117, 1, 1, 25), (117, 3, 20, 300)])

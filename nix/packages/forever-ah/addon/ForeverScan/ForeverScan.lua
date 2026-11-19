@@ -276,6 +276,11 @@ local function watchRead(item)
         watch.pending = nil
     end
     local n = C_AuctionHouse.GetNumCommoditySearchResults(item)
+    -- blizz fires twice per refresh, first w th list cleared (0 results). as a poll tht reads as th whole
+    -- book selling out every second, so a passive empty read is never kept
+    if passive and n == 0 then
+        return
+    end
     local rows = {}
     for j = 1, math.min(n, WATCH_DEPTH) do
         local r = C_AuctionHouse.GetCommoditySearchResultInfo(item, j)

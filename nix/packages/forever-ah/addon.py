@@ -145,7 +145,7 @@ def addon_import(args, db):
                 print(f"  sample link {link}")
             check_against_api(db, sid, house, s["server_time"])
 
-    new = rows = jumped = 0
+    new = rows = jumped = skipped = 0
     latest = 0
     for p in sv.get("watch_polls") or []:
         # polls r appended in order, so one well behind th newest b4 it came from a clock jump (forever's
@@ -154,6 +154,11 @@ def addon_import(args, db):
             jumped += 1
             continue
         latest = max(latest, p["t"])
+        # 0.3.0 kept blizz's mid-refresh empty list as a passive poll (2026-11-18), every other read on th
+        # buy screen. an empty passive poll is never a real sellout, nd as one it fakes a sale of th whole book
+        if p.get("passive") and not p.get("n"):
+            skipped += 1
+            continue
         # th addon tags polls at a neutral auctioneer since 2026-11-18. older untagged ones can only b assumed
         house = args.neutral_house if p.get("ah") == "neutral" else args.house
         cur = db.execute(
@@ -174,6 +179,8 @@ def addon_import(args, db):
         print(f"watch: {new} new polls, {rows} listings")
     if jumped:
         print(f"watch: skipped {jumped} polls stamped b4 th poll ahead of them (clock jumped back)")
+    if skipped:
+        print(f"watch: skipped {skipped} empty passive polls (blizz clearing th list mid-refresh)")
 
     db.executemany("insert or replace into addon_deposit_duration values (?, ?)",
                    list(enumerate(sv.get("deposit_durations") or [], 1)))

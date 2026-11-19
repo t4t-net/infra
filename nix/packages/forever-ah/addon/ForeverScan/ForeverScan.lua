@@ -1,7 +1,8 @@
 -- ForeverScan: pull th AH into SavedVariables 4 forever-ah while ellie stands at it.
 -- full dump: opens th AH -> C_AuctionHouse.ReplicateItems() (1 per 15 min) -> every listing.
 -- watch: round-robin commodity searches on a watchlist, ~1/min per item, cheapest listings w auction ids
--- so sales show up minute by minute. rows land in ForeverScanDB on /reload or logout.
+-- so sales show up minute by minute, plus whatever commodity ellie has open on th buy screen 4 free.
+-- rows land in ForeverScanDB on /reload or logout.
 -- only read-side api here, nothing tht buys/posts/cancels (those need a hardware event anyway)
 
 local KEEP_SCANS = 3      -- full dumps r a few mb each, dont let th saved file grow forever
@@ -257,12 +258,23 @@ local function watchTick()
         { { sortOrder = Enum.AuctionHouseSortOrder.Price, reverseSort = false } }, false)
 end
 
+-- results we didnt ask 4: blizz's own commodity buy screen searching th item ellie has open. reading them
+-- sends nothing, so its free nd cant reset her screen, nd its th item she cares about right then (th watch
+-- ticker sits that screen out, so a long look at one item used 2 record nothing). blizz re-fires on every
+-- refresh, so th same book again within PASSIVE_SAME_S is skipped
+local PASSIVE_SAME_S = 30
+
 local function watchRead(item)
     local p = watch.pending
-    if not p or p.item ~= item then
-        return
+    local passive = not p or p.item ~= item
+    if passive then
+        local mode = AuctionHouseFrame and AuctionHouseFrame:IsShown() and AuctionHouseFrame:GetDisplayMode()
+        if not db.watch_on or mode ~= AuctionHouseFrameDisplayMode.CommoditiesBuy then
+            return
+        end
+    else
+        watch.pending = nil
     end
-    watch.pending = nil
     local n = C_AuctionHouse.GetNumCommoditySearchResults(item)
     local rows = {}
     for j = 1, math.min(n, WATCH_DEPTH) do
@@ -273,11 +285,20 @@ local function watchRead(item)
                 r.timeLeftSeconds or -1, r.totalNumberOfOwners or 0)
         end
     end
+    local book, t = table.concat(rows, " "), passive and now() or p.server_time
+    if passive then
+        local last = watch.passive and watch.passive[item]
+        if last and last.book == book and t - last.t < PASSIVE_SAME_S then
+            return
+        end
+        watch.passive = watch.passive or {}
+        watch.passive[item] = { book = book, t = t }
+    end
     local polls = db.watch_polls
     polls[#polls + 1] = {
-        t = p.server_time, c = UnitName("player"), item = item, ms = floor(debugprofilestop() - p.t0), n = n,
-        full = C_AuctionHouse.HasFullCommoditySearchResults(item), rows = table.concat(rows, " "),
-        ah = here and here.kind,
+        t = t, c = UnitName("player"), item = item, ms = not passive and floor(debugprofilestop() - p.t0) or nil,
+        n = n, full = C_AuctionHouse.HasFullCommoditySearchResults(item), rows = book,
+        ah = here and here.kind, passive = passive or nil,
     }
     while #polls > WATCH_KEEP do
         table.remove(polls, 1)

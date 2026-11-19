@@ -289,6 +289,12 @@ def market_data(args, db):
     gather = {k: [market(i) for i in ids if i in now] for k, ids in GATHERED.items()}
 
     flips, vendor = spreads(args, db, snaps, now, bw, items, book)
+    # liquidity: how th sell side here actually moves, same sales model as th crafts. `sold` is None until
+    # th item's had raw listings 4 an hour (everything only got them from 2026-11-18), so new flips say "-"
+    for f in flips:
+        m = market(f["id"])
+        f.update({k: m[k] for k in ("sold", "sold_maybe", "war", "wait_h", "trend_per_h")},
+                 tracked_h=round(tracked_h.get(f["id"], 0), 1))
 
     return {
         "house": args.house, "dump": snaps[-1][1], "first_dump": snaps[0][1], "dumps": len(snaps),

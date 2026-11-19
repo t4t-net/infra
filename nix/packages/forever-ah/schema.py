@@ -22,7 +22,7 @@ create table if not exists price (
 );
 create index if not exists price_item on price(item_id);
 
--- raw listings 4 watched items in tracked houses. an auction id vanishing w time left on it
+-- raw listings 4 every item in tracked houses (only recipe items b4 2026-11-18). an auction id vanishing w time left on it
 -- between snapshots means it (almost always) sold
 create table if not exists auction (
   snapshot_id integer not null references snapshot(id),

@@ -16,6 +16,33 @@ def gsc(c):
     return " ".join(p for p in (f"{g_}g" if g_ else "", f"{s_}s" if s_ else "", f"{c_}c" if c_ and not g_ else "") if p) or "0c"
 
 
+def hours(h):
+    return "<1h" if h < 1 else f"~{round(h)}h" if h < 48 else f"~{round(h / 24)}d"
+
+
+def liquidity(f):
+    """how th sell side moves, sure sales up front nd th maybe ones apart (see fills.tally)"""
+    if f.get("sold") is None:
+        return "sales: not tracked yet"
+    out = f"sold {f['sold']}" + (f" (+{f['sold_maybe']}?)" if f["sold_maybe"] else "") + f" in {hours(f['tracked_h'])}"
+    if f["war"]:
+        out += f", {'relist war' if f['war'] == 'relisting' else 'sales dried up'}"
+    elif f["wait_h"] is not None:
+        out += f", {hours(f['wait_h'])} to sell"
+    return out
+
+
+def stability(f, dumps):
+    """wat th floor here did over th window, nd which way sales r drifting"""
+    if not f.get("floor_dumps"):
+        return "no floor history"
+    rng = gsc(f["floor_low"]) if f["floor_low"] == f["floor_high"] else f"{gsc(f['floor_low'])}-{gsc(f['floor_high'])}"
+    out = f"floor {rng} (med {gsc(f['floor_med'])}), up {f['floor_dumps']}/{dumps} dumps"
+    if f.get("trend_per_h") and round(f["trend_per_h"]):
+        out += f", {'rising' if f['trend_per_h'] > 0 else 'falling'} {gsc(abs(round(f['trend_per_h'])))}/h"
+    return out
+
+
 def alert(args, db):
     """Post flips tht opened since th last dump 2 discord. th first run only records state."""
     data = json.loads(Path(args.data).read_text())
@@ -32,13 +59,17 @@ def alert(args, db):
         print(f"{len(fresh)} new flips but no webhook at {args.webhook_file}, skipping")
     elif fresh:
         lines = [f"**{len(fresh)} new flip{'s' if len(fresh) > 1 else ''}** (blackwater -> alliance)"]
+        tail = [f"<{args.site}#flips>"] if args.site else []
         for f in fresh[:10]:
-            lines.append(f"[{f['name']}](<https://www.wowhead.com/forever/item={f['id']}>): buy {gsc(f['buy'])} "
-                         f"({f['buy_listings']} listed), sell {gsc(f['sell'])} ({f['sell_listings']} listed), "
-                         f"**+{gsc(f['profit'])}**, open {f['open']}/{data['dumps']} dumps")
-        if args.site:
-            lines.append(f"<{args.site}#flips>")
-        body = json.dumps({"content": "\n".join(lines)[:2000], "allowed_mentions": {"parse": []}}).encode()
+            entry = [f"[{f['name']}](<https://www.wowhead.com/forever/item={f['id']}>): buy {gsc(f['buy'])} "
+                     f"({f['buy_listings']} listed), sell {gsc(f['sell'])} ({f['sell_listings']} listed), "
+                     f"**+{gsc(f['profit'])}**, open {f['open']}/{data['dumps']} dumps",
+                     f"-# {liquidity(f)} · {stability(f, data['dumps'])}"]
+            # discord caps a message at 2000, drop whole flips rather than cut one mid-link
+            if len("\n".join(lines + entry + tail)) > 2000:
+                break
+            lines += entry
+        body = json.dumps({"content": "\n".join(lines + tail), "allowed_mentions": {"parse": []}}).encode()
         req = urllib.request.Request(Path(args.webhook_file).read_text().strip(), data=body, headers={
             "Content-Type": "application/json", "User-Agent": "forever-ah/0.1"})
         urllib.request.urlopen(req, timeout=30).close()

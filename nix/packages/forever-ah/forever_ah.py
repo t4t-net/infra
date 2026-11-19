@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """WoW: Forever auction house tracker.
 
-  forever-ah scrape   snapshot every house as per-item aggregates, plus raw auctions 4 watched items
+  forever-ah scrape   snapshot every house as per-item aggregates, plus raw auctions 4 tracked houses
   forever-ah recipes  cache profession recipes + item vendor prices from th static api
   forever-ah quests   cache quests: questie's levels/givers/chains + th api's rewards
   forever-ah analyze  craft profitability 4 one house from th latest snapshot

@@ -26,20 +26,29 @@ def spreads(args, db, snaps, now, bw, items, book):
             for i in open_spreads(book(sid), book(bsid[0])):
                 open_count[i] += 1
 
+    # stability: wat th floor here did over th window. a sell side tht only just spiked 2 its top is a flip tht
+    # closes b4 ur stuff arrives, a flat one isnt. dumps w nothing up dont count, `floor_dumps` says how many did
+    floors = [book(sid) for sid, _ in snaps]
+
+    def floor_range(i):
+        seen = sorted(b[i][1] for b in floors if i in b)
+        return {"floor_low": seen[0], "floor_med": seen[len(seen) // 2], "floor_high": seen[-1],
+                "floor_dumps": len(seen)} if seen else {"floor_low": None, "floor_med": None, "floor_high": None,
+                                                         "floor_dumps": 0}
+
     flips = [{"id": i, "name": (items.get(i) or (None,))[0] or f"item {i}", "buy": buy, "buy_listings": bw[i][3],
-              "sell": now[i][1], "sell_listings": now[i][3], "profit": profit, "open": open_count[i]}
+              "sell": now[i][1], "sell_listings": now[i][3], "profit": profit, "open": open_count[i], **floor_range(i)}
              for i, (buy, profit) in open_spreads(now, bw).items()]
     flips.sort(key=lambda f: -f["profit"])
 
     # listed under wat a vendor pays: buy nd vendor it. gear used 2 list in whole silvers (undercutting a 4s
     # wall landed on 3s even when it vendored 4 3s07c), copper-precise since 2026-11-12. th scan only knows
-    # th floor; raw listings (watched items) say how many r actually under
+    # th floor; raw listings (tracked houses) say how many r actually under
     under = defaultdict(int)
     for i, p, q in db.execute("select item_id, unit_price, quantity from auction where snapshot_id = ?", (last,)):
         sell = (items.get(i) or (None, None))[1]
         if p is not None and sell and p < sell:
             under[i] += q
-    floors = [book(sid) for sid, _ in snaps]
     vendor = []
     for i, (_, mn, q, n) in now.items():
         sell = (items.get(i) or (None, None))[1]

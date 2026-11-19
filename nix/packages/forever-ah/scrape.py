@@ -1,4 +1,4 @@
-"""th hourly api scrape: every house as per-item aggregates, raw listings 4 watched items, vendor price backfill."""
+"""th hourly api scrape: every house as per-item aggregates, raw listings 4 tracked houses, vendor price backfill."""
 import time
 from collections import defaultdict
 
@@ -35,8 +35,6 @@ def aggregate(rows, commodity):
 
 def scrape(args, db):
     api = Client(args.region, *creds())
-    # every reagent nd output of th crawled professions; empty until `recipes` has run once
-    watched = {i for (i,) in db.execute("select item_id from reagent union select crafted_item_id from recipe")}
 
     # every ruleset lists th same houses w identical data, so walk only th first one
     ruleset = api.get("/data/wow/ruleset/index")["rulesets"][0]["id"]
@@ -62,6 +60,8 @@ def scrape(args, db):
             "insert into price values (?, ?, ?, ?, ?, ?, ?)",
             [(sid, *r) for r in aggregate(regular, False) + aggregate(commodities, True)],
         )
+        # every item, not just recipe ones: flips can b anything nd their liquidity is th same vanished-id sales
+        # logic. ~2x th rows of recipe items alone (~230k listings/dump in 111, 2026-11-18)
         if h["id"] in args.track_house:
             db.executemany(
                 "insert or ignore into auction values (?, ?, ?, ?, ?, ?)",
@@ -69,7 +69,6 @@ def scrape(args, db):
                     (sid, a["id"], a["item"]["id"], unit_price(a, commodity), a.get("quantity", 1), a["time_left"])
                     for commodity, rows in ((False, regular), (True, commodities))
                     for a in rows
-                    if a["item"]["id"] in watched
                 ],
             )
         db.commit()

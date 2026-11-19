@@ -39,7 +39,7 @@ def api_dumps(db, house, since):
 
 
 def api_observations(db, dumps):
-    """{item: [Observation per dump]} from th raw listings (watched items only). every item gets one per dump,
+    """{item: [Observation per dump]} from th raw listings (tracked houses). every item gets one per dump,
     empty where it had nothing up, so 'all its listings vanished' is a pair like any other"""
     by_dump = defaultdict(lambda: defaultdict(list))
     marks = ",".join("?" * len(dumps))

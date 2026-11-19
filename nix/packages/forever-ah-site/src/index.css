@@ -236,3 +236,13 @@ a.con-green:hover { color: #40c040; } a.con-grey:hover { color: #808080; }
   border: 1px dashed var(--rule); padding: 0 .5ch; margin-left: 1ch;
 }
 .pickers input { width: 5ch; }
+
+
+/* last on purpose: margin shorthands above (h3, p) wud reset th auto margins.
+   th column is 128ch 4 th tables, so everything narrower than it centers in it instead of hugging th left
+   edge: prose at 80ch, each table at its own width. text inside stays left aligned, h2 rules stay full width */
+header, .views, .pickers { justify-content: center; }
+p, h3, .qa, .note { max-width: 80ch; margin-left: auto; margin-right: auto; }
+pre { width: fit-content; max-width: 100%; margin-left: auto; margin-right: auto; }
+footer { text-align: center; }
+footer .themes { justify-content: center; }

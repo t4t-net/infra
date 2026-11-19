@@ -108,6 +108,11 @@ type Market = { id: number; name: string; wait_h: number | null; ahead: number; 
 type Flip = Market & { buy: number; buy_listings: number; sell: number; sell_listings: number; profit: number; open: number
   war: string | null; tracked_h: number; floor_low: number | null; floor_med: number | null; floor_high: number | null; floor_dumps: number }
 
+// sales measured at one price say nothing about another: a reseller sweeping th 1g wall nd relisting at 4g
+// leaves "sold 345" from th 1g days, nd nobody's bought at 4g yet. so past 25% over wat sales averaged,
+// th wait is untested instead of a confident ~2h
+const untested = (f: Flip) => f.sold_at != null && f.sell > f.sold_at * 1.25
+
 // th median floor over th window, flagged wen th price th spread is figured from sits well above it: tht's a
 // spike, not a market, nd its usually gone by th time u get back from blackwater
 function usual(f: Flip): Run[] {
@@ -361,19 +366,21 @@ raid-launch:  stones, flasks, thorium         `}<span className="c"># raids open
         <p>
           sold and sells in are how the item actually moves here, same as the profession tables. usual is the
           median floor over the window, flagged when today's price is way above it: that spread is a spike and
-          probably closes before you get back. the line under each row is the floor's whole range.
+          probably closes before you get back. the line under each row is what sales averaged and the floor's whole
+          range. when the price here is well above what things actually sold for, sells in says untested: nobody's
+          bought at that price yet, however fast it moved cheaper.
         </p>
         <Block
           head={['item', 'blackwater', 'here', 'profit', 'sold', 'sells in', 'usual', 'open']}
           rows={flips.map(f => [
             item(f.id, f.name), [...money(f.buy), { t: ` (${f.buy_listings})`, c: 'c' }], [...money(f.sell), { t: ` (${f.sell_listings})`, c: 'c' }], money(f.profit),
-            sold(f), f.war ? [{ t: f.war === 'relisting' ? 'war' : 'dried up', c: 'down' }] : wait(f), usual(f),
+            sold(f), f.war ? [{ t: f.war === 'relisting' ? 'war' : 'dried up', c: 'down' }] : untested(f) ? [{ t: 'untested', c: 'down' }] : wait(f), usual(f),
             [{ t: `${f.open}/${D.dumps}`, c: f.open * 2 < D.dumps ? 'c' : undefined }],
           ])}
-          notes={flips.map(f => f.floor_dumps
+          notes={flips.map(f => [...(f.sold_at != null ? [{ t: 'sold at ' }, ...money(f.sold_at), { t: ' avg · ' }] : []), ...(f.floor_dumps
             ? [{ t: 'floor ' }, ...money(f.floor_low), ...(f.floor_high !== f.floor_low ? [{ t: ' to ' }, ...money(f.floor_high)] : []),
                { t: `, up ${f.floor_dumps}/${D.dumps} dumps` }, ...plan(f)]
-            : [{ t: 'no floor history' }])}
+            : [{ t: 'no floor history' }])])}
         />
         <h3>under vendor price</h3>
         <p>

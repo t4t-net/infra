@@ -105,7 +105,8 @@ function Block({ head, rows, notes }: { head: string[]; rows: Cell[][]; notes?: 
 type Market = { id: number; name: string; wait_h: number | null; ahead: number; deposit_risk: number | null; floor: number | null; median: number | null; qty: number | null; listings: number | null; floor_then: number | null; sold: number | null; sold_at: number | null; vendor: number | null
   sold_maybe: number | null; as_of: number | null; source: 'api' | 'addon' | 'watch' | null; duration_h: number | null; listing_deposit: number | null; deposit_known: boolean; trend_per_h: number | null }
 // a blackwater -> here spread, w th same sales fields as a Market 4 th sell side here plus wat its floor did
-type Flip = Market & { buy: number; buy_listings: number; sell: number; sell_listings: number; profit: number; open: number
+type Flip = Market & { buy: number; buy_listings: number; buy_qty: number; buy_cheap: number | null; sell: number; sell_listings: number
+  sell_qty: number; profit: number; open: number; liquid: boolean
   war: string | null; tracked_h: number; floor_low: number | null; floor_med: number | null; floor_high: number | null; floor_dumps: number }
 
 // sales measured at one price say nothing about another: a reseller sweeping th 1g wall nd relisting at 4g
@@ -364,6 +365,13 @@ raid-launch:  stones, flasks, thorium         `}<span className="c"># raids open
           every time.
         </p>
         <p>
+          the numbers in brackets are units up, not auctions. on the blackwater side, 10/37 means 10 of the 37
+          are cheap enough to flip at their own price, since the rest of the book usually sits well above the floor.
+          liquid flips sold {D.liquid_sold}+ here in the window. they stay on the list even when their profit per unit is
+          small, and they count as open at a thinner margin, since anything that sells hundreds a day is less likely
+          to drop in price before you're back or to sit unsold.
+        </p>
+        <p>
           sold and sells in are how the item actually moves here, same as the profession tables. usual is the
           median floor over the window, flagged when today's price is way above it: that spread is a spike and
           probably closes before you get back. the line under each row is what sales averaged and the floor's whole
@@ -373,8 +381,9 @@ raid-launch:  stones, flasks, thorium         `}<span className="c"># raids open
         <Block
           head={['item', 'blackwater', 'here', 'profit', 'sold', 'sells in', 'usual', 'open']}
           rows={flips.map(f => [
-            item(f.id, f.name), [...money(f.buy), { t: ` (${f.buy_listings})`, c: 'c' }], [...money(f.sell), { t: ` (${f.sell_listings})`, c: 'c' }], money(f.profit),
-            sold(f), f.war ? [{ t: f.war === 'relisting' ? 'war' : 'dried up', c: 'down' }] : untested(f) ? [{ t: 'untested', c: 'down' }] : wait(f), usual(f),
+            item(f.id, f.name), [...money(f.buy), { t: ` (${f.buy_cheap != null ? `${f.buy_cheap}/` : ''}${f.buy_qty})`, c: 'c' }],
+            [...money(f.sell), { t: ` (${f.sell_qty})`, c: 'c' }], money(f.profit),
+            [...(sold(f) as Run[]), ...(f.liquid ? [{ t: ' liquid', c: 'gold' }] : [])], f.war ? [{ t: f.war === 'relisting' ? 'war' : 'dried up', c: 'down' }] : untested(f) ? [{ t: 'untested', c: 'down' }] : wait(f), usual(f),
             [{ t: `${f.open}/${D.dumps}`, c: f.open * 2 < D.dumps ? 'c' : undefined }],
           ])}
           notes={flips.map(f => [...(f.sold_at != null ? [{ t: 'sold at ' }, ...money(f.sold_at), { t: ' avg · ' }] : []), ...(f.floor_dumps

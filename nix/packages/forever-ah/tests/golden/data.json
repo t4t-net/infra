@@ -9574,6 +9574,7 @@
  },
  "hours": 12,
  "house": 111,
+ "liquid_sold": 300,
  "quality": {
   "10286": "common",
   "10499": "uncommon",

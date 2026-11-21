@@ -156,6 +156,7 @@ def name_shown(args, db, data):
     flips = [f for f in flips if not f["name"].startswith("item ")]
     flips = [f for n, f in enumerate(flips) if n < 10 or f["liquid"]]
     data["flips"] = flips
+    data["liquid_sold"] = args.liquid_sold
     data["quality"] = {i: quality[i] for i in shown_ids}
 
 

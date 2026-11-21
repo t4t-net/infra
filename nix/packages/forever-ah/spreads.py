@@ -3,15 +3,22 @@ vendor pays."""
 from collections import defaultdict
 
 
-def spreads(args, db, snaps, now, bw, items, book):
-    """(flips, vendor) 4 th site. book(snapshot id) is {item: (median, floor, qty, listings)}"""
+def spreads(args, db, snaps, now, bw, bw_sid, items, book, liquid):
+    """(flips, vendor) 4 th site. book(snapshot id) is {item: (median, floor, qty, listings)}, bw_sid th
+    blackwater snapshot bw came from, liquid th items tht sold --liquid-sold here in th window"""
     last = snaps[-1][0]
-    # buy in th quiet neutral house, sell here; 15% neutral cut is classic's, unverified 4 forever
+
+    # buy in th quiet neutral house, sell here; 15% neutral cut is classic's, unverified 4 forever. th margin
+    # covers th price moving b4 u get back nd th listing tht never sells. stuff tht sells hundreds a day risks
+    # less of both, so it gets a thinner one
+    def flippable(i, buy, sell):
+        return sell > buy * (args.liquid_margin if i in liquid else args.margin) and sell - buy >= 2000
+
     def open_spreads(here, there):
         out = {}
         for i in here.keys() & there.keys():
             buy, sell = there[i][1], here[i][1] * 0.95
-            if here[i][3] >= 8 and there[i][3] >= 2 and sell > buy * 1.5 and sell - buy >= 2000:
+            if here[i][3] >= 8 and there[i][3] >= 2 and flippable(i, buy, sell):
                 out[i] = (buy, int(sell - buy))
         return out
 
@@ -36,9 +43,22 @@ def spreads(args, db, snaps, now, bw, items, book):
                 "floor_dumps": len(seen)} if seen else {"floor_low": None, "floor_med": None, "floor_high": None,
                                                          "floor_dumps": 0}
 
+    opened = open_spreads(now, bw)
+    # th floor is one listing, th rest of th book can sit way over break-even. raw blackwater listings (tracked
+    # since 2026-11-20) say how many units still flip at their own price. None b4 tht, not a fake 0
+    cheap = defaultdict(int) if bw_sid is not None and db.execute(
+        "select 1 from auction where snapshot_id = ? limit 1", (bw_sid,)).fetchone() else None
+    if cheap is not None and opened:
+        marks = ",".join("?" * len(opened))
+        for i, p, q in db.execute(f"select item_id, unit_price, quantity from auction where snapshot_id = ? "
+                                  f"and item_id in ({marks})", (bw_sid, *opened)):
+            if p is not None and flippable(i, p, now[i][1] * 0.95):
+                cheap[i] += q
     flips = [{"id": i, "name": (items.get(i) or (None,))[0] or f"item {i}", "buy": buy, "buy_listings": bw[i][3],
-              "buy_qty": bw[i][2], "sell": now[i][1], "sell_listings": now[i][3], "sell_qty": now[i][2], "profit": profit, "open": open_count[i], **floor_range(i)}
-             for i, (buy, profit) in open_spreads(now, bw).items()]
+              "buy_qty": bw[i][2], "buy_cheap": cheap[i] if cheap is not None else None, "sell": now[i][1],
+              "sell_listings": now[i][3], "sell_qty": now[i][2], "profit": profit, "open": open_count[i],
+              "liquid": i in liquid, **floor_range(i)}
+             for i, (buy, profit) in opened.items()]
     flips.sort(key=lambda f: -f["profit"])
 
     # listed under wat a vendor pays: buy nd vendor it. gear used 2 list in whole silvers (undercutting a 4s

@@ -46,6 +46,11 @@ class Alert(unittest.TestCase):
             msg = self.run_alert(tmp, [flip(7078, "Essence of Fire", 13573, liquid=True)], was_open=[])
         self.assertIn("sold 438 in ~23h at 1g 70s avg, untested at this price", msg)
 
+    def test_says_how_many_are_cheap_enough_once_blackwater_is_tracked(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            msg = self.run_alert(tmp, [flip(7078, "Essence of Fire", 13573, liquid=True, buy_cheap=10)], was_open=[])
+        self.assertIn("buy 1g 35s (10 of 37 cheap enough)", msg)
+
     def test_already_open_stays_quiet(self):
         with tempfile.TemporaryDirectory() as tmp:
             self.assertIsNone(self.run_alert(tmp, [flip(7078, "Essence of Fire", 13573, liquid=True)], was_open=[7078]))

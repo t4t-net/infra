@@ -68,11 +68,11 @@ def alert(args, db):
         lines = [f"**{len(fresh)} new flip{'s' if len(fresh) > 1 else ''}** (blackwater -> alliance)"]
         tail = [f"<{args.site}#flips>"] if args.site else []
         for f in fresh[:10]:
-            # units, not listings: a commodity's 37 up can be 3 auctions. buy is just th floor, nd we hav no raw
-            # blackwater listings, so how many of those 37 r cheap enough 2 flip is unknown
+            # units, not listings: a commodity's 37 up can be 3 auctions, nd only some of them cheap enough 2 flip
+            up = f"{f['buy_qty']} up" if f.get("buy_cheap") is None else f"{f['buy_cheap']} of {f['buy_qty']} cheap enough"
             entry = [f"{'**liquid** ' if f.get('liquid') else ''}"
                      f"[{f['name']}](<https://www.wowhead.com/forever/item={f['id']}>): buy {gsc(f['buy'])} "
-                     f"({f['buy_qty']} up), sell {gsc(f['sell'])} ({f['sell_qty']} up), "
+                     f"({up}), sell {gsc(f['sell'])} ({f['sell_qty']} up), "
                      f"**+{gsc(f['profit'])}** each, open {f['open']}/{data['dumps']} dumps",
                      f"-# {liquidity(f)} · {stability(f, data['dumps'])}"]
             # discord caps a message at 2000, drop whole flips rather than cut one mid-link
@@ -154,8 +154,6 @@ def name_shown(args, db, data):
     # top 10 by profit per unit, plus anything tht moves in bulk: a 1g commodity selling 400 a day loses th
     # per-unit race 2 every 15g green but can be th better trip
     flips = [f for f in flips if not f["name"].startswith("item ")]
-    for f in flips:
-        f["liquid"] = (f["sold"] or 0) >= args.liquid_sold
     flips = [f for n, f in enumerate(flips) if n < 10 or f["liquid"]]
     data["flips"] = flips
     data["quality"] = {i: quality[i] for i in shown_ids}

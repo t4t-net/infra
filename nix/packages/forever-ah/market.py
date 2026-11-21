@@ -288,7 +288,8 @@ def market_data(args, db):
 
     gather = {k: [market(i) for i in ids if i in now] for k, ids in GATHERED.items()}
 
-    flips, vendor = spreads(args, db, snaps, now, bw, items, book)
+    liquid = {i for i, (units, _) in sold.items() if tracked_h.get(i, 0) >= 1 and units >= args.liquid_sold}
+    flips, vendor = spreads(args, db, snaps, now, bw, bw_last and bw_last[0], items, book, liquid)
     # liquidity: how th sell side here actually moves, same sales model as th crafts. `sold` is None until
     # th item's had raw listings 4 an hour (everything only got them from 2026-11-18), so new flips say "-"
     for f in flips:

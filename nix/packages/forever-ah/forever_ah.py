@@ -31,7 +31,7 @@ def main():
 
     sp = sub.add_parser("scrape")
     # 111 is normal alliance
-    sp.add_argument("--track-house", type=int, action="append", help="houses 2 keep raw auctions 4 (default 111)")
+    sp.add_argument("--track-house", type=int, action="append", help="houses 2 keep raw auctions 4 (default 111 nd blackwater 117)")
     sp.add_argument("--keep-days", type=int, default=7, help="prune raw auctions older than this")
     rp = sub.add_parser("recipes")
     rp.add_argument("--profession", type=int, action="append", help="profession ids (default: all crafting professions)")
@@ -60,6 +60,8 @@ def main():
     ex.add_argument("--dry-expect", type=float, default=5, help="...when th window's rate expects this many sales in them")
     ex.add_argument("--liquid-sold", type=int, default=300,
                     help="flips tht sold this many here in th window stay on th site nd alert past th top 10")
+    ex.add_argument("--margin", type=float, default=1.5, help="a flip's sell (after th 5%% cut) over its buy")
+    ex.add_argument("--liquid-margin", type=float, default=1.25, help="--margin 4 liquid flips")
     ex.add_argument("--out", required=True, help="data.json path, next 2 th forever-ah-site files")
     ex.add_argument("--now", type=int, help="unix time 2 export as of, 4 tests (default: th real now)")
     al = sub.add_parser("alert")
@@ -76,7 +78,7 @@ def main():
     args = ap.parse_args()
 
     if args.cmd == "scrape":
-        args.track_house = args.track_house or [111]
+        args.track_house = args.track_house or [111, 117]
     if args.cmd == "recipes":
         args.profession = args.profession or list(PROFESSIONS)
 

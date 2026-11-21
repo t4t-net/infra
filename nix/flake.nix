@@ -49,6 +49,7 @@
     };
     disko = {
       url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL/main";
@@ -60,9 +61,15 @@
     };
     microvm = {
       url = "github:microvm-nix/microvm.nix";
-      inputs.flake-utils.follows = "flake-utils";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
-    colmena.url = "github:zhaofengli/colmena";
+    # colmena's own nixpkgs + stable (nixos-25.05) pins never got bumped nd carried cves,, we
+    # build it thru th overlay anyway so just hand it ours
+    colmena = {
+      url = "github:zhaofengli/colmena";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.stable.follows = "nixpkgs";
+    };
     darwin-ssh-askpass = {
       url = "github:theseal/homebrew-ssh-askpass";
       flake = false;

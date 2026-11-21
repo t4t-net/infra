@@ -37,7 +37,7 @@ def spreads(args, db, snaps, now, bw, items, book):
                                                          "floor_dumps": 0}
 
     flips = [{"id": i, "name": (items.get(i) or (None,))[0] or f"item {i}", "buy": buy, "buy_listings": bw[i][3],
-              "sell": now[i][1], "sell_listings": now[i][3], "profit": profit, "open": open_count[i], **floor_range(i)}
+              "buy_qty": bw[i][2], "sell": now[i][1], "sell_listings": now[i][3], "sell_qty": now[i][2], "profit": profit, "open": open_count[i], **floor_range(i)}
              for i, (buy, profit) in open_spreads(now, bw).items()]
     flips.sort(key=lambda f: -f["profit"])
 

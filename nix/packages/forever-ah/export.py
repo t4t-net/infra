@@ -25,8 +25,13 @@ def liquidity(f):
     if f.get("sold") is None:
         return "sales: not tracked yet"
     out = f"sold {f['sold']}" + (f" (+{f['sold_maybe']}?)" if f["sold_maybe"] else "") + f" in {hours(f['tracked_h'])}"
+    if f.get("sold_at"):
+        out += f" at {gsc(f['sold_at'])} avg"
     if f["war"]:
         out += f", {'relist war' if f['war'] == 'relisting' else 'sales dried up'}"
+    elif f.get("sold_at") and f["sell"] > f["sold_at"] * 1.25:
+        # same rule as th site's untested(): those sales happened cheaper, nobody's bought at this price yet
+        out += ", untested at this price"
     elif f["wait_h"] is not None:
         out += f", {hours(f['wait_h'])} to sell"
     return out
@@ -53,7 +58,9 @@ def alert(args, db):
         return
     was_open = set(state["open"]) if state else None
     flips = data["flips"]
-    fresh = [f for f in flips if was_open is not None and f["id"] not in was_open and f["profit"] >= args.min_profit]
+    fresh = [f for f in flips if was_open is not None and f["id"] not in was_open
+             and (f["profit"] >= args.min_profit or f.get("liquid"))]
+    fresh.sort(key=lambda f: not f.get("liquid"))
 
     if fresh and not Path(args.webhook_file).exists():
         print(f"{len(fresh)} new flips but no webhook at {args.webhook_file}, skipping")
@@ -61,9 +68,12 @@ def alert(args, db):
         lines = [f"**{len(fresh)} new flip{'s' if len(fresh) > 1 else ''}** (blackwater -> alliance)"]
         tail = [f"<{args.site}#flips>"] if args.site else []
         for f in fresh[:10]:
-            entry = [f"[{f['name']}](<https://www.wowhead.com/forever/item={f['id']}>): buy {gsc(f['buy'])} "
-                     f"({f['buy_listings']} listed), sell {gsc(f['sell'])} ({f['sell_listings']} listed), "
-                     f"**+{gsc(f['profit'])}**, open {f['open']}/{data['dumps']} dumps",
+            # units, not listings: a commodity's 37 up can be 3 auctions. buy is just th floor, nd we hav no raw
+            # blackwater listings, so how many of those 37 r cheap enough 2 flip is unknown
+            entry = [f"{'**liquid** ' if f.get('liquid') else ''}"
+                     f"[{f['name']}](<https://www.wowhead.com/forever/item={f['id']}>): buy {gsc(f['buy'])} "
+                     f"({f['buy_qty']} up), sell {gsc(f['sell'])} ({f['sell_qty']} up), "
+                     f"**+{gsc(f['profit'])}** each, open {f['open']}/{data['dumps']} dumps",
                      f"-# {liquidity(f)} · {stability(f, data['dumps'])}"]
             # discord caps a message at 2000, drop whole flips rather than cut one mid-link
             if len("\n".join(lines + entry + tail)) > 2000:
@@ -141,7 +151,12 @@ def name_shown(args, db, data):
         for m in shown:
             if m["name"].startswith("item ") and m["id"] in names:
                 m["name"] = names[m["id"]]
-    flips = [f for f in flips if not f["name"].startswith("item ")][:10]
+    # top 10 by profit per unit, plus anything tht moves in bulk: a 1g commodity selling 400 a day loses th
+    # per-unit race 2 every 15g green but can be th better trip
+    flips = [f for f in flips if not f["name"].startswith("item ")]
+    for f in flips:
+        f["liquid"] = (f["sold"] or 0) >= args.liquid_sold
+    flips = [f for n, f in enumerate(flips) if n < 10 or f["liquid"]]
     data["flips"] = flips
     data["quality"] = {i: quality[i] for i in shown_ids}
 

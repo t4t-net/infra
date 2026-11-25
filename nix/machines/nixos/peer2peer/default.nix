@@ -48,6 +48,7 @@
     ];
 
     rv32ima.machine.bootstrapper.baseUrl = "http://peer2peer.sea.t4t.net:8787";
+    rv32ima.machine.bootstrapper.source = "zoomies";
     rv32ima.machine.bootstrapper.clientInterface = "bond0";
     rv32ima.machine.bootstrapper.clientNetwork = "23.190.72.0/24";
 

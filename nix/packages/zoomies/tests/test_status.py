@@ -199,5 +199,53 @@ class TestFormatting(unittest.TestCase):
         self.assertEqual(args.url, "https://zoomies.tail09d5b.ts.net")
 
 
+class TestHostAddress(unittest.TestCase):
+    def test_parse_host(self):
+        self.assertEqual(status.parse_host("iris"), ("iris", "iris"))
+        self.assertEqual(status.parse_host("experimental-skin=100.123.106.62"),
+                         ("experimental-skin", "100.123.106.62"))
+        self.assertEqual(status.parse_host(" iris = 100.1.2.3 "), ("iris", "100.1.2.3"))
+        self.assertEqual(status.parse_host("iris="), ("iris", "iris"))
+
+    def test_default_hosts_pin_experimental_skin_v4(self):
+        self.assertIn("experimental-skin=100.123.106.62", status.DEFAULT_HOSTS)
+
+    def test_ssh_gets_address_fetch_gets_name(self):
+        fetched, sshed = [], []
+
+        def fetch(url):
+            fetched.append(url)
+            return latest(7, PATH_A)
+
+        def ssh(addr):
+            sshed.append(addr)
+            return ssh_out(PATH_A)
+
+        got = status.gather(["experimental-skin=100.123.106.62", "iris"], "http://z", fetch, ssh)
+        self.assertEqual(sorted(sshed), ["100.123.106.62", "iris"])
+        self.assertEqual(sorted(fetched), ["http://z/latest/nixos.experimental-skin.json",
+                                           "http://z/latest/nixos.iris.json"])
+        self.assertEqual([s["host"] for s in got], ["experimental-skin", "iris"])
+        self.assertTrue(all(s["state"] == "in-sync" for s in got))
+
+    def test_once_shows_name_not_address(self):
+        buf = io.StringIO()
+        status.main(["--once", "--url", "http://z", "--hosts", "experimental-skin=100.123.106.62"],
+                    fetch=lambda u: latest(7, PATH_A), ssh=lambda a: ssh_out(PATH_A),
+                    now=lambda: NOW, out=buf)
+        self.assertIn("experimental-skin", buf.getvalue())
+        self.assertNotIn("100.123.106.62", buf.getvalue())
+
+    def test_timed_out_row_uses_name(self):
+        release = threading.Event()
+        try:
+            got = status.gather(["experimental-skin=100.123.106.62"], "http://z",
+                                lambda u: None, lambda a: (release.wait(10), "")[1], timeout=0.2)
+        finally:
+            release.set()
+        self.assertEqual(got[0]["host"], "experimental-skin")
+        self.assertEqual(got[0]["state"], "unreachable")
+
+
 if __name__ == "__main__":
     unittest.main()

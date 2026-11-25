@@ -13,9 +13,12 @@ import urllib.error
 import urllib.request
 
 DEFAULT_URL = "https://zoomies.tail09d5b.ts.net"
+# entries r `name` or `name=address`. th name picks latest/nixos.<name>.json nd th row,
+# th address is wat we ssh 2. some hostnames resolve 2 a dead/slow v6, so those get their
+# tailnet v4 here
 DEFAULT_HOSTS = [
     "cert-authority",
-    "experimental-skin",
+    "experimental-skin=100.123.106.62",
     "ghostholding",
     "iris",
     "pawpatch",
@@ -126,8 +129,16 @@ def parse_ssh(out):
 # --- gathering ---
 
 
-def gather_host(host, url, fetch, ssh):
+def parse_host(entry):
+    """`name` or `name=address` -> (name, address). address defaults 2 th name"""
+    name, _, address = entry.strip().partition("=")
+    name, address = name.strip(), address.strip()
+    return name, address or name
+
+
+def gather_host(entry, url, fetch, ssh):
     """everything we know about 1 host. never raises"""
+    host, address = parse_host(entry)
     st = {"host": host, "published": None, "pub_error": None, "running": None, "ssh_error": None}
     try:
         raw = fetch(f"{url.rstrip('/')}/latest/nixos.{host}.json")
@@ -136,7 +147,7 @@ def gather_host(host, url, fetch, ssh):
     except Exception as e:  # noqa: BLE001 - a bad host shouldnt sink th table
         st["pub_error"] = short_error(e)
     try:
-        st["running"] = parse_ssh(ssh(host))
+        st["running"] = parse_ssh(ssh(address))
     except Exception as e:  # noqa: BLE001
         st["ssh_error"] = short_error(e)
     st["state"] = derive_state(st)
@@ -146,7 +157,7 @@ def gather_host(host, url, fetch, ssh):
 def gather(hosts, url, fetch, ssh, timeout=20):
     """all hosts in parallel. a host still going after `timeout` is marked unreachable"""
     pool = concurrent.futures.ThreadPoolExecutor(max_workers=max(1, len(hosts)))
-    futs = {h: pool.submit(gather_host, h, url, fetch, ssh) for h in hosts}
+    futs = {parse_host(h)[0]: pool.submit(gather_host, h, url, fetch, ssh) for h in hosts}
     deadline = time.monotonic() + timeout
     out = []
     for h, fut in futs.items():
@@ -328,7 +339,7 @@ def parse_args(argv):
     p = argparse.ArgumentParser(prog="zoomies status", description="fleet vs wat zoomies published")
     p.add_argument("--url", default=DEFAULT_URL)
     p.add_argument("--hosts", default=",".join(DEFAULT_HOSTS),
-                   help="comma separated (default: th whole fleet)")
+                   help="comma separated name or name=address (default: th whole fleet)")
     p.add_argument("--interval", type=float, default=10.0)
     p.add_argument("--once", action="store_true", help="print 1 plain text table nd exit")
     return p.parse_args(argv)

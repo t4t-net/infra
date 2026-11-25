@@ -24,6 +24,7 @@
     rv32ima.machine.hydraDeploy = {
       enable = true;
       allowReboot = true;
+      source = "zoomies";
       proxy = "http://localhost:1055";
     };
 

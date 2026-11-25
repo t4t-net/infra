@@ -49,6 +49,10 @@ in
 
     services.hydra = {
       enable = true;
+      # 26.05's hydra (5decc46c) has GHSA-rqvm-hhh5-vrx7, unauthenticated `/log/..hydra.conf` reads
+      # anything directly under $HYDRA_DATA. fixed in ea80b0d6, which only unstable has so far.
+      # drop this once 26.05 catches up
+      package = pkgs.unstable.hydra;
       hydraURL = "https://hydra.tail09d5b.ts.net";
       notificationSender = "hydra@t4t.net";
       buildMachinesFiles = [

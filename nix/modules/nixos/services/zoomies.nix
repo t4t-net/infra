@@ -14,6 +14,10 @@ let
   # th web server's only way in2 th state dir. it can traverse /var/lib/zoomies nd read public/,
   # but state/ nd gcroots/ keep zoomies' own group, so 2 it they're just "other" nd closed
   publicGroup = "zoomies-public";
+  # on a switch tmpfiles, zoomies nd zoomies-web all start at once, so tmpfiles alone lost th race on
+  # 2026-11-25: zoomies mkdir'd public/ as zoomies:zoomies nd th web server cudnt read it. both units
+  # make sure of it themselves 1st, as root ("+") cuz th group nd setgid need it
+  ensurePublic = "+${pkgs.coreutils}/bin/install -d -m 2750 -o zoomies -g ${publicGroup} ${publicDir}";
 
   # sws guesses types from th extension nd .log isnt one it knows, so th types r spelled out.
   # these r inserted in order, so th no-cache 4 latest/ wins over th runs/ one
@@ -171,6 +175,7 @@ in
       };
       serviceConfig = {
         Type = "oneshot";
+        ExecStartPre = ensurePublic;
         ExecStart = "${lib.getExe cfg.package} run --config ${configFile}";
         # AWS_* 4 th s3 store
         EnvironmentFile = config.sops.secrets."zoomies/r2".path;
@@ -224,6 +229,7 @@ in
       description = "serve zoomies' public dir";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
+        ExecStartPre = ensurePublic;
         ExecStart = "${lib.getExe pkgs.static-web-server} --config-file ${swsConfig}";
         Restart = "on-failure";
         DynamicUser = true;

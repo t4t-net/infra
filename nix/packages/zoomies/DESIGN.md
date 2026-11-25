@@ -14,8 +14,8 @@ upload it, tell th fleet".
 th whole contract is 2 json endpoints:
 
 - `GET /job/infra/main/nixos.<host>/latest`: hydra-deploy reads `.id`, `.finished`,
-  `.buildstatus`, `.buildoutputs.out.path`. it needs `.id` 2 only ever go up (rollback check).
-  th discord ping links `/build/<id>`.
+  `.buildstatus`, `.buildoutputs.out.path`. `.id` only shows up in logs nd th discord link
+  (`/build/<id>`). its rollback guard is th last-applied path, not th id.
 - `GET /job/infra/main/nixos.<host>-installer/latest-finished`: th netboot bootstrapper reads
   `.buildoutputs.out.path`.
 
@@ -36,8 +36,8 @@ is th nix-eval-jobs attr name of th `hydraJobs` output (`nixos.iris`,
  "path": "/nix/store/...-nixos-system-iris-...", "finished_at": 1795700000}
 ```
 
-it exists only once th job built AND its closure is uploaded + signed. `run` only ever goes up
-(th agent's rollback check uses it instead of hydra's build id). a job tht failed in a later run
+it exists only once th job built AND its closure is uploaded + signed. `run` only ever goes up, so
+it's a safe 'which build' in logs nd links (th agent's rollback guard is th last-applied path). a job tht failed in a later run
 keeps its old file.
 
 `runs/<run>/run.json`:

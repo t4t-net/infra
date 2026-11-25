@@ -24,14 +24,21 @@ def latest(run, path, finished_at=NOW - 300):
                        "finished_at": finished_at}).encode()
 
 
-def ssh_out(current, result="success", booted=KERNEL_1, kernel=KERNEL_1, active="inactive",
-            exit_ts=NOW - 60):
-    return (f"current={current}\nbooted_kernel={booted}\ncurrent_kernel={kernel}\n"
-            f"Result={result}\nExecMainExitTimestamp=@{exit_ts}\nActiveState={active}\n")
+def metrics_out(current, result="success", booted=KERNEL_1, kernel=KERNEL_1, active="inactive",
+                exit_ts=NOW - 60, source="zoomies"):
+    """a /metrics page like node_exporter serves it, w hydra-deploy's textfile in it"""
+    return (
+        "# HELP node_load1 1m load average.\nnode_load1 0.5\n"
+        f'hydra_deploy_info{{source="{source}",current="{current}",applied="{current}"}} 1\n'
+        f"hydra_deploy_last_tick_success {1 if result == 'success' else 0}\n"
+        f"hydra_deploy_last_tick_timestamp_seconds {exit_ts}\n"
+        f"hydra_deploy_reboot_pending {1 if booted != kernel else 0}\n"
+        f"hydra_deploy_switching {1 if active == 'activating' else 0}\n"
+    )
 
 
 class Fleet:
-    """fake fetch + ssh keyed by host. a value tht's an exception gets raised"""
+    """fake fetch + metrics probe keyed by host. a value tht's an exception gets raised"""
 
     def __init__(self, published, running):
         self.published, self.running = published, running
@@ -43,7 +50,7 @@ class Fleet:
             raise v
         return v
 
-    def ssh(self, host):
+    def probe(self, host):
         v = self.running[host]
         if isinstance(v, Exception):
             raise v
@@ -54,7 +61,7 @@ class Fleet:
 
 def gather(fleet, hosts=None, timeout=5):
     hosts = hosts or sorted(fleet.running)
-    return {s["host"]: s for s in status.gather(hosts, "http://z", fleet.fetch, fleet.ssh,
+    return {s["host"]: s for s in status.gather(hosts, "http://z", fleet.fetch, fleet.probe,
                                                 timeout=timeout)}
 
 
@@ -62,7 +69,7 @@ class TestState(unittest.TestCase):
     def test_in_sync_behind_never_published(self):
         fleet = Fleet(
             {"iris": latest(213, PATH_A), "pawpatch": latest(213, PATH_A), "peer2peer": None},
-            {"iris": ssh_out(PATH_A), "pawpatch": ssh_out(PATH_B), "peer2peer": ssh_out(PATH_A)},
+            {"iris": metrics_out(PATH_A), "pawpatch": metrics_out(PATH_B), "peer2peer": metrics_out(PATH_A)},
         )
         got = gather(fleet)
         self.assertEqual(got["iris"]["state"], "in-sync")
@@ -70,20 +77,20 @@ class TestState(unittest.TestCase):
         self.assertEqual(got["peer2peer"]["state"], "never-published")
 
     def test_agent_exit_code_is_agent_failed(self):
-        fleet = Fleet({"iris": latest(1, PATH_A)}, {"iris": ssh_out(PATH_A, result="exit-code")})
+        fleet = Fleet({"iris": latest(1, PATH_A)}, {"iris": metrics_out(PATH_A, result="exit-code")})
         self.assertEqual(gather(fleet)["iris"]["state"], "agent-failed")
 
-    def test_ssh_error_is_unreachable(self):
+    def test_probe_error_is_unreachable(self):
         fleet = Fleet({"iris": latest(1, PATH_A)}, {"iris": RuntimeError("Connection refused")})
         st = gather(fleet)["iris"]
         self.assertEqual(st["state"], "unreachable")
-        self.assertIn("Connection refused", st["ssh_error"])
+        self.assertIn("Connection refused", st["probe_error"])
 
-    def test_hung_ssh_is_unreachable_nd_doesnt_block_others(self):
+    def test_hung_probe_is_unreachable_nd_doesnt_block_others(self):
         release = threading.Event()
         fleet = Fleet(
             {"iris": latest(1, PATH_A), "pawpatch": latest(1, PATH_A)},
-            {"iris": lambda: (release.wait(10), ssh_out(PATH_A))[1], "pawpatch": ssh_out(PATH_A)},
+            {"iris": lambda: (release.wait(10), metrics_out(PATH_A))[1], "pawpatch": metrics_out(PATH_A)},
         )
         try:
             t0 = time.monotonic()
@@ -92,13 +99,13 @@ class TestState(unittest.TestCase):
         finally:
             release.set()
         self.assertEqual(got["iris"]["state"], "unreachable")
-        self.assertEqual(got["iris"]["ssh_error"], "timed out")
+        self.assertEqual(got["iris"]["probe_error"], "timed out")
         self.assertEqual(got["pawpatch"]["state"], "in-sync")
 
     def test_reboot_pending(self):
         fleet = Fleet(
             {"iris": latest(1, PATH_A), "pawpatch": latest(1, PATH_A)},
-            {"iris": ssh_out(PATH_A, booted=KERNEL_1, kernel=KERNEL_2), "pawpatch": ssh_out(PATH_A)},
+            {"iris": metrics_out(PATH_A, booted=KERNEL_1, kernel=KERNEL_2), "pawpatch": metrics_out(PATH_A)},
         )
         got = gather(fleet)
         self.assertTrue(got["iris"]["running"]["reboot_pending"])
@@ -109,41 +116,62 @@ class TestState(unittest.TestCase):
     def test_sort_order(self):
         fleet = Fleet(
             {h: latest(5, PATH_A) for h in ["a-sync", "b-behind", "c-failed", "d-down", "e-sync"]},
-            {"a-sync": ssh_out(PATH_A), "e-sync": ssh_out(PATH_A), "b-behind": ssh_out(PATH_B),
-             "c-failed": ssh_out(PATH_A, result="exit-code"), "d-down": OSError("no route")},
+            {"a-sync": metrics_out(PATH_A), "e-sync": metrics_out(PATH_A), "b-behind": metrics_out(PATH_B),
+             "c-failed": metrics_out(PATH_A, result="exit-code"), "d-down": OSError("no route")},
         )
         hosts = ["e-sync", "a-sync", "b-behind", "c-failed", "d-down"]
-        order = [s["host"] for s in status.gather(hosts, "http://z", fleet.fetch, fleet.ssh)]
+        order = [s["host"] for s in status.gather(hosts, "http://z", fleet.fetch, fleet.probe)]
         self.assertEqual(order, ["d-down", "c-failed", "b-behind", "a-sync", "e-sync"])
 
 
 class TestDefensive(unittest.TestCase):
     def test_malformed_json(self):
         for raw in [b"{not json", b"[]", b'{"run": 1}', b"\xff\xfe"]:
-            fleet = Fleet({"iris": raw}, {"iris": ssh_out(PATH_A)})
+            fleet = Fleet({"iris": raw}, {"iris": metrics_out(PATH_A)})
             st = gather(fleet)["iris"]
             self.assertEqual(st["state"], "fetch-error", raw)
             self.assertIsNone(st["published"])
             status.format_row(st, NOW)
 
     def test_fetch_exception(self):
-        fleet = Fleet({"iris": OSError("tailnet down")}, {"iris": ssh_out(PATH_A)})
+        fleet = Fleet({"iris": OSError("tailnet down")}, {"iris": metrics_out(PATH_A)})
         st = gather(fleet)["iris"]
         self.assertEqual(st["state"], "fetch-error")
         self.assertIn("err: tailnet down", status.format_row(st, NOW)[2])
 
-    def test_partial_ssh_output(self):
-        for out in ["", "garbage\n", f"current={PATH_A}\n", "current=\nResult=\n",
-                    "booted_kernel=x\nExecMainExitTimestamp=n/a\n"]:
+    def test_metrics_without_agent_is_no_agent(self):
+        for out in ["", "garbage\n", "node_load1 0.5\n", "hydra_deploy_last_tick_success 1\n"]:
             fleet = Fleet({"iris": latest(1, PATH_A)}, {"iris": out})
             st = gather(fleet)["iris"]
-            self.assertIn(st["state"], ("in-sync", "behind"), out)
+            self.assertEqual(st["state"], "no-agent", out)
+            row = status.format_row(st, NOW)
+            self.assertEqual(row[0], "iris", out)
+            self.assertEqual(row[4], "no agent", out)
+
+    def test_partial_metrics(self):
+        info = f'hydra_deploy_info{{source="zoomies",current="{PATH_A}",applied=""}} 1\n'
+        for out in [info, info + "hydra_deploy_last_tick_success nope\n",
+                    info + "hydra_deploy_reboot_pending\n", info + "hydra_deploy_bogus 1 2 3\n"]:
+            fleet = Fleet({"iris": latest(1, PATH_A)}, {"iris": out})
+            st = gather(fleet)["iris"]
+            self.assertEqual(st["state"], "in-sync", out)
             self.assertFalse(st["running"]["reboot_pending"], out)
+            self.assertIsNone(st["running"]["result"], out)
             status.format_row(st, NOW)
+
+    def test_metrics_probe_hits_port_9100(self):
+        seen = []
+        real = status.http_fetch
+        try:
+            status.http_fetch = lambda url, timeout=10: (seen.append(url), b"x")[1]
+            self.assertEqual(status.metrics_probe("100.123.106.62"), "x")
+        finally:
+            status.http_fetch = real
+        self.assertEqual(seen, ["http://100.123.106.62:9100/metrics"])
 
     def test_wrong_types_in_json(self):
         raw = json.dumps({"run": "213", "path": PATH_A, "finished_at": "soon"}).encode()
-        fleet = Fleet({"iris": raw}, {"iris": ssh_out(PATH_A)})
+        fleet = Fleet({"iris": raw}, {"iris": metrics_out(PATH_A)})
         st = gather(fleet)["iris"]
         self.assertEqual(st["state"], "in-sync")
         row = status.format_row(st, NOW)
@@ -161,18 +189,18 @@ class TestFormatting(unittest.TestCase):
         self.assertEqual(status.fmt_age(3 * 86400), "3d")
 
     def test_deploying_shows_instead_of_result(self):
-        fleet = Fleet({"iris": latest(1, PATH_A)}, {"iris": ssh_out(PATH_B, active="activating")})
+        fleet = Fleet({"iris": latest(1, PATH_A)}, {"iris": metrics_out(PATH_B, active="activating")})
         self.assertEqual(status.format_row(gather(fleet)["iris"], NOW)[4], "deploying")
 
     def test_once_output(self):
         fleet = Fleet(
             {"iris": latest(213, PATH_A), "pawpatch": latest(212, PATH_A), "ghostholding": None},
-            {"iris": ssh_out(PATH_A), "pawpatch": ssh_out(PATH_B, result="exit-code"),
+            {"iris": metrics_out(PATH_A), "pawpatch": metrics_out(PATH_B, result="exit-code"),
              "ghostholding": TimeoutError("timed out")},
         )
         buf = io.StringIO()
         rc = status.main(["--once", "--url", "http://z", "--hosts", "iris,pawpatch,ghostholding"],
-                         fetch=fleet.fetch, ssh=fleet.ssh, now=lambda: NOW, out=buf)
+                         fetch=fleet.fetch, probe=fleet.probe, now=lambda: NOW, out=buf)
         self.assertEqual(rc, 0)
         lines = buf.getvalue().splitlines()
         self.assertIn("zoomies http://z", lines[0])
@@ -186,9 +214,9 @@ class TestFormatting(unittest.TestCase):
                                    "success", "1m", "5m"])
 
     def test_not_a_tty_falls_back_2_once(self):
-        fleet = Fleet({"iris": None}, {"iris": ssh_out(PATH_A)})
+        fleet = Fleet({"iris": None}, {"iris": metrics_out(PATH_A)})
         buf = io.StringIO()
-        rc = status.main(["--hosts", "iris"], fetch=fleet.fetch, ssh=fleet.ssh,
+        rc = status.main(["--hosts", "iris"], fetch=fleet.fetch, probe=fleet.probe,
                          now=lambda: NOW, out=buf)
         self.assertEqual(rc, 0)
         self.assertIn("never-published", buf.getvalue())
@@ -210,19 +238,19 @@ class TestHostAddress(unittest.TestCase):
     def test_default_hosts_pin_experimental_skin_v4(self):
         self.assertIn("experimental-skin=100.123.106.62", status.DEFAULT_HOSTS)
 
-    def test_ssh_gets_address_fetch_gets_name(self):
-        fetched, sshed = [], []
+    def test_probe_gets_address_fetch_gets_name(self):
+        fetched, probed = [], []
 
         def fetch(url):
             fetched.append(url)
             return latest(7, PATH_A)
 
-        def ssh(addr):
-            sshed.append(addr)
-            return ssh_out(PATH_A)
+        def probe(addr):
+            probed.append(addr)
+            return metrics_out(PATH_A)
 
-        got = status.gather(["experimental-skin=100.123.106.62", "iris"], "http://z", fetch, ssh)
-        self.assertEqual(sorted(sshed), ["100.123.106.62", "iris"])
+        got = status.gather(["experimental-skin=100.123.106.62", "iris"], "http://z", fetch, probe)
+        self.assertEqual(sorted(probed), ["100.123.106.62", "iris"])
         self.assertEqual(sorted(fetched), ["http://z/latest/nixos.experimental-skin.json",
                                            "http://z/latest/nixos.iris.json"])
         self.assertEqual([s["host"] for s in got], ["experimental-skin", "iris"])
@@ -231,7 +259,7 @@ class TestHostAddress(unittest.TestCase):
     def test_once_shows_name_not_address(self):
         buf = io.StringIO()
         status.main(["--once", "--url", "http://z", "--hosts", "experimental-skin=100.123.106.62"],
-                    fetch=lambda u: latest(7, PATH_A), ssh=lambda a: ssh_out(PATH_A),
+                    fetch=lambda u: latest(7, PATH_A), probe=lambda a: metrics_out(PATH_A),
                     now=lambda: NOW, out=buf)
         self.assertIn("experimental-skin", buf.getvalue())
         self.assertNotIn("100.123.106.62", buf.getvalue())

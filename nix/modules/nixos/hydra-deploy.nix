@@ -12,6 +12,9 @@ let
   cfg = config.rv32ima.machine.hydraDeploy;
   hostName = config.networking.hostName;
   discordSecret = "hydra-deploy/discord-webhook";
+  # node_exporter's textfile collector serves wat th agent writes here, so `zoomies status` reads
+  # :9100/metrics instead of ssh'ing in as root every few seconds
+  textfileDir = "/var/lib/prometheus-node-exporter-text-files";
 
   # everything tht differs between th 2 sources goes thru these.
   # zoomies' run ids nd hydra's build ids r different number spaces, so each source gets its own
@@ -63,6 +66,7 @@ let
       # th newest ${cfg.source} id we've seen. only a strictly newer one can deploy, so a source tht's
       # behind (or 2 sources disagreeing during a move) cant drag th box back 2 an older build
       ID_STATE=/nix/var/nix/hydra-deploy-last-${cfg.source}-id
+      METRICS=${textfileDir}/hydra-deploy.prom
 
       # only ${cfg.source} goes through the proxy. the cache is public and nix-daemon fetches it, not us
       proxy_args=()
@@ -79,6 +83,34 @@ let
           -d "$(jq -n --arg msg "$1" '{content: $msg}')" \
           "$(<"$DISCORD_WEBHOOK_FILE")" >/dev/null
       }
+
+      # wat this tick ended up as, 4 node_exporter. tmp + mv so it never serves half a file.
+      # never fails th tick: metrics r nice 2 have, deploys r th job
+      write_metrics() {
+        local ok=$1 switching=$2 reboot=0 f
+        for f in kernel initrd kernel-modules; do
+          if [[ $(readlink -f "/run/booted-system/$f") != $(readlink -f "/run/current-system/$f") ]]; then
+            reboot=1
+          fi
+        done
+        {
+          echo "# HELP hydra_deploy_info th system this box runs nd th last one th agent applied."
+          echo "# TYPE hydra_deploy_info gauge"
+          echo "hydra_deploy_info{source=\"${cfg.source}\",current=\"$(readlink -f /run/current-system)\",applied=\"$(readlink "$STATE" || true)\"} 1"
+          echo "# TYPE hydra_deploy_last_tick_success gauge"
+          echo "hydra_deploy_last_tick_success $ok"
+          echo "# TYPE hydra_deploy_last_tick_timestamp_seconds gauge"
+          echo "hydra_deploy_last_tick_timestamp_seconds $(date +%s)"
+          echo "# TYPE hydra_deploy_last_id gauge"
+          echo "hydra_deploy_last_id $(cat "$ID_STATE" 2>/dev/null || echo NaN)"
+          echo "# TYPE hydra_deploy_reboot_pending gauge"
+          echo "hydra_deploy_reboot_pending $reboot"
+          echo "# TYPE hydra_deploy_switching gauge"
+          echo "hydra_deploy_switching $switching"
+        } >"$METRICS.tmp" && mv "$METRICS.tmp" "$METRICS" || echo "couldn't write $METRICS" >&2
+      }
+      # shellcheck disable=SC2154 # rc is set inside th trap
+      trap 'rc=$?; write_metrics "$((rc == 0))" 0; exit "$rc"' EXIT
 
       ${fetchBuild}
 
@@ -141,6 +173,7 @@ let
         version=''${path#/nix/store/*-nixos-system-"$HOST"-}
         build_link="[$build_id](<${buildUrl}>)"
 
+        write_metrics 1 1
         # a transient unit, so the switch has its own lifetime that switch-to-configuration can't
         # stop out from under itself. a fixed name doubles as a lock
         if systemd-run --unit=hydra-deploy-switch --collect --wait --quiet --service-type=exec \
@@ -297,6 +330,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    systemd.tmpfiles.rules = [ "d ${textfileDir} 0755 root root -" ];
+    services.prometheus.exporters.node.extraFlags = [
+      "--collector.textfile.directory=${textfileDir}"
+    ];
+
     sops.secrets.${discordSecret} = lib.mkIf cfg.discord.enable {
       inherit (cfg.discord) sopsFile;
       key = "discord-webhook";

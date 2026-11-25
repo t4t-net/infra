@@ -5,6 +5,7 @@
   step-kms-plugin,
   openbao,
   colmena,
+  zoomies,
   ...
 }:
 mkShell {
@@ -14,5 +15,7 @@ mkShell {
     step-kms-plugin
     openbao
     colmena
+    # 4 `zoomies status`
+    zoomies
   ];
 }

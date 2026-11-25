@@ -13,11 +13,11 @@ let
   hostName = config.networking.hostName;
   discordSecret = "hydra-deploy/discord-webhook";
 
-  # everything tht differs between th 2 sources goes thru these, nd they render 2 th exact old text
-  # 4 hydra, so hosts tht stay on hydra keep th same script (nd th same drv).
-  # zoomies' run ids nd hydra's build ids r different number spaces, but nothing compares them:
-  # STATE in th script is th last applied *path*, so moving a box between sources is a no-op as
-  # long as both serve th same path, nd th id only ever shows up in logs nd links
+  # everything tht differs between th 2 sources goes thru these.
+  # zoomies' run ids nd hydra's build ids r different number spaces, so each source gets its own
+  # ID_STATE file in th script. th last-applied *path* alone wasnt enough: wen cert-authority moved
+  # 2 zoomies on 2026-11-25, zoomies still served an older system (one w source = hydra), so th 2
+  # agents kept deploying each other's build back nd forth
   zoomies = cfg.source == "zoomies";
   build = if zoomies then "zoomies run" else "hydra build";
   sourcesBuild = if zoomies then "zoomies run" else "hydra's build";
@@ -60,6 +60,9 @@ let
       # newer instead of getting reverted on the next tick (or after a reboot). a gc root and not a
       # file in /var/lib, since impermanence wipes that but /nix always survives
       STATE=/nix/var/nix/gcroots/hydra-deploy-last-applied
+      # th newest ${cfg.source} id we've seen. only a strictly newer one can deploy, so a source tht's
+      # behind (or 2 sources disagreeing during a move) cant drag th box back 2 an older build
+      ID_STATE=/nix/var/nix/hydra-deploy-last-${cfg.source}-id
 
       # only ${cfg.source} goes through the proxy. the cache is public and nix-daemon fetches it, not us
       proxy_args=()
@@ -98,8 +101,24 @@ let
         last=$path
       fi
 
+      if [[ ! $build_id =~ ^[0-9]+$ ]]; then
+        echo "${build} id '$build_id' isn't a number, refusing" >&2
+        exit 1
+      fi
+      last_id=$(cat "$ID_STATE" 2>/dev/null || true)
+      # first tick on this source (a new box, or one that just moved here): whatever it has is th
+      # baseline, not something 2 deploy. it might b older than wat we run
+      if [[ ! $last_id =~ ^[0-9]+$ ]]; then
+        echo "first tick on ${cfg.source}, ${build} $build_id is th baseline: $path"
+        echo "$build_id" >"$ID_STATE"
+        last_id=$build_id
+      fi
+
       if [[ $path == "$current" ]]; then
         ln -sfn "$path" "$STATE"
+        if ((build_id > last_id)); then echo "$build_id" >"$ID_STATE"; fi
+      elif ((build_id <= last_id)); then
+        echo "running $current, ${build} $build_id isn't newer than $last_id, leaving it alone"
       elif [[ $path == "$last" ]]; then
         echo "running $current, which isn't ${sourcesBuild} $build_id, but we already applied that one. leaving it alone"
       else
@@ -116,6 +135,7 @@ let
         # written before the switch so a switch that keeps failing doesn't get retried (and restart
         # half the box) every tick. the unit going failed is the signal
         ln -sfn "$path" "$STATE"
+        echo "$build_id" >"$ID_STATE"
 
         # the bit after nixos-system-$HOST-, like 25.11.20261020.abcdef0
         version=''${path#/nix/store/*-nixos-system-"$HOST"-}

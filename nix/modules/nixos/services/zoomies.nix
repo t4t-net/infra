@@ -11,6 +11,41 @@ let
   cfg = config.rv32ima.services.zoomies;
   stateDir = "/var/lib/zoomies";
   publicDir = "${stateDir}/public";
+  # th web server's only way in2 th state dir. it can traverse /var/lib/zoomies nd read public/,
+  # but state/ nd gcroots/ keep zoomies' own group, so 2 it they're just "other" nd closed
+  publicGroup = "zoomies-public";
+
+  # sws guesses types from th extension nd .log isnt one it knows, so th types r spelled out.
+  # these r inserted in order, so th no-cache 4 latest/ wins over th runs/ one
+  swsConfig = (pkgs.formats.toml { }).generate "zoomies-sws.toml" {
+    general = {
+      host = "127.0.0.1";
+      inherit (cfg) port;
+      root = publicDir;
+      directory-listing = false;
+      cache-control-headers = false;
+    };
+    advanced.headers = [
+      {
+        source = "**/*.json";
+        headers.Content-Type = "application/json";
+      }
+      {
+        source = "**/*.log";
+        headers.Content-Type = "text/plain; charset=utf-8";
+      }
+      # run.json changes while a run is going
+      {
+        source = "/runs/**";
+        headers.Cache-Control = "max-age=10";
+      }
+      # th agent polls these every 2 min, a cached one is a deploy tht shows up late
+      {
+        source = "/latest/**";
+        headers.Cache-Control = "no-cache";
+      }
+    ];
+  };
 
   configFile = pkgs.writeText "zoomies.json" (
     builtins.toJSON {
@@ -43,7 +78,7 @@ in
     port = lib.mkOption {
       type = lib.types.port;
       default = 8472;
-      description = "Loopback port nginx serves the public dir on; tailscale serve is the way in.";
+      description = "Loopback port the public dir is served on; tailscale serve is the way in.";
     };
 
     interval = lib.mkOption {
@@ -69,9 +104,9 @@ in
     rv32ima.machine.impermanence.extraPersistDirectories = [
       {
         path = /var/lib/zoomies;
-        mode = "0750";
+        mode = "0710";
         owner = "zoomies";
-        group = "zoomies";
+        group = publicGroup;
       }
     ];
 
@@ -82,14 +117,14 @@ in
       home = stateDir;
     };
     users.groups.zoomies = { };
-    # nginx only gets group read on th state dir. state/ nd gcroots/ r just ids, shas nd symlinks,
-    # th secrets live in /run/secrets nd nginx's root is public/ anyway
-    users.users.${config.services.nginx.user}.extraGroups = [ "zoomies" ];
+    users.groups.${publicGroup} = { };
 
-    # without impermanence nobody else makes these, nd nginx shud have a root b4 th first run
+    # without impermanence nobody else makes these, nd th web server shud have a root b4 th first
+    # run. setgid on public/ so everything zoomies writes in there lands in th public group, zoomies
+    # itself doesnt need 2 b in it
     systemd.tmpfiles.rules = [
-      "d ${stateDir} 0750 zoomies zoomies -"
-      "d ${publicDir} 0750 zoomies zoomies -"
+      "d ${stateDir} 0710 zoomies ${publicGroup} -"
+      "d ${publicDir} 2750 zoomies ${publicGroup} -"
     ];
 
     # th same secrets hydra uses, under their own names so zoomies can own its copies. th signing key
@@ -143,7 +178,7 @@ in
         Group = "zoomies";
         # th flake fetcher cache. fine 2 lose on reboot
         CacheDirectory = "zoomies";
-        # group read 4 nginx, nothing 4 anyone else
+        # group read 4 th web server (via public/'s setgid group), nothing 4 anyone else
         UMask = "0027";
 
         # /nix stays reachable (ProtectSystem=full leaves it alone) cuz everything goes thru th
@@ -183,41 +218,30 @@ in
       };
     };
 
-    # only public/ is served, as plain static files. loopback only; tailscale serve is th way in
-    services.nginx = {
-      enable = true;
-      virtualHosts.zoomies = {
-        listen = [
-          {
-            addr = "127.0.0.1";
-            inherit (cfg) port;
-          }
+    # only public/ is served, as plain static files. loopback only; tailscale serve is th way in.
+    # sws nd not nginx: enabling nginx on a box moves its acme http-01 listener (machine-certificate)
+    systemd.services.zoomies-web = {
+      description = "serve zoomies' public dir";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        ExecStart = "${lib.getExe pkgs.static-web-server} --config-file ${swsConfig}";
+        Restart = "on-failure";
+        DynamicUser = true;
+        SupplementaryGroups = [ publicGroup ];
+        ProtectHome = true;
+        PrivateDevices = true;
+        CapabilityBoundingSet = "";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
         ];
-        root = publicDir;
-        extraConfig = ''
-          autoindex off;
-        '';
-        # th agent polls these every 2 min, a cached one is a deploy tht shows up late
-        locations."/latest/".extraConfig = ''
-          default_type application/json;
-          add_header Cache-Control "no-cache";
-        '';
-        # run.json changes while a run is going. .log isnt in nginx's mime.types nd wud download
-        locations."/runs/".extraConfig = ''
-          types {
-            text/html html;
-            application/json json;
-            text/plain log;
-          }
-          add_header Cache-Control "max-age=10";
-        '';
       };
     };
 
     rv32ima.machine.tailscale.services.zoomies = {
       inherit (cfg) port;
       # zoomies.service is a oneshot thts inactive most of th time, th serve unit wud go down w it
-      targetUnit = "nginx.service";
+      targetUnit = "zoomies-web.service";
     };
   };
 }

@@ -13,6 +13,31 @@ let
   hostName = config.networking.hostName;
   discordSecret = "hydra-deploy/discord-webhook";
 
+  # everything tht differs between th 2 sources goes thru these, nd they render 2 th exact old text
+  # 4 hydra, so hosts tht stay on hydra keep th same script (nd th same drv).
+  # zoomies' run ids nd hydra's build ids r different number spaces, but nothing compares them:
+  # STATE in th script is th last applied *path*, so moving a box between sources is a no-op as
+  # long as both serve th same path, nd th id only ever shows up in logs nd links
+  zoomies = cfg.source == "zoomies";
+  build = if zoomies then "zoomies run" else "hydra build";
+  sourcesBuild = if zoomies then "zoomies run" else "hydra's build";
+  urlVar = if zoomies then "ZOOMIES_URL" else "HYDRA_URL";
+  buildUrl = if zoomies then "$ZOOMIES_URL/runs/$build_id/" else "$HYDRA_URL/build/$build_id";
+  fetchBuild =
+    if zoomies then
+      # a job tht failed in a later run keeps its old file, so this is always th newest good build
+      ''
+        build=$(curl -sfL --max-time 30 "''${proxy_args[@]}" "$ZOOMIES_URL/latest/$JOB.json")
+        build_id=$(jq -r '.run' <<<"$build")
+        path=$(jq -r '.path // empty' <<<"$build")''
+    else
+      ''
+        # latest and not latest-finished: latest-finished only looks at evals where *every* build is
+        # done, so we'd sit waiting on some installer or disk image nobody deploys
+        build=$(curl -sfL --max-time 30 "''${proxy_args[@]}" -H 'Accept: application/json' "$HYDRA_URL/job/$JOB/latest")
+        build_id=$(jq -r '.id' <<<"$build")
+        path=$(jq -r 'select(.finished == 1 and .buildstatus == 0) | .buildoutputs.out.path // empty' <<<"$build")'';
+
   deployScript = pkgs.writeShellApplication {
     name = "hydra-deploy";
     runtimeInputs = [
@@ -23,9 +48,9 @@ let
       config.systemd.package
     ];
     text = ''
-      HYDRA_URL=${lib.escapeShellArg cfg.hydraUrl}
+      ${urlVar}=${lib.escapeShellArg (if zoomies then cfg.zoomiesUrl else cfg.hydraUrl)}
       HYDRA_PROXY=${lib.escapeShellArg (if cfg.proxy == null then "" else cfg.proxy)}
-      JOB=${lib.escapeShellArg "${cfg.project}/${cfg.jobset}/${cfg.job}"}
+      JOB=${lib.escapeShellArg (if zoomies then cfg.job else "${cfg.project}/${cfg.jobset}/${cfg.job}")}
       HOST=${lib.escapeShellArg hostName}
       ALLOW_REBOOT=${lib.boolToString cfg.allowReboot}
       WINDOW_LOWER=${lib.escapeShellArg cfg.rebootWindow.lower}
@@ -36,7 +61,7 @@ let
       # file in /var/lib, since impermanence wipes that but /nix always survives
       STATE=/nix/var/nix/gcroots/hydra-deploy-last-applied
 
-      # only hydra goes through the proxy. the cache is public and nix-daemon fetches it, not us
+      # only ${cfg.source} goes through the proxy. the cache is public and nix-daemon fetches it, not us
       proxy_args=()
       if [[ -n $HYDRA_PROXY ]]; then
         proxy_args=(--proxy "$HYDRA_PROXY")
@@ -52,16 +77,12 @@ let
           "$(<"$DISCORD_WEBHOOK_FILE")" >/dev/null
       }
 
-      # latest and not latest-finished: latest-finished only looks at evals where *every* build is
-      # done, so we'd sit waiting on some installer or disk image nobody deploys
-      build=$(curl -sfL --max-time 30 "''${proxy_args[@]}" -H 'Accept: application/json' "$HYDRA_URL/job/$JOB/latest")
-      build_id=$(jq -r '.id' <<<"$build")
-      path=$(jq -r 'select(.finished == 1 and .buildstatus == 0) | .buildoutputs.out.path // empty' <<<"$build")
+      ${fetchBuild}
 
       # don't trust hydra to hand us the right job: a typo'd job name switching pawpatch to
       # psychoboost's system would be a very bad day
       if [[ $path != /nix/store/*-nixos-system-"$HOST"-* ]]; then
-        echo "hydra build $build_id gave '$path', which isn't a system for $HOST, refusing" >&2
+        echo "${build} $build_id gave '$path', which isn't a system for $HOST, refusing" >&2
         exit 1
       fi
 
@@ -72,7 +93,7 @@ let
       # colmena, so current-system is what someone meant to run, and hydra may well be older (or not
       # have this module at all yet). from here on only builds newer than this one get deployed
       if [[ -z $last ]]; then
-        echo "first run, adopting hydra build $build_id as already applied: $path"
+        echo "first run, adopting ${build} $build_id as already applied: $path"
         ln -sfn "$path" "$STATE"
         last=$path
       fi
@@ -80,15 +101,15 @@ let
       if [[ $path == "$current" ]]; then
         ln -sfn "$path" "$STATE"
       elif [[ $path == "$last" ]]; then
-        echo "running $current, which isn't hydra's build $build_id, but we already applied that one. leaving it alone"
+        echo "running $current, which isn't ${sourcesBuild} $build_id, but we already applied that one. leaving it alone"
       else
-        echo "deploying hydra build $build_id: $path"
+        echo "deploying ${build} $build_id: $path"
         # signatures are still checked here, so hydra can only point us at things cache.t4t.net signed
         nix-store --realise "$path" >/dev/null
         # switching to a system without us in it uninstalls us, and then only colmena can fix it.
         # turning this off is a manual job anyway
         if [[ ! -e $path/etc/systemd/system/hydra-deploy.timer ]]; then
-          echo "hydra build $build_id doesn't have hydra-deploy in it, refusing to deploy it" >&2
+          echo "${build} $build_id doesn't have hydra-deploy in it, refusing to deploy it" >&2
           exit 1
         fi
         nix-env --profile /nix/var/nix/profiles/system --set "$path"
@@ -98,17 +119,17 @@ let
 
         # the bit after nixos-system-$HOST-, like 25.11.20261020.abcdef0
         version=''${path#/nix/store/*-nixos-system-"$HOST"-}
-        build_link="[$build_id](<$HYDRA_URL/build/$build_id>)"
+        build_link="[$build_id](<${buildUrl}>)"
 
         # a transient unit, so the switch has its own lifetime that switch-to-configuration can't
         # stop out from under itself. a fixed name doubles as a lock
         if systemd-run --unit=hydra-deploy-switch --collect --wait --quiet --service-type=exec \
           -E LOCALE_ARCHIVE -E NIXOS_INSTALL_BOOTLOADER= \
           "$path/bin/switch-to-configuration" switch; then
-          discord "**$HOST** switched to hydra build $build_link ($version)" ||
+          discord "**$HOST** switched to ${build} $build_link ($version)" ||
             echo "couldn't ping discord about the switch" >&2
         else
-          discord "**$HOST** failed to switch to hydra build $build_link ($version), check \`journalctl -u hydra-deploy-switch\`" ||
+          discord "**$HOST** failed to switch to ${build} $build_link ($version), check \`journalctl -u hydra-deploy-switch\`" ||
             echo "couldn't ping discord about the failed switch" >&2
           exit 1
         fi
@@ -174,16 +195,30 @@ in
   options.rv32ima.machine.hydraDeploy = {
     enable = lib.mkEnableOption "pulling this machine's system from hydra and switching to it";
 
+    source = lib.mkOption {
+      type = lib.types.enum [
+        "hydra"
+        "zoomies"
+      ];
+      default = "hydra";
+      description = "Where to get this machine's latest system from. zoomies replaces hydra, boxes move over one at a time.";
+    };
+
     hydraUrl = lib.mkOption {
       type = lib.types.str;
       default = "https://hydra.tail09d5b.ts.net";
+    };
+
+    zoomiesUrl = lib.mkOption {
+      type = lib.types.str;
+      default = "https://zoomies.tail09d5b.ts.net";
     };
 
     proxy = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
       example = "http://localhost:1055";
-      description = "HTTP proxy for reaching hydra, for boxes where tailscale runs in userspace mode and the tailnet isn't routable.";
+      description = "HTTP proxy for reaching hydra or zoomies, for boxes where tailscale runs in userspace mode and the tailnet isn't routable.";
     };
 
     project = lib.mkOption {
@@ -245,7 +280,7 @@ in
     };
 
     systemd.services.hydra-deploy = {
-      description = "deploy this machine's latest hydra build";
+      description = "deploy this machine's latest ${build}";
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       # the switch would otherwise restart (i.e. kill) the thing doing the switching

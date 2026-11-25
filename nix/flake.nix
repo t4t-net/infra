@@ -224,7 +224,6 @@
                   (machineAndInstaller "pawpatch")
                   (machineAndInstaller "psychoboost")
                   (machineAndInstaller "experimental-skin")
-                  (machineAndInstaller "professional-vengeance")
                 ])
                 // {
                   # droplets boot from th digitalocean-base image, so no installer 2 build

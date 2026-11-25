@@ -8,6 +8,16 @@ let
   cfg = config.rv32ima.machine.bootstrapper;
   hydraUrl = "https://hydra.tail09d5b.ts.net";
 
+  # these render 2 th exact old text 4 hydra, so peer2peer's server doesnt change til it moves over
+  zoomies = cfg.source == "zoomies";
+  urlVar = if zoomies then "ZOOMIES_URL" else "HYDRA_URL";
+  installerUrl =
+    if zoomies then
+      ''f"{ZOOMIES_URL}/latest/nixos.{machine}-installer.json"''
+    else
+      ''f"{HYDRA_URL}/job/infra/main/nixos.{machine}-installer/latest-finished"'';
+  installerPath = if zoomies then ''data["path"]'' else ''data["buildoutputs"]["out"]["path"]'';
+
   netbootChainScript = pkgs.writeText "autoexec.ipxe" ''
     #!ipxe
 
@@ -37,7 +47,7 @@ let
         from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
         from pathlib import Path
 
-        HYDRA_URL = "${hydraUrl}"
+        ${urlVar} = "${if zoomies then cfg.zoomiesUrl else hydraUrl}"
         BASE_URL = "${cfg.baseUrl}"
         NIX_STORE = "${pkgs.nix}/bin/nix-store"
         GC_ROOTS_DIR = "/nix/var/nix/gcroots/netboot-server"
@@ -48,11 +58,11 @@ let
         def get_store_path(machine):
             if machine in store_path_cache:
                 return store_path_cache[machine]
-            url = f"{HYDRA_URL}/job/infra/main/nixos.{machine}-installer/latest-finished"
+            url = ${installerUrl}
             req = urllib.request.Request(url, headers={"Accept": "application/json"})
             with urllib.request.urlopen(req, timeout=30) as resp:
                 data = json.load(resp)
-            path = data["buildoutputs"]["out"]["path"]
+            path = ${installerPath}
             gc_root = os.path.join(GC_ROOTS_DIR, machine)
             subprocess.run([NIX_STORE, "--add-root", gc_root, "--realise", path], check=True)
             store_path_cache[machine] = path
@@ -83,7 +93,7 @@ let
                 try:
                     store_path = get_store_path(machine)
                 except Exception as e:
-                    self.send_error(404, f"hydra lookup failed for {machine}: {e}")
+                    self.send_error(404, f"${cfg.source} lookup failed for {machine}: {e}")
                     return
                 file_path = Path(store_path) / filename
                 if not file_path.exists():
@@ -124,6 +134,18 @@ in
       description = "interface netbooting machines reach this server on";
       example = "bond0";
     };
+    rv32ima.machine.bootstrapper.source = lib.mkOption {
+      type = lib.types.enum [
+        "hydra"
+        "zoomies"
+      ];
+      default = "hydra";
+      description = "where to look up each machine's installer build";
+    };
+    rv32ima.machine.bootstrapper.zoomiesUrl = lib.mkOption {
+      type = lib.types.str;
+      default = "https://zoomies.tail09d5b.ts.net";
+    };
     rv32ima.machine.bootstrapper.clientNetwork = lib.mkOption {
       type = lib.types.str;
       description = "IPv4 network netbooting machines get their address from. The server only binds IPv4.";
@@ -143,7 +165,7 @@ in
     ];
 
     systemd.services.netboot-server = {
-      description = "netboot file server (hydra-backed)";
+      description = "netboot file server (${cfg.source}-backed)";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {

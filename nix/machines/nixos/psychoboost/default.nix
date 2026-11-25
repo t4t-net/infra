@@ -14,6 +14,7 @@
     (self.lib.nixosModule "nixos/machine-certificate")
     (self.lib.nixosModule "nixos/services/tailscale")
     (self.lib.nixosModule "nixos/services/hydra")
+    (self.lib.nixosModule "nixos/services/zoomies")
     (self.lib.nixosModule "nixos/services/forever-ah")
 
     (self.lib.nixosModule "users/root")
@@ -55,6 +56,9 @@
     networking.hostId = "6c0d5ca5";
 
     rv32ima.machine.tailscale.enable = true;
+
+    # runs next 2 hydra til th fleet moves over, both publish th same signed paths 2 th same bucket
+    rv32ima.services.zoomies.enable = true;
 
     # luks w/o tpm2 or initrd ssh yet, so a reboot hangs at the password prompt. it still
     # switches on its own and logs "reboot pending", reboot it by hand for now

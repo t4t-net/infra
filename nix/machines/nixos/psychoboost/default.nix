@@ -62,7 +62,12 @@
 
     # luks w/o tpm2 or initrd ssh yet, so a reboot hangs at the password prompt. it still
     # switches on its own and logs "reboot pending", reboot it by hand for now
-    rv32ima.machine.hydraDeploy.enable = true;
+    # pulls its own system from th zoomies it runs, which is fine: zoomies is a oneshot nd its
+    # unit has restartIfChanged = false, so a switch never kills a run halfway
+    rv32ima.machine.hydraDeploy = {
+      enable = true;
+      source = "zoomies";
+    };
 
     services.prometheus.exporters.node.enable = true;
 

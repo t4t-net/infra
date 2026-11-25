@@ -21,8 +21,37 @@ th whole contract is 2 json endpoints:
 
 plus th side effect: every output is signed nd in `s3://rv32ima-nix-store` (cache.t4t.net).
 
-zoomies serves those same paths as static files w th same json shape, so neither th agents
-nor th bootstrapper change. cutover is flipping a hostname.
+zoomies doesnt copy hydra's url shape. it serves its own simpler contract at
+`https://zoomies.tail09d5b.ts.net/` (a tailscale service on psychoboost), nd hydra-deploy + th
+bootstrapper move over 2 it at cutover.
+
+## th contract (static files, all json is utf-8, keys exactly as written)
+
+`latest/<job>.json`, e.g. `latest/nixos.iris.json`, `latest/nixos.iris-installer.json`. `<job>`
+is th nix-eval-jobs attr name of th `hydraJobs` output (`nixos.iris`,
+`packages.x86_64-linux.colmena`, ...):
+
+```json
+{"run": 213, "rev": "<full git sha>", "job": "nixos.iris",
+ "path": "/nix/store/...-nixos-system-iris-...", "finished_at": 1795700000}
+```
+
+it exists only once th job built AND its closure is uploaded + signed. `run` only ever goes up
+(th agent's rollback check uses it instead of hydra's build id). a job tht failed in a later run
+keeps its old file.
+
+`runs/<run>/run.json`:
+
+```json
+{"run": 213, "rev": "<sha>", "started_at": 1795699000, "finished_at": 1795700000,
+ "state": "running" | "done" | "crashed",
+ "jobs": {"nixos.iris": {"status": "ok" | "eval-failed" | "build-failed" | "upload-failed",
+                         "drv": "/nix/store/...drv" | null, "path": "/nix/store/..." | null,
+                         "log": "logs/nixos.iris.log" | null}}}
+```
+
+`runs/<run>/index.html` lists th jobs nd links their logs. `runs/<run>/logs/<job>.log` holds
+eval errors or `nix log <drv>` 4 failed jobs. discord pings link `runs/<run>/`.
 
 ## non-goals (4 nao)
 
@@ -43,16 +72,12 @@ a systemd timer on psychoboost (every ~2 min) runs `zoomies run`:
 4. build: `nix build --keep-going` on th drvs. a job's result is th exit status of its own drv.
 5. upload: `nix copy --to <store uri w secret-key>` per successful job. signing happens here,
    same as hydra's `store_uri` today.
-6. publish: 4 every job tht built AND uploaded, write `job/infra/main/<job>/latest` nd
-   `latest-finished` (tmp file + rename, so a reader never sees half a file). a failed job
-   keeps its old files, which is exactly wat hydra's `/latest` does. hydra's ids r per build
-   nd zoomies' r per run, but both only go up, nd thts all th agent checks.
+6. publish: 4 every job tht built AND uploaded, write `latest/<job>.json` (tmp file + rename,
+   so a reader never sees half a file). a failed job keeps its old file, like hydra's `/latest`.
 7. logs: failed jobs get `nix log <drv>` saved 2 `runs/<id>/logs/<job>.log`.
 8. report: 1 discord message per run (commit, ok/failed counts, failed job names), using th
    webhook hydra-deploy already has.
 
-`/build/<id>` gets a generated `index.html` listing th run's jobs nd links 2 their logs, so th
-discord links keep working w/o a web app.
 
 a run tht crashes halfway leaves `run.json` marked unfinished nd publishes nothing it didnt
 finish. th next tick starts over on th same commit (th id still goes up, ids r cheap).
@@ -61,16 +86,14 @@ finish. th next tick starts over on th same commit (th id still goes up, ids r c
 
 ```
 /var/lib/zoomies/
-  state/last-id  state/last-rev
-  job/infra/main/<job>/latest            (served)
-  job/infra/main/<job>/latest-finished   (served)
-  build/<id>/index.html                  (served, symlink 2 runs/<id>/)
-  runs/<id>/run.json  runs/<id>/logs/
+  state/last-id  state/last-rev        (not served)
+  public/latest/<job>.json             (served)
+  public/runs/<id>/run.json  index.html  logs/<job>.log   (served)
   gcroots/<job> -> current published path
 ```
 
-served read-only as static files (nginx `root`, autoindex off) at hydra.tail09d5b.ts.net once
-we cut over. gc roots keep th published path per job alive on psychoboost. old runs/ get pruned
+only `public/` is served, read-only as static files (nginx `root`, autoindex off), via
+`rv32ima.machine.tailscale.services.zoomies` → zoomies.tail09d5b.ts.net. gc roots keep th published path per job alive on psychoboost. old runs/ get pruned
 after N runs.
 
 ## security
@@ -82,7 +105,7 @@ serves never include them (state/ nd th key live outside th served dirs).
 ## tui: `zoomies status`
 
 runs on ellie's laptop. 4 each host in a config list it shows: published path + run id (from
-`latest` over th tailnet), wat th host runs (`ssh root@host readlink /run/current-system`), th
+`latest/nixos.<host>.json` over th tailnet), wat th host runs (`ssh root@host readlink /run/current-system`), th
 agent's last result (`systemctl show hydra-deploy -p Result,ExecMainExitTimestamp`), nd
 whether a reboot is pending. hosts w a mismatch or a failed agent float 2 th top. refreshes
 every N seconds, curses from stdlib. ssh calls run in parallel w a timeout so 1 dead host
@@ -98,15 +121,16 @@ half-done, 1 eval error doesnt sink th other jobs.
 
 ## cutover
 
-1. deploy zoomies on psychoboost next 2 hydra, serving on a different port, nd publishing 2 th
-   same bucket (same signing key, so th outputs r identical).
-2. 4 a few commits, diff zoomies' `latest` paths against hydra's 4 every job. they should match.
-3. point hydra.tail09d5b.ts.net at zoomies' static root. agents nd bootstrapper dont change.
+1. deploy zoomies on psychoboost next 2 hydra, publishing 2 th same bucket (same signing key,
+   so th outputs r identical).
+2. 4 a few commits, diff zoomies' `latest/<job>.json` paths against hydra's `/latest` 4 every
+   job. they should match.
+3. flip hydra-deploy nd th bootstrapper 2 zoomies (an option on th agent picks th source, so
+   hosts can move 1 at a time).
 4. turn hydra off. keep /var/lib/postgresql nd /var/lib/hydra 4 a while in case we want history.
-5. later: rename `hydraDeploy`/`hydraUrl` 2 something honest.
+5. rename `hydraDeploy` 2 something honest once hydra is gone.
 
-## open questions
+## decided
 
-- name lol
-- do we keep th `/job/infra/main/...` url shape 4ever, or move th agents 2 a simpler
-  `/latest/<job>.json` after cutover? (keeping it means step 3 is free)
+name stays zoomies (2026-11-25). served at zoomies.tail09d5b.ts.net. hydra's url shape is
+dropped 4 th contract above.

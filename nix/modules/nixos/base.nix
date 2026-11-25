@@ -115,6 +115,11 @@
       enable = true;
     };
 
+    # a switch reloads root's user units, nd w/o linger root's user manager only exists while a
+    # root session is open. one ending mid-switch failed th switch w "Failed to get GID for root"
+    # (iris 2026-11-07, peer2peer 2026-11-25), so keep it running 4 good
+    users.users.root.linger = true;
+
     users.groups.trusted = { };
     # users in trusted group are trusted by the nix-daemon
     nix.settings.trusted-users = [ "@trusted" ];

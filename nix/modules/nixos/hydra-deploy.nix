@@ -239,8 +239,11 @@ in
 
     interval = lib.mkOption {
       type = lib.types.str;
-      default = "2min";
-      description = "How often to ask hydra for a new build (systemd time span).";
+      # zoomies only hands out a static json file, so asking it often is ~free. hydra runs perl nd
+      # postgres 4 every request, so it keeps th old pace
+      default = if cfg.source == "zoomies" then "30s" else "2min";
+      defaultText = lib.literalExpression ''if source == "zoomies" then "30s" else "2min"'';
+      description = "How often to ask for a new build (systemd time span).";
     };
 
     allowReboot = lib.mkOption {

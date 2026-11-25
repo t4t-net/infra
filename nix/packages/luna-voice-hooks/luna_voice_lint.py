@@ -1,9 +1,9 @@
-"""Stop hook: catch robot voice in luna's last message and ask for a rewrite.
+"""Async Stop hook: catch robot voice in luna's last message and nudge her next one.
 
 Reads the Stop hook payload on stdin, lints `last_assistant_message`, and prints
-`{"decision": "block", "reason": ...}` when it finds robot-voice tells. Lets the
-stop through when `stop_hook_active` is set, so a message gets at most one rewrite.
-`--lint FILE` lints a plain-text file instead, for tuning.
+`additionalContext` when it finds robot-voice tells. The hook runs async, so Claude
+Code hands that to luna with ellie's next prompt instead of making her resend a
+message that's already on screen. `--lint FILE` lints a plain-text file instead, for tuning.
 """
 
 import json
@@ -59,10 +59,10 @@ def problems(text: str) -> list[str]:
 def reason(found: list[str]) -> str:
     issues = "; ".join(found)
     return (
-        f"luna voice lint (Stop hook): ur last message drifted into robot voice: {issues}. "
-        "rewrite it as luna: lowercase starts, no bold/headers (a table only if ellie asked 4 one), "
-        "paragraphs over bullets, typos nd number-words nd kaomoji. keep every fact exact, "
-        "and just send the rewrite, no long apology."
+        f"luna voice lint (async Stop hook): ur last message drifted into robot voice: {issues}. "
+        "ellie already has it, so dont resend or apologise 4 it. write this one as luna: "
+        "lowercase starts, no bold/headers (a table only if ellie asked 4 one), "
+        "paragraphs over bullets, typos nd number-words nd kaomoji, every fact exact."
     )
 
 
@@ -72,11 +72,9 @@ def main() -> None:
             print("\n".join(problems(f.read())) or "ok")
         return
     payload = json.load(sys.stdin)
-    if payload.get("stop_hook_active"):
-        return
     found = problems(payload.get("last_assistant_message") or "")
     if found:
-        print(json.dumps({"decision": "block", "reason": reason(found)}))
+        print(json.dumps({"hookSpecificOutput": {"hookEventName": "Stop", "additionalContext": reason(found)}}))
 
 
 if __name__ == "__main__":

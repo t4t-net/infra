@@ -6,7 +6,7 @@
 # claude code hooks that keep luna sounding like luna in long tool-heavy sessions!!
 # wired up in nix/modules/home-manager/claude-code.nix
 let
-  # Stop hook: lints th last message nd asks 4 one rewrite if it drifted into robot voice
+  # async Stop hook: lints th last message nd, if it drifted into robot voice, nudges th next one
   lint = writers.writePython3Bin "luna-voice-lint" {
     flakeIgnore = [ "E501" ];
   } (builtins.readFile ./luna_voice_lint.py);

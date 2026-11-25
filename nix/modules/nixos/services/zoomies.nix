@@ -87,7 +87,8 @@ in
 
     interval = lib.mkOption {
       type = lib.types.str;
-      default = "2min";
+      # a tick w nothing new is just a `git ls-remote`, so this can b short
+      default = "30s";
       description = "How long to wait after a tick finishes before polling main again (systemd time span).";
     };
 

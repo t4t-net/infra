@@ -55,8 +55,9 @@ def fake_world(rev, jobs, crash_on=None, eval_rc=0):
         if argv[:2] == ["nix", "log"]:
             return done(argv, out=f"build log of {argv[2]}\nit exploded\n")
         if argv[:2] == ["nix", "copy"]:
-            j = next(j for j in world["jobs"] if j["out"] in argv)
-            return done(argv, rc=0 if j["upload_ok"] else 1, err="" if j["upload_ok"] else "403 forbidden")
+            # 1 batched copy fails if any job in it does, like a real nix copy
+            ok = all(j["upload_ok"] for j in world["jobs"] if j["out"] in argv)
+            return done(argv, rc=0 if ok else 1, err="" if ok else "403 forbidden")
         if argv[:2] == ["nix-store", "--add-root"]:
             root, path = Path(argv[2]), argv[4]
             root.parent.mkdir(parents=True, exist_ok=True)

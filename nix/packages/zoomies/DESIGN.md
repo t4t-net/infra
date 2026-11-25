@@ -47,8 +47,12 @@ keeps its old file.
  "state": "running" | "done" | "crashed",
  "jobs": {"nixos.iris": {"status": "ok" | "eval-failed" | "build-failed" | "upload-failed",
                          "drv": "/nix/store/...drv" | null, "path": "/nix/store/..." | null,
-                         "log": "logs/nixos.iris.log" | null}}}
+                         "log": "logs/nixos.iris.log" | null}},
+ "timings": {"eval": 61.2, "build": 3.4, "check": 0.2, "upload": 40.1, "gcroots": 4.0, "publish": 0.1}}
 ```
+
+`timings` is seconds per phase, filled in as th run goes (a crashed run has th ones it got thru).
+th upload is 1 `nix copy` 4 every ok job, nd only goes job by job if tht fails.
 
 `runs/<run>/index.html` lists th jobs nd links their logs. `runs/<run>/logs/<job>.log` holds
 eval errors or `nix log <drv>` 4 failed jobs. discord pings link `runs/<run>/`.

@@ -70,7 +70,14 @@ class TickTest(unittest.TestCase):
         self.assertEqual(got["path"], job("nixos.iris")["out"])
         self.assertIsInstance(got["finished_at"], int)
         info = self.run_json(1)
-        self.assertEqual(set(info), {"run", "rev", "started_at", "finished_at", "state", "jobs"})
+        self.assertEqual(set(info), {"run", "rev", "started_at", "finished_at", "state", "jobs", "timings"})
+        self.assertEqual(set(info["timings"]), {"eval", "build", "check", "upload", "gcroots", "publish"})
+        self.assertTrue(all(isinstance(v, (int, float)) and v >= 0 for v in info["timings"].values()))
+        # 1 batched copy 4 every job, not 1 per job
+        copies = [c for c in calls if c[:2] == ["nix", "copy"]]
+        self.assertEqual(len(copies), 1)
+        self.assertIn(job("nixos.iris")["out"], copies[0])
+        self.assertIn(job("nixos.iris-installer")["out"], copies[0])
         self.assertEqual(info["state"], "done")
         self.assertEqual(info["jobs"]["nixos.iris"],
                          {"status": "ok", "drv": job("nixos.iris")["drv"], "path": job("nixos.iris")["out"], "log": None})
@@ -133,6 +140,17 @@ class TickTest(unittest.TestCase):
         r = self.run_json(1)["jobs"]["nixos.iris"]
         self.assertEqual(r["status"], "upload-failed")
         self.assertIn("403", (self.state / "public/runs/1" / r["log"]).read_text())
+
+    def test_failed_batch_copy_falls_back_2_per_job(self):
+        run, calls = fake_world(REV1, [job("nixos.iris", upload_ok=False), job("nixos.pawpatch")])
+        self.tick(run)
+        copies = [c for c in calls if c[:2] == ["nix", "copy"]]
+        # th batch, then 1 per job
+        self.assertEqual(len(copies), 3)
+        self.assertIn(job("nixos.iris")["out"], copies[0])
+        self.assertIn(job("nixos.pawpatch")["out"], copies[0])
+        self.assertEqual(self.run_json(1)["jobs"]["nixos.pawpatch"]["status"], "ok")
+        self.assertEqual(self.run_json(1)["jobs"]["nixos.iris"]["status"], "upload-failed")
 
     def test_run_ids_only_go_up(self):
         run, _ = fake_world(REV1, [job("nixos.iris")])

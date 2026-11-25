@@ -254,6 +254,14 @@ def do_run(cfg, run, now, rid, rev, run_dir, info, write_run, roots_dir):
     so a crash leaves run.json w just th jobs we actually know about"""
     state = Path(cfg["state_dir"])
     logs = run_dir / "logs"
+    # seconds per phase, so a slow run says where th time went
+    timings = info.setdefault("timings", {})
+    mark = [now()]
+
+    def lap(phase):
+        t = now()
+        timings[phase] = round(t - mark[0], 1)
+        mark[0] = t
 
     def fail(job, status, text, drv=None):
         log = None
@@ -263,6 +271,7 @@ def do_run(cfg, run, now, rid, rev, run_dir, info, write_run, roots_dir):
         info["jobs"][job] = {"status": status, "drv": drv, "path": None, "log": log}
 
     evaluated, eval_rc, eval_err = evaluate(run, cfg, rev, roots_dir)
+    lap("eval")
     if eval_rc != 0:
         write_atomic(logs / "eval.log", eval_err)
     jobs = {}
@@ -276,7 +285,9 @@ def do_run(cfg, run, now, rid, rev, run_dir, info, write_run, roots_dir):
     write_run()
 
     build_err = build(run, sorted({j["drv"] for j in jobs.values()}))
+    lap("build")
     invalid = invalid_paths(run, sorted({p for j in jobs.values() for p in j["outputs"].values()}))
+    lap("check")
     built = {}
     for job, j in sorted(jobs.items()):
         if invalid & set(j["outputs"].values()):
@@ -285,17 +296,26 @@ def do_run(cfg, run, now, rid, rev, run_dir, info, write_run, roots_dir):
             built[job] = j
     write_run()
 
+    # 1 nix copy 4 everything: th closures overlap a lot nd nix uploads in parallel inside it.
+    # only if tht fails do we go job by job, so th failure lands on th right job
     uploaded = {}
-    for job, j in sorted(built.items()):
-        ok, err = upload(run, cfg["store_uri"], sorted(j["outputs"].values()))
-        if ok:
-            uploaded[job] = j
-        else:
-            fail(job, "upload-failed", "nix copy failed:\n" + tail(err), j["drv"])
+    every = sorted({p for j in built.values() for p in j["outputs"].values()})
+    ok, _ = upload(run, cfg["store_uri"], every) if every else (True, "")
+    if ok:
+        uploaded = dict(built)
+    else:
+        for job, j in sorted(built.items()):
+            ok, err = upload(run, cfg["store_uri"], sorted(j["outputs"].values()))
+            if ok:
+                uploaded[job] = j
+            else:
+                fail(job, "upload-failed", "nix copy failed:\n" + tail(err), j["drv"])
+    lap("upload")
     write_run()
 
     for job, j in sorted(uploaded.items()):
         add_gcroot(run, state / "gcroots" / job, main_output(j["outputs"]))
+    lap("gcroots")
 
     # publish last nd all at once, so a crash above leaves every latest/ file untouched
     published_at = now()
@@ -304,6 +324,7 @@ def do_run(cfg, run, now, rid, rev, run_dir, info, write_run, roots_dir):
         write_json(state / "public" / "latest" / f"{job}.json",
                    {"run": rid, "rev": rev, "job": job, "path": path, "finished_at": published_at})
         info["jobs"][job] = {"status": "ok", "drv": j["drv"], "path": path, "log": None}
+    lap("publish")
     return eval_rc
 
 

@@ -39,6 +39,7 @@
     # no luks on th droplet, so it can reboot for kernels on its own
     rv32ima.machine.hydraDeploy = {
       enable = true;
+      source = "zoomies";
       allowReboot = true;
       rebootWindow = {
         lower = "05:00";

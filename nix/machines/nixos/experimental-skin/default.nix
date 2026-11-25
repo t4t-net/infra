@@ -114,6 +114,7 @@
     # luks unlocks itself from th tpm2, so it can reboot for kernels on its own
     rv32ima.machine.hydraDeploy = {
       enable = true;
+      source = "zoomies";
       allowReboot = true;
     };
 

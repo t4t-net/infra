@@ -50,9 +50,18 @@ in
     services.hydra = {
       enable = true;
       # 26.05's hydra (5decc46c) has GHSA-rqvm-hhh5-vrx7, unauthenticated `/log/..hydra.conf` reads
-      # anything directly under $HYDRA_DATA. fixed in ea80b0d6, which only unstable has so far.
-      # drop this once 26.05 catches up
-      package = pkgs.unstable.hydra;
+      # anything directly under $HYDRA_DATA. upstream fixed it in ea80b0d6, but only on top of th
+      # rust queue-runner rewrite, which needs unstable's module (gRPC builders, no machines files).
+      # taking unstable's package alone broke hydra on 2026-11-25, so this is a backport instead.
+      # drop it once 26.05 catches up.
+      # NOTE: that unstable hydra-init already migrated th db 2 schema 88. 86-88 r additive nd
+      # 5decc46c's hydra-init only upgrades, so it's fine, but dont go below 26.05's hydra
+      package = pkgs.hydra.overrideAttrs (old: {
+        patches = (old.patches or [ ]) ++ [ ./log-traversal.patch ];
+        meta = old.meta // {
+          knownVulnerabilities = [ ];
+        };
+      });
       hydraURL = "https://hydra.tail09d5b.ts.net";
       notificationSender = "hydra@t4t.net";
       buildMachinesFiles = [

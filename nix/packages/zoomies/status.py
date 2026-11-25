@@ -23,7 +23,6 @@ DEFAULT_HOSTS = [
     "iris",
     "pawpatch",
     "peer2peer",
-    "professional-vengeance",
     "psychoboost",
 ]
 
@@ -42,7 +41,7 @@ STATE_ORDER = {
     "fetch-error": 3,
     "never-published": 4,
     "in-sync": 5,
-    # reachable but no deploy agent (professional-vengeance), nothing 2 fix
+    # reachable but no deploy agent, nothing 2 fix
     "no-agent": 6,
 }
 

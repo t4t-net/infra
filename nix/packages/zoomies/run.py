@@ -210,7 +210,7 @@ def render_index(info, has_eval_log):
 """
 
 
-def discord_message(info, public_url, eval_rc):
+def discord_message(info, public_url, eval_rc, retry):
     ok = sorted(j for j, r in info["jobs"].items() if r["status"] == "ok")
     failed = sorted(j for j, r in info["jobs"].items() if r["status"] != "ok")
     link = f"{public_url.rstrip('/')}/runs/{info['run']}/"
@@ -224,6 +224,8 @@ def discord_message(info, public_url, eval_rc):
         if len(names) > 1500:
             names = names[:1500] + "..."
         msg += f"\nfailed: {names}"
+    if retry:
+        msg += "\nwill retry this rev every tick til it counts"
     return msg + f"\n{link}"
 
 
@@ -338,8 +340,11 @@ def _tick_locked(cfg, run, now, post, state):
         write_json(runs_dir / str(last_id) / "run.json", last_run)
 
     rev = ls_remote(run, cfg["repo"], cfg["branch"])
-    if rev == read_text(state / "state" / "last-rev") and (last_run is None or last_run.get("state") == "done"):
+    last_rev = read_text(state / "state" / "last-rev")
+    if rev == last_rev and (last_run is None or last_run.get("state") == "done"):
         return 0
+    # th last run was this rev nd didnt count (crash or retry), so we already pinged 4 it
+    already_pinged = bool(last_run and last_run.get("rev") == rev and last_rev != rev)
 
     # th id is claimed b4 any work, so even a crashed run burns it nd ids only go up
     rid = last_id + 1
@@ -362,7 +367,11 @@ def _tick_locked(cfg, run, now, post, state):
         info["finished_at"] = now()
         write_atomic(run_dir / "index.html", render_index(info, (run_dir / "logs" / "eval.log").exists()))
         write_run()
-        write_atomic(state / "state" / "last-rev", f"{rev}\n")
+        # a dead eval (github/daemon blip) or a failed upload is worth another go next tick,
+        # th builds r already local so its cheap. build failures would just fail again
+        retry = eval_rc != 0 or any(r["status"] == "upload-failed" for r in info["jobs"].values())
+        if not retry:
+            write_atomic(state / "state" / "last-rev", f"{rev}\n")
         done = True
     finally:
         shutil.rmtree(roots_dir, ignore_errors=True)
@@ -371,9 +380,11 @@ def _tick_locked(cfg, run, now, post, state):
             info["finished_at"] = now()
             write_run()
             write_atomic(run_dir / "index.html", render_index(info, False))
-            # a rev tht crashes every tick would ping every 2 min, so only ping th first crash
-            if not (last_run and last_run.get("state") == "crashed" and last_run.get("rev") == rev):
-                notify(post, cfg["discord_webhook_file"], discord_message(info, cfg["public_url"], 0))
-    notify(post, cfg["discord_webhook_file"], discord_message(info, cfg["public_url"], eval_rc))
+            # a rev tht crashes every tick would ping every 2 min, so only ping th first time
+            if not already_pinged:
+                notify(post, cfg["discord_webhook_file"], discord_message(info, cfg["public_url"], 0, False))
+    # same 4 retries, but a run tht counts always pings, so th eventual success still shows up
+    if not (retry and already_pinged):
+        notify(post, cfg["discord_webhook_file"], discord_message(info, cfg["public_url"], eval_rc, retry))
     prune(runs_dir, cfg["keep_runs"])
     return 0

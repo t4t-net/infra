@@ -41,7 +41,8 @@ def fake_world(rev, jobs, crash_on=None, eval_rc=0):
                     lines.append(json.dumps({"attr": j["name"], "error": j["eval_error"]}))
                 else:
                     lines.append(json.dumps({"attr": j["name"], "drvPath": j["drv"], "outputs": {"out": j["out"]}}))
-            return done(argv, rc=eval_rc, out="\n".join(lines) + "\n", err="eval stderr" if eval_rc else "")
+            rc = world["eval_rc"]
+            return done(argv, rc=rc, out="\n".join(lines) + "\n", err="eval stderr" if rc else "")
         if argv[:2] == ["nix", "build"]:
             for j in world["jobs"]:
                 if f"{j['drv']}^*" in argv and j["build_ok"]:
@@ -65,6 +66,6 @@ def fake_world(rev, jobs, crash_on=None, eval_rc=0):
             return done(argv, out=path + "\n")
         raise AssertionError(f"unexpected command {argv}")
 
-    world = {"rev": rev, "jobs": jobs}
+    world = {"rev": rev, "jobs": jobs, "eval_rc": eval_rc}
     run.world = world
     return run, calls

@@ -205,6 +205,61 @@ class TickTest(unittest.TestCase):
         self.assertIn("eval stderr", (self.state / "public/runs/1/logs/eval.log").read_text())
         self.assertIn("nix-eval-jobs exited 1", json.loads(self.posts[-1][1])["content"])
 
+    def last_rev(self):
+        p = self.state / "state" / "last-rev"
+        return p.read_text().strip() if p.exists() else None
+
+    def test_whole_eval_failure_retries_then_succeeds(self):
+        run, _ = fake_world(REV1, [job("nixos.iris")])
+        self.tick(run)
+        run.world.update(rev=REV2, eval_rc=1, jobs=[])  # github blip: nothing evals
+        self.tick(run)
+        self.assertEqual(self.last_rev(), REV1)
+        self.tick(run)  # still broken: retried, but no 2nd ping
+        self.assertEqual(self.run_json(3)["rev"], REV2)
+        self.assertEqual(len(self.posts), 2)
+        self.assertIn("will retry", json.loads(self.posts[-1][1])["content"])
+        run.world.update(eval_rc=0, jobs=[job("nixos.iris", v="2")])
+        self.tick(run)
+        self.assertEqual(self.last_rev(), REV2)
+        self.assertEqual(self.latest("nixos.iris")["run"], 4)
+        self.assertEqual(self.latest("nixos.iris")["rev"], REV2)
+        self.assertEqual(len(self.posts), 3)  # th success still pings
+        self.assertIn("1 ok, 0 failed", json.loads(self.posts[-1][1])["content"])
+        self.assertEqual(self.tick(run), 0)
+        self.assertFalse((self.state / "public/runs/5").exists())
+
+    def test_upload_failure_retries_then_publishes(self):
+        bad = job("nixos.iris", upload_ok=False)
+        run, calls = fake_world(REV1, [bad, job("nixos.pawpatch")])
+        self.tick(run)
+        self.assertIsNone(self.last_rev())
+        self.assertEqual(self.latest("nixos.pawpatch")["run"], 1)
+        bad["upload_ok"] = True
+        calls.clear()
+        self.tick(run)
+        self.assertEqual(self.last_rev(), REV1)
+        self.assertEqual(self.latest("nixos.iris")["run"], 2)
+        self.assertEqual(self.latest("nixos.pawpatch")["run"], 2)
+        self.assertEqual(self.run_json(2)["jobs"]["nixos.iris"]["status"], "ok")
+        self.assertEqual(len(self.posts), 2)
+
+    def test_build_failure_not_retried(self):
+        run, calls = fake_world(REV1, [job("nixos.iris", build_ok=False), job("nixos.pawpatch")])
+        self.tick(run)
+        self.assertEqual(self.last_rev(), REV1)
+        calls.clear()
+        self.tick(run)
+        self.assertEqual([c[:2] for c in calls], [["git", "ls-remote"]])
+        self.assertEqual((self.state / "state" / "last-id").read_text().strip(), "1")
+
+    def test_job_eval_error_not_retried(self):
+        run, _ = fake_world(REV1, [job("nixos.broken", eval_error="nope"), job("nixos.iris")])
+        self.tick(run)
+        self.assertEqual(self.last_rev(), REV1)
+        self.tick(run)
+        self.assertEqual((self.state / "state" / "last-id").read_text().strip(), "1")
+
     def test_pruning_keeps_keep_runs(self):
         self.cfg["keep_runs"] = 3
         run, _ = fake_world(REV1, [job("nixos.iris")])

@@ -82,6 +82,11 @@ a systemd timer on psychoboost (every ~2 min) runs `zoomies run`:
 a run tht crashes halfway leaves `run.json` marked unfinished nd publishes nothing it didnt
 finish. th next tick starts over on th same commit (th id still goes up, ids r cheap).
 
+retries: `state/last-rev` only moves once a run counts. a crash, a whole-eval failure
+(nix-eval-jobs exits non-zero), or any upload-failed job means th next tick retries th same commit
+w a new id (1 discord ping per commit 4 those); per-job eval errors nd build failures r real
+failures nd dont retry.
+
 ## layout
 
 ```

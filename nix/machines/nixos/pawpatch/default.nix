@@ -71,7 +71,10 @@
 
     # luks w/o tpm2 or initrd ssh yet, so a reboot hangs at the password prompt. it still
     # switches on its own and logs "reboot pending", reboot it by hand for now
-    rv32ima.machine.hydraDeploy.enable = true;
+    rv32ima.machine.hydraDeploy = {
+      enable = true;
+      source = "zoomies";
+    };
 
     services.prometheus.exporters.node.enable = true;
 

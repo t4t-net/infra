@@ -1,0 +1,25 @@
+--- a/src/lib/Hydra/Controller/Root.pm
++++ b/src/lib/Hydra/Controller/Root.pm
+@@ -567,6 +567,11 @@
+ sub log :Local :Args(1) {
+     my ($self, $c, $drvPath) = @_;
+ 
++    # Backport of upstream ea80b0d6 (GHSA-rqvm-hhh5-vrx7): only accept a real store path base name,
++    # otherwise "..hydra.conf" walks out of build-logs/ into $HYDRA_DATA.
++    notFound($c, "Not a valid store path.")
++        unless $drvPath =~ /\A[0-9a-df-np-sv-z]{32}-(?!\.\.?(?:-|\z))[A-Za-z0-9+\-._?=]{1,211}\z/;
++
+     $drvPath = "/nix/store/$drvPath";
+ 
+     my $tail = $c->request->params->{"tail"};
+--- a/src/lib/Hydra/Helper/CatalystUtils.pm
++++ b/src/lib/Hydra/Helper/CatalystUtils.pm
+@@ -337,7 +337,7 @@
+ 
+ 
+ # Security checking of filenames.
+-Readonly::Scalar our $pathCompRE    => "(?:[A-Za-z0-9-\+\._\$][A-Za-z0-9-\+\._\$:]*)";
++Readonly::Scalar our $pathCompRE    => "(?:(?![.][.](?![^/]))[A-Za-z0-9-\+\._\$][A-Za-z0-9-\+\._\$:]*)";
+ Readonly::Scalar our $relPathRE     => "(?:$pathCompRE(?:/$pathCompRE)*)";
+ Readonly::Scalar our $relNameRE     => "(?:[A-Za-z0-9-_][A-Za-z0-9-\._]*)";
+ Readonly::Scalar our $attrNameRE    => "(?:[A-Za-z_][A-Za-z0-9-_]*)";

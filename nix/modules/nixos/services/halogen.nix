@@ -65,6 +65,20 @@ in
       '';
     };
 
+    sops.secrets."llama-cpp/ellie-api-key" = {
+      sopsFile = ../../../machines/nixos/experimental-skin/secrets/llama-cpp.yaml;
+      key = "ellie-api-key";
+    };
+
+    # iris's key (shared w llama-cpp) nd ellie's claude-halogen key. halogen takes them comma-separated
+    # nd gives each key its own prompt cache, so a long claude code session cant evict iris's prefix
+    sops.templates."halogen/api-keys" = {
+      content = "${config.sops.placeholder."llama-cpp/api-key"},${
+        config.sops.placeholder."llama-cpp/ellie-api-key"
+      }";
+      restartUnits = [ "podman-halogen.service" ];
+    };
+
     virtualisation.oci-containers.containers.halogen = {
       inherit image;
       # it cant share th box w llama-cpp, so halogen is th one tht boots nd llama-cpp is a by-hand swap:
@@ -76,14 +90,13 @@ in
         "${ggufDir}:/gguf:ro"
         "${modelDir}:/models:ro"
         "${stateDir}/cache:/cache"
-        "${config.sops.secrets."llama-cpp/api-key".path}:/run/secrets/api-key:ro"
+        "${config.sops.templates."halogen/api-keys".path}:/run/secrets/api-keys:ro"
       ];
       environment = {
         HALOGEN_CHECKPOINT = "/gguf/${ggufFile}";
         HALOGEN_MTP_HEAD = "/models/qwen38-flash-next-mtp.hgn";
         HALOGEN_TOKENIZER = "/models/tokenizer";
-        # th same key as llama-cpp, so hermes only needs a new base_url
-        HALOGEN_API_KEY_FILE = "/run/secrets/api-key";
+        HALOGEN_API_KEY_FILE = "/run/secrets/api-keys";
         HALOGEN_API_PORT = toString port;
         # turns survive a restart instead of re-reading th whole conversation
         HALOGEN_CACHE_DIR = "/cache";

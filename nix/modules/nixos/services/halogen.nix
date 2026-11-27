@@ -59,10 +59,10 @@ in
 
     virtualisation.oci-containers.containers.halogen = {
       inherit image;
-      # it cant share th box w llama-cpp, so it only runs wen started by hand:
-      #   systemctl start podman-halogen   (stops llama-cpp)
+      # it cant share th box w llama-cpp, so halogen is th one tht boots nd llama-cpp is a by-hand swap:
       #   systemctl start llama-cpp        (stops halogen)
-      autoStart = false;
+      #   systemctl start podman-halogen   (stops llama-cpp)
+      autoStart = true;
       cmd = [ "all" ];
       volumes = [
         "${ggufDir}:/gguf:ro"
@@ -79,7 +79,7 @@ in
         HALOGEN_API_PORT = toString port;
         # turns survive a restart instead of re-reading th whole conversation
         HALOGEN_CACHE_DIR = "/cache";
-        # hermes' background self-improvement review gets its own slot instead of evicting th main context
+        # a 2nd request gets its own slot instead of evicting th first one's context
         HALOGEN_KV_SLOTS = "2";
         # one full 262k conversation resident, or both slots at 131k
         HALOGEN_KV_POOL_POSITIONS = "262144";
@@ -122,6 +122,15 @@ in
       # podman pulls th image on first start
       serviceConfig.TimeoutStartSec = lib.mkForce "30min";
       after = [ "llama-cpp.service" ];
+    };
+
+    # both on at boot would just race 2 c who gets stopped
+    systemd.services.llama-cpp.wantedBy = lib.mkForce [ ];
+
+    # https://llm.tail09d5b.ts.net, so clients dont care which engine or port is behind it
+    rv32ima.machine.tailscale.services.llm = {
+      inherit port;
+      targetUnit = "podman-halogen.service";
     };
   };
 }

@@ -126,7 +126,7 @@ in
         fallback_model = [
           {
             provider = "custom";
-            base_url = "http://experimental-skin.tail09d5b.ts.net:8080/v1";
+            base_url = "https://llm.tail09d5b.ts.net/v1";
             model = "qwen3.8-flash-next";
             key_env = "OPENAI_API_KEY";
           }

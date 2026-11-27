@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   self,
   inputs,
@@ -99,6 +100,12 @@
 
     services.displayManager.gdm.enable = true;
     services.desktopManager.gnome.enable = true;
+    # gdm's greeter suspended th box 15min after boot (2026-11-26) nd took halogen + svc:llm w it.
+    # autoSuspend only covers th login screen, so th sleep targets go 2, 4 a logged-in session
+    services.displayManager.gdm.autoSuspend = false;
+    systemd.targets = lib.genAttrs [ "sleep" "suspend" "hibernate" "hybrid-sleep" ] (_: {
+      enable = false;
+    });
 
     programs.virt-manager.enable = true;
     virtualisation.libvirtd.enable = true;

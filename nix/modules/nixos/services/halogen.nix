@@ -26,6 +26,14 @@ in
         owner = "root";
         group = "root";
       }
+      # podman's image store. th rollback wiped it, so every boot re-pulled th whole image, nd
+      # th first boot after this went wrong cuz dns wasnt up yet
+      {
+        path = /var/lib/containers;
+        mode = "0700";
+        owner = "root";
+        group = "root";
+      }
     ];
 
     # a GGUF carries no draft head halogen can run, so it needs th 1.4GiB head + tokenizer from th
@@ -121,6 +129,9 @@ in
       conflicts = [ "llama-cpp.service" ];
       # podman pulls th image on first start
       serviceConfig.TimeoutStartSec = lib.mkForce "30min";
+      # network-online comes up b4 magicdns answers, nd 3 instant retries used up th start limit.
+      # 30s apart never hits it
+      serviceConfig.RestartSec = "30s";
       after = [ "llama-cpp.service" ];
     };
 

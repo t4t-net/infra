@@ -39,6 +39,32 @@
     {
       home.packages = [
         (pkgs.rv32ima.claude-code-sandboxed.override { inherit (pkgs.unstable) claude-code; })
+        # claude code on halogen (svc:llm on experimental-skin) instead of anthropic. th key is ellie's own
+        # (ellie-api-key in experimental-skin's sops), so halogen gives it a prompt cache separate from iris's
+        (pkgs.writeShellApplication {
+          name = "claude-halogen";
+          text = ''
+            key_file="''${XDG_CONFIG_HOME:-$HOME/.config}/halogen/api-key"
+            if [[ ! -r "$key_file" ]]; then
+              echo "claude-halogen: no key at $key_file (ellie-api-key in experimental-skin's llama-cpp.yaml)" >&2
+              exit 1
+            fi
+            unset ANTHROPIC_API_KEY
+            export ANTHROPIC_BASE_URL=https://llm.tail09d5b.ts.net
+            ANTHROPIC_AUTH_TOKEN=$(<"$key_file")
+            export ANTHROPIC_AUTH_TOKEN
+            # claude code asks 4 its model's whole output limit, over halogen's 65536 cap
+            export CLAUDE_CODE_MAX_OUTPUT_TOKENS=32000
+            # halogen answers any name. a non-claude one makes claude code assume a 200k window (measured)
+            # instead of opus's 1M, nd halogen caps a request at 262144
+            model=qwen3.8-flash-next
+            export ANTHROPIC_MODEL=$model
+            export ANTHROPIC_DEFAULT_OPUS_MODEL=$model
+            export ANTHROPIC_DEFAULT_SONNET_MODEL=$model
+            export ANTHROPIC_DEFAULT_HAIKU_MODEL=$model
+            exec claude "$@"
+          '';
+        })
       ];
 
       home.file.".claude" = {

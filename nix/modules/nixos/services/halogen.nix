@@ -41,9 +41,16 @@ in
         TimeoutStartSec = "infinity";
       };
       script = ''
+        # named files, not --include: hf's --include takes 1 pattern, nd a 2nd one is read as a filename
         ${lib.getExe' pkgs.python3Packages.huggingface-hub "hf"} download ${weightsRepo} \
+          qwen38-flash-next-mtp.hgn \
+          tokenizer/chat_template.jinja \
+          tokenizer/generation_config.json \
+          tokenizer/merges.txt \
+          tokenizer/tokenizer.json \
+          tokenizer/tokenizer_config.json \
+          tokenizer/vocab.json \
           --revision ${weightsRevision} \
-          --include "qwen38-flash-next-mtp.hgn" "tokenizer/*" \
           --local-dir ${modelDir}
         mkdir -p ${stateDir}/cache
         touch ${fetchedMarker}

@@ -36,12 +36,12 @@ in
       }
     ];
 
-    # a GGUF carries no draft head halogen can run, so it needs th 1.4GiB head + tokenizer from th
-    # weights repo. fetching them here keeps HALOGEN_DOWNLOAD unset, so th container makes no
-    # outbound connections. by hand, like llama-model-fetch:
+    # a GGUF carries no draft head halogen can run, so it needs th 1.4GiB head, th vision tower nd
+    # tokenizer from th weights repo. fetching them here keeps HALOGEN_DOWNLOAD unset, so th container
+    # makes no outbound connections. by hand, like llama-model-fetch:
     #   systemctl start --no-block halogen-model-fetch
     systemd.services.halogen-model-fetch = {
-      description = "fetch ${weightsRepo} draft head nd tokenizer";
+      description = "fetch ${weightsRepo} draft head, vision tower nd tokenizer";
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       serviceConfig = {
@@ -52,6 +52,7 @@ in
         # named files, not --include: hf's --include takes 1 pattern, nd a 2nd one is read as a filename
         ${lib.getExe' pkgs.python3Packages.huggingface-hub "hf"} download ${weightsRepo} \
           qwen38-flash-next-mtp.hgn \
+          qwen38-flash-next-vision.hgn \
           tokenizer/chat_template.jinja \
           tokenizer/generation_config.json \
           tokenizer/merges.txt \
@@ -96,6 +97,10 @@ in
         HALOGEN_CHECKPOINT = "/gguf/${ggufFile}";
         HALOGEN_MTP_HEAD = "/models/qwen38-flash-next-mtp.hgn";
         HALOGEN_TOKENIZER = "/models/tokenizer";
+        # images. `1` would look beside th checkpoint, which 4 us is th read-only gguf dir, so name it.
+        # takes ~2GiB of RAM (already counted in th pool fit) nd adds ~1-4s 2 a request carrying an
+        # image. without it an image is a 400, so text behaviour is unchanged either way
+        HALOGEN_VISION_TOWER = "/models/qwen38-flash-next-vision.hgn";
         HALOGEN_API_KEY_FILE = "/run/secrets/api-keys";
         HALOGEN_API_PORT = toString port;
         # turns survive a restart instead of re-reading th whole conversation

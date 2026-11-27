@@ -64,8 +64,12 @@
       # 120GiB of gtt. in-tree amdgpu, so ttm.* and not th dkms amdttm.* names!!
       "ttm.pages_limit=31457280"
       "ttm.page_pool_size=31457280"
-      # 8GiB. arc defaults 2 nearly all of ram nd fights gtt while big models load
-      "zfs.zfs_arc_max=8589934592"
+      # 2GiB. arc defaults 2 nearly all of ram nd fights gtt while big models load. both llama-cpp
+      # nd halogen mmap th n-gram table, so its rows live in th page cache nd arc only holds a 2nd
+      # copy (measured: a repeat prefill touched arc ~350 times 4 240k rows). th min has 2 move 2,
+      # its default is 1/32 of ram (~3.9GiB) nd a max below it doesnt take
+      "zfs.zfs_arc_max=2147483648"
+      "zfs.zfs_arc_min=1073741824"
       # worth 13-16% of halogen's prefill. vms here only get usb passthru (qemu/libusb, no vfio), so
       # nothing needs dma translation. it does mean thunderbolt devices get full dma too
       "amd_iommu=off"

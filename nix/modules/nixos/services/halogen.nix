@@ -88,6 +88,9 @@ in
         HALOGEN_MAX_TOK = "16384";
         # th template defaults 2 xhigh, which thinks 4 thousands of tokens on agent prompts
         HALOGEN_REASONING_EFFORT = "low";
+        # mlock th weights. unlocked, th kernel reclaims weight pages 4 lookup table rows nd th gpu
+        # has 2 remap them: 1.9-3.1s of "GPU queues evicted" per request on th first bench
+        HALOGEN_WEIGHTS_LOCK = "1";
       };
       extraOptions = [
         # host networking so th firewall still applies. podman's published ports get DNAT'd past
@@ -108,6 +111,10 @@ in
         "--health-start-period=20m"
       ];
     };
+
+    # compaction can still move mlocked pages, which costs th same remap as reclaiming them. only
+    # mlocked pages care, nd llama-cpp doesnt mlock, so its fine 2 leave on wen llama-cpp is th one up
+    boot.kernel.sysctl."vm.compact_unevictable_allowed" = 0;
 
     systemd.services.podman-halogen = {
       unitConfig.ConditionPathExists = fetchedMarker;

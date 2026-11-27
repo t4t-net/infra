@@ -100,10 +100,13 @@ in
       enable = true;
 
       config = {
+        # DARWIN_USER_TEMP_DIR is a per-machine hash path, so also link it at a fixed spot 4
+        # things tht dont get fish's SSH_AUTH_SOCK (launchd-started apps like Rex.app). th
+        # darwin workstation module points IdentityAgent at it
         ProgramArguments = [
           (lib.getExe pkgs.bash)
           "-c"
-          ''${lib.getExe' cfg.package "ssh-agent"} -D -a "$(${lib.getExe pkgs.getconf} DARWIN_USER_TEMP_DIR)/${cfg.socket}"${
+          ''sock="$(${lib.getExe pkgs.getconf} DARWIN_USER_TEMP_DIR)/${cfg.socket}"; ln -sfn "$sock" "${config.home.homeDirectory}/.ssh/agent.sock"; exec ${lib.getExe' cfg.package "ssh-agent"} -D -a "$sock"${
             lib.optionalString (
               cfg.defaultMaximumIdentityLifetime != null
             ) " -t ${toString cfg.defaultMaximumIdentityLifetime}"

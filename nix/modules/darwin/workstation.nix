@@ -36,6 +36,16 @@
 
     home-manager.users.${config.system.primaryUser}.rv32ima.services.ssh-agent.enable = true;
 
+    # launchd-started apps (Rex.app's ssh://) get apple's empty launchd agent, not fish's
+    # SSH_AUTH_SOCK, so point ssh at our agent's fixed link. same rule as th shell init in
+    # home-manager/ssh-agent.nix: hands off inside ai-sandbox, which brings its own agent.
+    # cant test SSH_AUTH_SOCK itself here: ssh runs Match exec thru $SHELL -c nd fish/zsh init
+    # re-export it b4 th test runs. /bin/sh cuz $SHELL may b fish
+    programs.ssh.extraConfig = ''
+      Match exec "/bin/sh -c 'test x$AI_SANDBOX_ACTIVE = x'"
+        IdentityAgent ~/.ssh/agent.sock
+    '';
+
     services.tailscale.enable = true;
 
     system.defaults.dock.autohide = true;

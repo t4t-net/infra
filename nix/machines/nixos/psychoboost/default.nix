@@ -15,6 +15,7 @@
     (self.lib.nixosModule "nixos/services/tailscale")
     (self.lib.nixosModule "nixos/services/hydra")
     (self.lib.nixosModule "nixos/services/zoomies")
+    (self.lib.nixosModule "nixos/services/rex")
     (self.lib.nixosModule "nixos/services/forever-ah")
 
     (self.lib.nixosModule "users/root")

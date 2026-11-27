@@ -83,6 +83,8 @@
       flake = false;
     };
     hermes-agent.url = "github:NousResearch/hermes-agent/v0.22.5";
+    # prebuilt release binary patched against its own nixpkgs (pam runpath etc), so no follows
+    rex.url = "https://pkgs.superlogical.com/rex/nix/preview.tar.gz";
 
     nixos-hardware = {
       url = "github:NixOS/nixos-hardware";

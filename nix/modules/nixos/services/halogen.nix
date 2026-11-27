@@ -114,9 +114,11 @@ in
         HALOGEN_MAX_TOK = "16384";
         # th thinky experiment: request params r decorative on halogen (openai reasoning_effort gave
         # 118 vs 114 chars low-vs-high, nd anthropic thinking budget 0 still emitted a thinking block,
-        # measured 2026-11-26), so this env var is th only knob. xhigh thinks 4 thousands of tokens
-        # per turn, decoded at 30-50 tok/sec — flip back 2 low if th KV pool starts chokin
-        HALOGEN_REASONING_EFFORT = "xhigh";
+        # measured 2026-11-26), so this env var is th only knob. xhigh thinks thousands of tokens per
+        # turn, nd claude code's background utility calls (haiku alias maps 2 qwen 2, ~45k of system
+        # prompt + tool schemas each) pay th same tax every 30-60s: w one client connected th shared
+        # 262k KV pool still hit 88%. medium keeps main turns thinky without taxin all th busywork
+        HALOGEN_REASONING_EFFORT = "medium";
         # mlock th weights. unlocked, th kernel reclaims weight pages 4 lookup table rows nd th gpu
         # has 2 remap them: 1.9-3.1s of "GPU queues evicted" per request on th first bench
         HALOGEN_WEIGHTS_LOCK = "1";

@@ -13,6 +13,7 @@
     (self.lib.nixosModule "nixos/remote-builder")
     (self.lib.nixosModule "nixos/services/tailscale")
     (self.lib.nixosModule "nixos/services/llama-cpp")
+    (self.lib.nixosModule "nixos/services/halogen")
     # No machine-certificate since this lives at home and is behind
     # NAT.
 
@@ -65,6 +66,9 @@
       "ttm.page_pool_size=31457280"
       # 8GiB. arc defaults 2 nearly all of ram nd fights gtt while big models load
       "zfs.zfs_arc_max=8589934592"
+      # worth 13-16% of halogen's prefill. vms here only get usb passthru (qemu/libusb, no vfio), so
+      # nothing needs dma translation. it does mean thunderbolt devices get full dma too
+      "amd_iommu=off"
     ];
 
     boot.initrd.availableKernelModules = [

@@ -39,6 +39,8 @@
     {
       home.packages = [
         (pkgs.rv32ima.claude-code-sandboxed.override { inherit (pkgs.unstable) claude-code; })
+        # luna's own github identity (th luna-t4t app), so her PRs need ellie's approval
+        pkgs.rv32ima.luna-gh
         # claude code on halogen (svc:llm on experimental-skin) instead of anthropic. th key is ellie's own
         # (ellie-api-key in experimental-skin's sops), so halogen gives it a prompt cache separate from iris's
         (pkgs.writeShellApplication {

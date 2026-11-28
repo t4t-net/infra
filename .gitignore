@@ -5,3 +5,4 @@ nix/result
 
 .terragrunt-cache/
 __pycache__/
+.claude/worktrees/
